@@ -1,0 +1,428 @@
+<!DOCTYPE html>
+<html lang="uk">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Каталог | Квітковий Дім</title>
+
+<script src="https://www.gstatic.com/firebasejs/9.22.1/firebase-app-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/9.22.1/firebase-database-compat.js"></script>
+
+<style>
+*{margin:0;padding:0;box-sizing:border-box;-webkit-tap-highlight-color:transparent}
+:root{
+  --bg:#fffaf4;--paper:#fffdf8;--milk:#fff7ef;
+  --sage:#6f8f72;--sage-dark:#3f5f44;
+  --rose:#d9a2ad;--berry:#8d465a;--gold:#c6a56b;
+  --text:#2d2822;--muted:#7f7468;--line:rgba(63,95,68,.16);
+  --shadow:0 28px 90px rgba(63,95,68,.14);
+}
+html,body{min-height:100%;font-family:Arial,sans-serif;background:var(--bg);color:var(--text);scroll-behavior:smooth}
+body{overflow-x:hidden;background:radial-gradient(circle at 12% 8%,rgba(217,162,173,.24),transparent 28%),radial-gradient(circle at 88% 4%,rgba(111,143,114,.22),transparent 30%),linear-gradient(180deg,#fffdf8 0%,#fff7ef 46%,#f4ecdf 100%)}
+a{text-decoration:none;color:inherit}
+button,input{font-family:inherit}
+button{border:0;cursor:pointer;transition:.18s}
+button:active{transform:scale(.97)}
+.app{min-height:100vh;position:relative;overflow:hidden}
+
+.topbar{position:sticky;top:14px;z-index:70;width:min(1180px,calc(100% - 28px));margin:14px auto 0;display:flex;align-items:center;justify-content:space-between;gap:18px;padding:12px 14px;border-radius:999px;background:rgba(255,253,248,.78);border:1px solid rgba(255,255,255,.86);backdrop-filter:blur(24px);box-shadow:0 20px 70px rgba(63,95,68,.12)}
+.brand{display:flex;align-items:center;gap:12px}
+.logo{width:52px;height:52px;border-radius:50%;display:grid;place-items:center;background:linear-gradient(145deg,#fff,#f0e1d5);border:1px solid rgba(198,165,107,.28);box-shadow:inset 0 0 0 6px rgba(255,255,255,.5),0 16px 34px rgba(63,95,68,.14);color:var(--sage-dark);font-size:25px}
+.brand-title strong{display:block;font-size:20px;letter-spacing:-.03em;color:var(--sage-dark)}
+.brand-title span{display:block;margin-top:4px;font-size:12px;color:var(--muted)}
+.nav{display:flex;align-items:center;gap:8px}
+.nav a{padding:13px 16px;border-radius:999px;color:var(--sage-dark);font-size:14px;font-weight:900;background:rgba(255,255,255,.52)}
+.cart-link{background:var(--sage-dark)!important;color:#fff!important;box-shadow:0 14px 28px rgba(63,95,68,.2);display:flex;gap:8px;align-items:center}
+.cart-count{min-width:22px;height:22px;border-radius:999px;background:#fff;color:var(--sage-dark);display:grid;place-items:center;font-size:12px}
+
+.hero{width:min(1180px,calc(100% - 28px));margin:24px auto 0;display:grid;grid-template-columns:1fr .65fr;gap:16px}
+.hero-card{padding:44px;border-radius:46px;background:linear-gradient(135deg,rgba(255,255,255,.94),rgba(255,250,244,.78));border:1px solid rgba(255,255,255,.88);box-shadow:var(--shadow)}
+.kicker{display:inline-flex;padding:11px 16px;border-radius:999px;background:rgba(111,143,114,.1);color:var(--sage-dark);font-size:13px;font-weight:950}
+.hero h1{margin-top:24px;font-size:clamp(42px,7vw,78px);line-height:.9;letter-spacing:-.07em;color:#28231e}
+.hero p{margin-top:18px;color:var(--muted);font-size:18px;line-height:1.65;max-width:720px}
+.hero-photo{min-height:380px;border-radius:46px;background:linear-gradient(180deg,rgba(0,0,0,.03),rgba(0,0,0,.18)),url("https://images.unsplash.com/photo-1622396481322-6a2b82de51fc?auto=format&fit=crop&w=1200&q=90") center/cover no-repeat;box-shadow:var(--shadow);border:1px solid rgba(255,255,255,.84)}
+
+.menu-wrap{position:sticky;top:92px;z-index:60;width:min(1180px,calc(100% - 28px));margin:16px auto 0;padding:10px;border-radius:999px;background:rgba(255,253,248,.82);border:1px solid rgba(255,255,255,.86);backdrop-filter:blur(22px);box-shadow:0 18px 55px rgba(63,95,68,.1);overflow:auto}
+.menu-tabs{display:flex;gap:8px;min-width:max-content}
+.tab{padding:13px 17px;border-radius:999px;background:#fff;color:var(--sage-dark);font-size:14px;font-weight:950;border:1px solid var(--line)}
+.tab.active{background:var(--sage-dark);color:#fff}
+
+.layout{width:min(1180px,calc(100% - 28px));margin:22px auto 0;display:grid;grid-template-columns:1fr 360px;gap:18px;align-items:start}
+.catalog{display:grid;gap:26px}
+.category-section{scroll-margin-top:170px}
+.category-head{display:flex;align-items:end;justify-content:space-between;gap:12px;margin-bottom:12px}
+.category-head h2{font-size:clamp(28px,5vw,48px);letter-spacing:-.05em}
+.category-head span{color:var(--muted);font-weight:800}
+
+.products{display:grid;grid-template-columns:repeat(2,1fr);gap:14px}
+.product{display:grid;grid-template-columns:150px 1fr;gap:14px;padding:12px;border-radius:30px;background:rgba(255,255,255,.76);border:1px solid rgba(255,255,255,.9);box-shadow:0 18px 50px rgba(63,95,68,.09)}
+.product-img{height:150px;border-radius:24px;background:#eee center/cover no-repeat}
+.product-body{padding:6px 6px 6px 0;display:flex;flex-direction:column}
+.product h3{font-size:21px;letter-spacing:-.03em;color:#28231e}
+.desc{margin-top:7px;color:var(--muted);font-size:14px;line-height:1.45;flex:1}
+.price-row{margin-top:12px;display:flex;align-items:end;justify-content:space-between;gap:10px}
+.price{font-size:24px;font-weight:950;color:var(--berry)}
+.unit{font-size:12px;color:var(--muted)}
+.product-actions{margin-top:12px;display:grid;grid-template-columns:108px 1fr;gap:8px}
+.qty{height:44px;border-radius:999px;background:var(--milk);border:1px solid var(--line);display:grid;grid-template-columns:34px 1fr 34px;align-items:center;overflow:hidden}
+.qty button{height:44px;background:transparent;color:var(--sage-dark);font-size:18px;font-weight:950}
+.qty input{width:100%;height:44px;text-align:center;border:0;background:transparent;font-weight:950;color:var(--text);outline:none}
+.add{height:44px;border-radius:999px;background:var(--sage-dark);color:#fff;font-weight:950}
+
+.side-cart{position:sticky;top:170px;padding:18px;border-radius:34px;background:rgba(255,255,255,.78);border:1px solid rgba(255,255,255,.9);box-shadow:0 24px 70px rgba(63,95,68,.12)}
+.side-cart h3{font-size:26px;color:var(--sage-dark);letter-spacing:-.04em}
+.cart-mini{margin-top:12px;display:grid;gap:10px;max-height:380px;overflow:auto}
+.cart-row{display:grid;grid-template-columns:1fr auto;gap:10px;padding:12px;border-radius:20px;background:var(--milk);border:1px solid var(--line)}
+.cart-row b{font-size:14px}
+.cart-row span{display:block;margin-top:4px;color:var(--muted);font-size:13px}
+.cart-row button{background:transparent;color:var(--berry);font-size:18px}
+.empty{padding:20px;border-radius:22px;text-align:center;color:var(--muted);background:var(--milk);border:1px solid var(--line)}
+.total{margin-top:14px;padding:16px;border-radius:22px;background:#fff;border:1px solid var(--line);display:flex;justify-content:space-between;font-size:20px;font-weight:950;color:var(--sage-dark)}
+.checkout{display:flex;margin-top:12px;height:54px;align-items:center;justify-content:center;border-radius:999px;background:var(--berry);color:#fff;font-weight:950}
+.note{margin-top:12px;color:var(--muted);font-size:13px;line-height:1.45}
+
+.toast{position:fixed;left:50%;bottom:22px;transform:translateX(-50%) translateY(20px);z-index:300;width:min(430px,calc(100% - 28px));padding:15px 18px;border-radius:999px;background:var(--sage-dark);color:#fff;text-align:center;opacity:0;pointer-events:none;transition:.22s;font-weight:900}
+.toast.open{opacity:1;transform:translateX(-50%) translateY(0)}
+.footer{width:min(1180px,calc(100% - 28px));margin:40px auto 22px;padding:28px;border-radius:34px;display:flex;justify-content:space-between;gap:18px;align-items:center;background:rgba(255,255,255,.56);border:1px solid rgba(255,255,255,.82);color:var(--muted)}
+.footer strong{color:var(--sage-dark)}
+
+@media(max-width:980px){
+  .hero{grid-template-columns:1fr}.layout{grid-template-columns:1fr}.side-cart{position:relative;top:auto}.products{grid-template-columns:1fr}
+}
+@media(max-width:640px){
+  .brand-title span{display:none}.nav a:not(.cart-link){display:none}
+  .hero-card{padding:30px 22px;border-radius:34px}.hero-photo{min-height:280px;border-radius:34px}
+  .menu-wrap{top:84px}
+  .product{grid-template-columns:118px 1fr;border-radius:26px}
+  .product-img{height:128px;border-radius:20px}
+  .product-actions{grid-template-columns:1fr}
+  .footer{display:block;text-align:center}
+}
+</style>
+</head>
+
+<body>
+<div class="app">
+
+<header class="topbar">
+  <a href="index.html" class="brand">
+    <div class="logo">✿</div>
+    <div class="brand-title">
+      <strong>Квітковий Дім</strong>
+      <span>квіти • ягоди • розсада</span>
+    </div>
+  </a>
+
+  <nav class="nav">
+    <a href="index.html">Головна</a>
+    <a href="bloom.html">Каталог</a>
+    <a href="cart.html" class="cart-link">Кошик <span class="cart-count" id="cartCount">0</span></a>
+  </nav>
+</header>
+
+<section class="hero">
+  <div class="hero-card">
+    <div class="kicker">🌸 Каталог рослин</div>
+    <h1>Оберіть рослини для свого саду</h1>
+    <p>Каталог зроблений як зручне меню: зверху категорії, нижче всі рослини. Оберіть кількість, додайте в кошик і оформіть замовлення.</p>
+  </div>
+  <div class="hero-photo"></div>
+</section>
+
+<div class="menu-wrap">
+  <div class="menu-tabs" id="menuTabs"></div>
+</div>
+
+<section class="layout">
+  <main class="catalog" id="catalog"></main>
+
+  <aside class="side-cart">
+    <h3>Ваш кошик</h3>
+    <div class="cart-mini" id="cartMini"></div>
+    <div class="total">
+      <span>Разом:</span>
+      <span id="cartTotal">0 грн</span>
+    </div>
+    <a href="cart.html" class="checkout">Оформити замовлення</a>
+    <div class="note">Кошик зберігається для вас через Firebase, як у сучасному онлайн-магазині.</div>
+  </aside>
+</section>
+
+<footer class="footer">
+  <div><strong>Квітковий Дім</strong><br>квіти • ягоди • розсада</div>
+  <div>© 2026. Вирощено з любовʼю.</div>
+</footer>
+
+<div class="toast" id="toast"></div>
+</div>
+
+<script>
+const firebaseConfig={
+  apiKey:"ВСТАВЬ_API_KEY",
+  authDomain:"ВСТАВЬ_AUTH_DOMAIN",
+  databaseURL:"ВСТАВЬ_DATABASE_URL",
+  projectId:"ВСТАВЬ_PROJECT_ID",
+  storageBucket:"ВСТАВЬ_STORAGE_BUCKET",
+  messagingSenderId:"ВСТАВЬ_SENDER_ID",
+  appId:"ВСТАВЬ_APP_ID"
+};
+
+firebase.initializeApp(firebaseConfig);
+const db=firebase.database();
+
+const categories=[
+  {id:"flowers",title:"Квіти",emoji:"🌸"},
+  {id:"hydrangeas",title:"Гортензії",emoji:"💠"},
+  {id:"chrysanthemums",title:"Хризантеми",emoji:"🌼"},
+  {id:"berries",title:"Ягоди",emoji:"🍓"},
+  {id:"seedlings",title:"Розсада",emoji:"🌱"}
+];
+
+const defaultProducts=[
+  {
+    id:"hydrangea-blue",
+    title:"Гортензія блакитна",
+    category:"hydrangeas",
+    price:280,
+    unit:"шт",
+    desc:"Ніжна садова гортензія для клумб і декоративних композицій.",
+    image:"https://images.unsplash.com/photo-1622396481322-6a2b82de51fc?auto=format&fit=crop&w=900&q=90",
+    sort:1
+  },
+  {
+    id:"hydrangea-pink",
+    title:"Гортензія рожева",
+    category:"hydrangeas",
+    price:300,
+    unit:"шт",
+    desc:"Пишне цвітіння, мʼякий рожевий відтінок, преміальний вигляд.",
+    image:"https://images.unsplash.com/photo-1596438459194-f275f413d6ff?auto=format&fit=crop&w=900&q=90",
+    sort:2
+  },
+  {
+    id:"chrysanthemum-white",
+    title:"Хризантема біла",
+    category:"chrysanthemums",
+    price:120,
+    unit:"шт",
+    desc:"Осіння класика для саду, вазонів і святкових композицій.",
+    image:"https://images.unsplash.com/photo-1606041008023-472dfb5e530f?auto=format&fit=crop&w=900&q=90",
+    sort:3
+  },
+  {
+    id:"strawberry",
+    title:"Розсада полуниці",
+    category:"seedlings",
+    price:35,
+    unit:"кущ",
+    desc:"Сильна розсада полуниці для домашнього солодкого врожаю.",
+    image:"https://images.unsplash.com/photo-1464965911861-746a04b4bca6?auto=format&fit=crop&w=900&q=90",
+    sort:4
+  },
+  {
+    id:"raspberry",
+    title:"Саджанець малини",
+    category:"berries",
+    price:90,
+    unit:"шт",
+    desc:"Ягідний саджанець для ароматного літнього врожаю.",
+    image:"https://images.unsplash.com/photo-1577069861033-55d04cec4ef5?auto=format&fit=crop&w=900&q=90",
+    sort:5
+  }
+];
+
+let products=[];
+let cart={};
+
+function getVisitorId(){
+  let id=localStorage.getItem("garden_visitor_id");
+  if(!id){
+    id="visitor_"+Date.now()+"_"+Math.random().toString(16).slice(2);
+    localStorage.setItem("garden_visitor_id",id);
+  }
+  return id;
+}
+
+const visitorId=getVisitorId();
+const cartRef=db.ref("gardenCarts/"+visitorId+"/items");
+
+async function loadProducts(){
+  try{
+    const snap=await db.ref("gardenProducts").once("value");
+    const data=snap.val();
+
+    if(data){
+      products=Object.keys(data).map(id=>({id,...data[id]})).filter(p=>p.active!==false);
+    }else{
+      products=defaultProducts;
+    }
+
+    products.sort((a,b)=>Number(a.sort||0)-Number(b.sort||0));
+    renderTabs();
+    renderCatalog();
+  }catch(e){
+    products=defaultProducts;
+    renderTabs();
+    renderCatalog();
+  }
+}
+
+function renderTabs(){
+  menuTabs.innerHTML=`<button class="tab active" onclick="scrollToCategory('all',this)">Усе</button>`;
+
+  categories.forEach(cat=>{
+    menuTabs.innerHTML+=`<button class="tab" onclick="scrollToCategory('${cat.id}',this)">${cat.emoji} ${cat.title}</button>`;
+  });
+}
+
+function renderCatalog(){
+  catalog.innerHTML="";
+
+  categories.forEach(cat=>{
+    const list=products.filter(p=>p.category===cat.id);
+    if(!list.length)return;
+
+    const section=document.createElement("section");
+    section.className="category-section";
+    section.id="cat_"+cat.id;
+
+    section.innerHTML=`
+      <div class="category-head">
+        <h2>${cat.emoji} ${cat.title}</h2>
+        <span>${list.length} позицій</span>
+      </div>
+      <div class="products"></div>
+    `;
+
+    const grid=section.querySelector(".products");
+
+    list.forEach(p=>{
+      const card=document.createElement("article");
+      card.className="product";
+
+      card.innerHTML=`
+        <div class="product-img" style="background-image:url('${p.image}')"></div>
+        <div class="product-body">
+          <h3>${p.title}</h3>
+          <div class="desc">${p.desc||""}</div>
+
+          <div class="price-row">
+            <div>
+              <div class="price">${p.price} грн</div>
+              <div class="unit">за ${p.unit||"шт"}</div>
+            </div>
+          </div>
+
+          <div class="product-actions">
+            <div class="qty">
+              <button onclick="changeQty('${p.id}',-1)">−</button>
+              <input id="qty_${p.id}" value="1">
+              <button onclick="changeQty('${p.id}',1)">+</button>
+            </div>
+            <button class="add" onclick="addToCart('${p.id}')">Додати</button>
+          </div>
+        </div>
+      `;
+
+      grid.appendChild(card);
+    });
+
+    catalog.appendChild(section);
+  });
+}
+
+function scrollToCategory(id,btn){
+  document.querySelectorAll(".tab").forEach(t=>t.classList.remove("active"));
+  btn.classList.add("active");
+
+  if(id==="all"){
+    window.scrollTo({top:0,behavior:"smooth"});
+    return;
+  }
+
+  document.getElementById("cat_"+id)?.scrollIntoView({behavior:"smooth"});
+}
+
+function changeQty(id,delta){
+  const input=document.getElementById("qty_"+id);
+  let value=Number(input.value||1)+delta;
+  if(value<1)value=1;
+  input.value=value;
+}
+
+async function addToCart(id){
+  const p=products.find(x=>x.id===id);
+  if(!p)return;
+
+  const qty=Number(document.getElementById("qty_"+id).value||1);
+  const existing=cart[id]||{};
+
+  await cartRef.child(id).set({
+    id:p.id,
+    title:p.title,
+    price:Number(p.price||0),
+    unit:p.unit||"шт",
+    image:p.image,
+    qty:Number(existing.qty||0)+qty,
+    addedAt:Date.now()
+  });
+
+  showToast("Додано до кошика 🌿");
+}
+
+function listenCart(){
+  cartRef.on("value",snap=>{
+    cart=snap.val()||{};
+    renderMiniCart();
+  });
+}
+
+function renderMiniCart(){
+  const items=Object.values(cart);
+  let count=0;
+  let total=0;
+
+  items.forEach(item=>{
+    count+=Number(item.qty||0);
+    total+=Number(item.qty||0)*Number(item.price||0);
+  });
+
+  cartCount.textContent=count;
+  cartTotal.textContent=total+" грн";
+
+  if(!items.length){
+    cartMini.innerHTML=`<div class="empty">Кошик порожній</div>`;
+    return;
+  }
+
+  cartMini.innerHTML="";
+
+  items.forEach(item=>{
+    const row=document.createElement("div");
+    row.className="cart-row";
+    row.innerHTML=`
+      <div>
+        <b>${item.title}</b>
+        <span>${item.qty} ${item.unit} × ${item.price} грн</span>
+      </div>
+      <button onclick="removeCartItem('${item.id}')">×</button>
+    `;
+    cartMini.appendChild(row);
+  });
+}
+
+async function removeCartItem(id){
+  await cartRef.child(id).remove();
+}
+
+function showToast(text){
+  toast.textContent=text;
+  toast.classList.add("open");
+  setTimeout(()=>toast.classList.remove("open"),2600);
+}
+
+loadProducts();
+listenCart();
+</script>
+</body>
+</html>
