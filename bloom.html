@@ -3,33 +3,19 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-
 <title>Каталог | Квітковий Дім</title>
 
 <script src="https://www.gstatic.com/firebasejs/9.22.1/firebase-app-compat.js"></script>
 <script src="https://www.gstatic.com/firebasejs/9.22.1/firebase-database-compat.js"></script>
 
 <style>
-*{
-  margin:0;
-  padding:0;
-  box-sizing:border-box;
-  -webkit-tap-highlight-color:transparent;
-}
-
+*{margin:0;padding:0;box-sizing:border-box;-webkit-tap-highlight-color:transparent}
 :root{
-  --bg:#fffaf4;
-  --paper:#fffdf8;
-  --milk:#fff7ef;
-  --sage:#6f8f72;
-  --sage-dark:#3f5f44;
-  --berry:#8d465a;
-  --text:#2d2822;
-  --muted:#7f7468;
-  --line:rgba(63,95,68,.16);
+  --bg:#fffaf4;--paper:#fffdf8;--milk:#fff7ef;
+  --sage:#6f8f72;--sage-dark:#3f5f44;--berry:#8d465a;
+  --text:#2d2822;--muted:#7f7468;--line:rgba(63,95,68,.16);
   --shadow:0 28px 90px rgba(63,95,68,.14);
 }
-
 html,body{
   min-height:100%;
   font-family:Arial,sans-serif;
@@ -38,105 +24,75 @@ html,body{
   scroll-behavior:smooth;
   touch-action:manipulation;
 }
-
 body{
   overflow-x:hidden;
   background:
     radial-gradient(circle at 10% 0%,rgba(217,162,173,.24),transparent 32%),
     radial-gradient(circle at 90% 0%,rgba(111,143,114,.22),transparent 34%),
     linear-gradient(180deg,#fffdf8 0%,#fff8ee 45%,#f6ecdf 100%);
-  background-attachment:fixed;
 }
+a{text-decoration:none;color:inherit}
+button,input{font-family:inherit}
+button{border:0;cursor:pointer}
+.app{min-height:100vh;padding-top:158px}
 
-a{
-  color:inherit;
-  text-decoration:none;
-}
-
-button,input{
-  font-family:inherit;
-}
-
-button{
-  border:0;
-  cursor:pointer;
-}
-
-.app{
-  min-height:100vh;
-  padding-top:154px;
-}
-
-/* FIXED BRAND HEADER */
+/* FIXED TOP BRAND */
 
 .topbar{
   position:fixed;
-  top:12px;
+  top:8px;
   left:50%;
   transform:translateX(-50%);
-  z-index:100;
-
-  width:min(1180px,calc(100% - 28px));
-
-  padding:12px 18px;
-
+  z-index:1000;
+  width:min(1180px,calc(100% - 18px));
+  padding:10px 16px;
   border-radius:999px;
-
-  background:rgba(255,253,248,.9);
-  border:1px solid rgba(255,255,255,.95);
-
+  background:rgba(255,253,248,.94);
+  border:1px solid rgba(255,255,255,.96);
   backdrop-filter:blur(24px);
-  box-shadow:0 20px 70px rgba(63,95,68,.12);
-
-  display:flex;
-  align-items:center;
-  justify-content:center;
+  box-shadow:0 18px 60px rgba(63,95,68,.13);
 }
 
 .brand{
+  width:100%;
   display:flex;
   align-items:center;
-  justify-content:center;
-  gap:13px;
-  text-align:center;
+  justify-content:flex-start;
+  gap:14px;
 }
 
 .logo{
-  width:52px;
-  height:52px;
-
+  width:50px;
+  height:50px;
+  flex:0 0 50px;
   border-radius:50%;
-
   display:grid;
   place-items:center;
-
   background:linear-gradient(145deg,#fff,#f0e1d5);
   border:1px solid rgba(198,165,107,.28);
-
   box-shadow:
     inset 0 0 0 6px rgba(255,255,255,.5),
-    0 16px 34px rgba(63,95,68,.14);
-
+    0 12px 28px rgba(63,95,68,.14);
   color:var(--sage-dark);
   font-size:25px;
-  flex:none;
 }
 
 .brand-title{
-  text-align:center;
+  display:flex;
+  flex-direction:column;
+  justify-content:center;
+  line-height:1.05;
 }
 
 .brand-title strong{
-  display:block;
-  font-size:20px;
-  letter-spacing:-.03em;
+  font-size:22px;
+  letter-spacing:-.04em;
   color:var(--sage-dark);
 }
 
 .brand-title span{
-  display:block;
-  margin-top:4px;
-  font-size:12px;
+  margin-top:6px;
+  font-size:13px;
   color:var(--muted);
 }
 
@@ -144,23 +100,17 @@ button{
 
 .menu-wrap{
   position:fixed;
-  top:92px;
+  top:82px;
   left:50%;
   transform:translateX(-50%);
-  z-index:95;
-
-  width:min(1180px,calc(100% - 28px));
-
+  z-index:999;
+  width:min(1180px,calc(100% - 18px));
   padding:10px;
-
   border-radius:999px;
-
-  background:rgba(255,253,248,.92);
-  border:1px solid rgba(255,255,255,.95);
-
+  background:rgba(255,253,248,.94);
+  border:1px solid rgba(255,255,255,.96);
   backdrop-filter:blur(22px);
-  box-shadow:0 18px 55px rgba(63,95,68,.1);
-
+  box-shadow:0 16px 46px rgba(63,95,68,.1);
   overflow-x:auto;
 }
 
@@ -171,17 +121,12 @@ button{
 }
 
 .tab{
-  padding:13px 17px;
-
+  padding:13px 18px;
   border-radius:999px;
-
   background:#fff;
-
   color:var(--sage-dark);
-
-  font-size:14px;
+  font-size:15px;
   font-weight:950;
-
   border:1px solid var(--line);
 }
 
@@ -199,17 +144,9 @@ button{
 
 .hero-card{
   padding:34px 38px;
-
   border-radius:42px;
-
   background:
-    linear-gradient(
-      135deg,
-      rgba(255,255,255,.96),
-      rgba(236,245,231,.86),
-      rgba(255,250,244,.95)
-    );
-
+    linear-gradient(135deg,rgba(255,255,255,.96),rgba(236,245,231,.86),rgba(255,250,244,.95));
   border:1px solid rgba(255,255,255,.92);
   box-shadow:var(--shadow);
 }
@@ -223,9 +160,7 @@ button{
 .hero p{
   margin-top:16px;
   max-width:760px;
-
   color:var(--muted);
-
   font-size:17px;
   line-height:1.6;
 }
@@ -274,14 +209,10 @@ button{
   display:grid;
   grid-template-columns:150px 1fr;
   gap:14px;
-
   padding:12px;
-
   border-radius:30px;
-
   background:rgba(255,255,255,.78);
   border:1px solid rgba(255,255,255,.9);
-
   box-shadow:0 18px 50px rgba(63,95,68,.09);
 }
 
@@ -311,9 +242,7 @@ button{
 .desc{
   margin-top:7px;
   flex:1;
-
   color:var(--muted);
-
   font-size:14px;
   line-height:1.45;
 }
@@ -332,7 +261,6 @@ button{
 
 .product-actions{
   margin-top:12px;
-
   display:grid;
   grid-template-columns:108px 1fr;
   gap:8px;
@@ -340,15 +268,11 @@ button{
 
 .qty{
   height:44px;
-
   border-radius:999px;
-
   background:var(--milk);
   border:1px solid var(--line);
-
   display:grid;
   grid-template-columns:34px 1fr 34px;
-
   overflow:hidden;
 }
 
@@ -369,12 +293,9 @@ button{
 
 .add{
   height:44px;
-
   border-radius:999px;
-
   background:var(--sage-dark);
   color:#fff;
-
   font-weight:950;
 }
 
@@ -384,37 +305,27 @@ button{
   position:fixed;
   right:18px;
   bottom:18px;
-  z-index:200;
-
+  z-index:800;
   height:62px;
   padding:0 22px;
-
   border-radius:999px;
-
   background:var(--sage-dark);
   color:#fff;
-
   display:flex;
   align-items:center;
   gap:10px;
-
   font-weight:950;
-
   box-shadow:0 18px 50px rgba(0,0,0,.18);
 }
 
 .floating-cart-btn span{
   width:24px;
   height:24px;
-
   border-radius:50%;
-
   background:#fff;
   color:var(--sage-dark);
-
   display:grid;
   place-items:center;
-
   font-size:12px;
 }
 
@@ -424,20 +335,14 @@ button{
   position:fixed;
   top:0;
   right:-430px;
-
   width:420px;
   max-width:100%;
   height:100vh;
-
   background:#fffaf4;
-
-  z-index:300;
-
+  z-index:1200;
   transition:.28s;
-
   display:flex;
   flex-direction:column;
-
   box-shadow:-20px 0 80px rgba(0,0,0,.12);
 }
 
@@ -447,11 +352,9 @@ button{
 
 .drawer-head{
   padding:20px;
-
   display:flex;
   justify-content:space-between;
   align-items:center;
-
   border-bottom:1px solid var(--line);
 }
 
@@ -463,21 +366,16 @@ button{
 .drawer-head button{
   width:42px;
   height:42px;
-
   border-radius:50%;
-
   background:#fff;
   color:var(--sage-dark);
-
   font-size:20px;
 }
 
 #drawerItems{
   flex:1;
   overflow:auto;
-
   padding:14px;
-
   display:flex;
   flex-direction:column;
   gap:8px;
@@ -487,16 +385,11 @@ button{
   display:grid;
   grid-template-columns:54px 1fr;
   gap:10px;
-
   padding:8px;
-
   border-radius:18px;
-
   background:#fff;
   border:1px solid var(--line);
-
   align-items:center;
-
   min-height:72px;
 }
 
@@ -508,11 +401,8 @@ button{
 }
 
 .drawer-item b{
-  display:block;
-
   font-size:14px;
   line-height:1.15;
-
   white-space:nowrap;
   overflow:hidden;
   text-overflow:ellipsis;
@@ -527,16 +417,11 @@ button{
 
 .drawer-controls{
   margin-top:7px;
-
   display:inline-grid;
   grid-template-columns:30px 34px 30px;
-
   height:30px;
-
   border-radius:999px;
-
   overflow:hidden;
-
   border:1px solid var(--line);
   background:var(--milk);
 }
@@ -562,39 +447,28 @@ button{
 .drawer-total{
   display:flex;
   justify-content:space-between;
-
   font-size:24px;
   font-weight:950;
-
   color:var(--sage-dark);
 }
 
 .drawer-checkout{
   margin-top:14px;
-
   height:56px;
-
   border-radius:999px;
-
   background:var(--berry);
   color:#fff;
-
   display:flex;
   align-items:center;
   justify-content:center;
-
   font-weight:950;
 }
 
 .empty{
   padding:20px;
-
   border-radius:22px;
-
   text-align:center;
-
   color:var(--muted);
-
   background:var(--milk);
   border:1px solid var(--line);
 }
@@ -603,21 +477,15 @@ button{
 
 .footer{
   width:min(1180px,calc(100% - 28px));
-
   margin:40px auto 100px;
-
   padding:28px;
-
   border-radius:34px;
-
   display:flex;
   justify-content:space-between;
   align-items:center;
   gap:18px;
-
   background:rgba(255,255,255,.56);
   border:1px solid rgba(255,255,255,.82);
-
   color:var(--muted);
 }
 
@@ -625,36 +493,31 @@ button{
   color:var(--sage-dark);
 }
 
-/* MOBILE */
-
 @media(max-width:980px){
-  .products{
-    grid-template-columns:1fr;
-  }
+  .products{grid-template-columns:1fr}
 }
 
 @media(max-width:640px){
-  .app{
-    padding-top:146px;
-  }
+  .app{padding-top:150px}
 
   .topbar{
     top:8px;
     width:calc(100% - 18px);
-    padding:10px;
+    padding:10px 14px;
   }
 
   .logo{
     width:46px;
     height:46px;
+    flex-basis:46px;
   }
 
   .brand-title strong{
-    font-size:18px;
+    font-size:20px;
   }
 
   .brand-title span{
-    font-size:11px;
+    font-size:12px;
   }
 
   .menu-wrap{
@@ -692,671 +555,360 @@ button{
 }
 </style>
 </head>
-<body>
 
+<body>
 <div class="app">
 
-<!-- FIXED HEADER -->
-
 <header class="topbar">
-
   <a href="index.html" class="brand">
-
     <div class="logo">✿</div>
-
     <div class="brand-title">
       <strong>Квітковий Дім</strong>
       <span>квіти • ягоди • розсада</span>
     </div>
-
   </a>
-
 </header>
 
-<!-- FIXED CATEGORY MENU -->
-
 <div class="menu-wrap">
-
   <div class="menu-tabs" id="menuTabs"></div>
-
 </div>
-
-<!-- HERO -->
 
 <section class="hero">
-
   <div class="hero-card">
-
-    <h1>
-      Оберіть рослини
-      для свого саду
-    </h1>
-
+    <h1>Оберіть рослини для свого саду</h1>
     <p>
-      Каталог зроблений як сучасне меню:
-      зверху категорії, нижче всі товари.
-      Оберіть кількість, додайте в кошик
-      та оформіть замовлення.
+      Каталог зроблений як сучасне меню: зверху категорії, нижче всі товари.
+      Оберіть кількість, додайте в кошик та оформіть замовлення.
     </p>
-
   </div>
-
 </section>
-
-<!-- CATALOG -->
 
 <section class="layout">
-
   <main class="catalog" id="catalog"></main>
-
 </section>
 
-<!-- FLOATING CART -->
-
 <div class="floating-cart-btn" onclick="toggleCart()">
-
-  🛒
-
-  <span id="floatingCount">0</span>
-
+  🛒 <span id="floatingCount">0</span>
 </div>
 
-<!-- CART DRAWER -->
-
 <div class="cart-drawer" id="cartDrawer">
-
   <div class="drawer-head">
-
     <h3>Ваш кошик</h3>
-
     <button onclick="toggleCart()">×</button>
-
   </div>
 
   <div id="drawerItems"></div>
 
   <div class="drawer-footer">
-
     <div class="drawer-total">
-
       <span>Разом:</span>
-
       <strong id="drawerTotal">0 грн</strong>
-
     </div>
 
     <a href="cart.html" class="drawer-checkout">
-
       Оформити замовлення
-
     </a>
-
   </div>
-
 </div>
 
-<!-- FOOTER -->
-
 <footer class="footer">
-
   <div>
     <strong>Квітковий Дім</strong><br>
     квіти • ягоди • розсада
   </div>
-
-  <div>
-    © 2026. Вирощено з любовʼю.
-  </div>
-
+  <div>© 2026. Вирощено з любовʼю.</div>
 </footer>
 
 </div>
 
 <script>
-
-/* FIREBASE */
-
-const firebaseConfig = {
-
+const firebaseConfig={
   apiKey:"AIzaSyALs-ZgFX7auGxRQ2EeQnVngjnejimPLV4",
-
   authDomain:"yyokai-tattoo-system.firebaseapp.com",
-
   databaseURL:"https://yyokai-tattoo-system-default-rtdb.europe-west1.firebasedatabase.app/",
-
   projectId:"yyokai-tattoo-system",
-
   storageBucket:"yyokai-tattoo-system.firebasestorage.app",
-
   messagingSenderId:"995298614954",
-
   appId:"1:995298614954:web:e4039c69fcb0541a95fad3"
-
 };
 
 firebase.initializeApp(firebaseConfig);
+const db=firebase.database();
 
-const db = firebase.database();
-
-/* CATEGORIES */
-
-const categories = [
-
-  {
-    id:"flowers",
-    title:"Квіти",
-    emoji:"🌸"
-  },
-
-  {
-    id:"hydrangeas",
-    title:"Гортензії",
-    emoji:"💠"
-  },
-
-  {
-    id:"chrysanthemums",
-    title:"Хризантеми",
-    emoji:"🌼"
-  },
-
-  {
-    id:"berries",
-    title:"Ягоди",
-    emoji:"🍓"
-  },
-
-  {
-    id:"seedlings",
-    title:"Розсада",
-    emoji:"🌱"
-  }
-
+const categories=[
+  {id:"flowers",title:"Квіти",emoji:"🌸"},
+  {id:"hydrangeas",title:"Гортензії",emoji:"💠"},
+  {id:"chrysanthemums",title:"Хризантеми",emoji:"🌼"},
+  {id:"berries",title:"Ягоди",emoji:"🍓"},
+  {id:"seedlings",title:"Розсада",emoji:"🌱"}
 ];
 
-/*
-========================================
-ADD PRODUCTS HERE
-========================================
-*/
-
-const defaultProducts = [
-
+const defaultProducts=[
   {
     id:"hydrangea-blue",
-
     title:"Гортензія блакитна",
-
     category:"hydrangeas",
-
     subcategory:"Крупнолиста",
-
     price:280,
-
     unit:"шт",
-
     desc:"Ніжна садова гортензія для клумб і композицій.",
-
     image:"https://images.unsplash.com/photo-1622396481322-6a2b82de51fc?auto=format&fit=crop&w=900&q=90",
-
     sort:1
   },
-
   {
     id:"hydrangea-pink",
-
     title:"Гортензія рожева",
-
     category:"hydrangeas",
-
     subcategory:"Садова",
-
     price:300,
-
     unit:"шт",
-
     desc:"Пишне рожеве цвітіння для декоративного саду.",
-
     image:"https://images.unsplash.com/photo-1596438459194-f275f413d6ff?auto=format&fit=crop&w=900&q=90",
-
     sort:2
   },
-
   {
     id:"chrysanthemum-white",
-
     title:"Хризантема біла",
-
     category:"chrysanthemums",
-
     subcategory:"Кущова",
-
     price:120,
-
     unit:"шт",
-
     desc:"Осіння класика для клумб та вазонів.",
-
     image:"https://images.unsplash.com/photo-1606041008023-472dfb5e530f?auto=format&fit=crop&w=900&q=90",
-
     sort:3
   },
-
   {
     id:"strawberry",
-
     title:"Розсада полуниці",
-
     category:"seedlings",
-
     subcategory:"Солодка",
-
     price:35,
-
     unit:"кущ",
-
     desc:"Сильна розсада для домашнього врожаю.",
-
     image:"https://images.unsplash.com/photo-1464965911861-746a04b4bca6?auto=format&fit=crop&w=900&q=90",
-
     sort:4
   }
-
 ];
 
-/* PRODUCTS */
-
-let products = defaultProducts;
-
-/* CART */
-
-let cart = {};
-
-/* VISITOR */
+let products=defaultProducts;
+let cart={};
 
 function getVisitorId(){
-
-  let id = localStorage.getItem("garden_visitor_id");
+  let id=localStorage.getItem("garden_visitor_id");
 
   if(!id){
-
-    id = "visitor_" + Date.now() + "_" + Math.random().toString(16).slice(2);
-
+    id="visitor_"+Date.now()+"_"+Math.random().toString(16).slice(2);
     localStorage.setItem("garden_visitor_id",id);
   }
 
   return id;
 }
 
-const visitorId = getVisitorId();
-
-const cartRef = db.ref("gardenCarts/" + visitorId + "/items");
-
-/* RENDER TABS */
+const visitorId=getVisitorId();
+const cartRef=db.ref("gardenCarts/"+visitorId+"/items");
 
 function renderTabs(){
-
-  menuTabs.innerHTML = `
-    <button class="tab active" onclick="scrollToTop()">
+  menuTabs.innerHTML=`
+    <button class="tab active" onclick="scrollToTopBlock(this)">
       Усе
     </button>
   `;
 
   categories.forEach(cat=>{
-
-    menuTabs.innerHTML += `
-      <button
-        class="tab"
-        onclick="scrollToCategory('${cat.id}',this)"
-      >
+    menuTabs.innerHTML+=`
+      <button class="tab" onclick="scrollToCategory('${cat.id}',this)">
         ${cat.emoji} ${cat.title}
       </button>
     `;
-
   });
-
 }
 
-/* RENDER CATALOG */
-
 function renderCatalog(){
-
-  catalog.innerHTML = "";
+  catalog.innerHTML="";
 
   categories.forEach(cat=>{
+    const list=products.filter(p=>p.category===cat.id);
+    if(!list.length)return;
 
-    const list = products.filter(
-      p => p.category === cat.id
-    );
+    const section=document.createElement("section");
+    section.className="category-section";
+    section.id="cat_"+cat.id;
 
-    if(!list.length) return;
-
-    const section = document.createElement("section");
-
-    section.className = "category-section";
-
-    section.id = "cat_" + cat.id;
-
-    section.innerHTML = `
-
+    section.innerHTML=`
       <div class="category-head">
-
-        <h2>
-          ${cat.emoji} ${cat.title}
-        </h2>
-
-        <span>
-          ${list.length} позицій
-        </span>
-
+        <h2>${cat.emoji} ${cat.title}</h2>
+        <span>${list.length} позицій</span>
       </div>
-
       <div class="products"></div>
     `;
 
-    const grid = section.querySelector(".products");
+    const grid=section.querySelector(".products");
 
     list.forEach(product=>{
+      const card=document.createElement("article");
+      card.className="product";
 
-      const card = document.createElement("article");
-
-      card.className = "product";
-
-      card.innerHTML = `
-
-        <div
-          class="product-img"
-          style="background-image:url('${product.image}')"
-        ></div>
+      card.innerHTML=`
+        <div class="product-img" style="background-image:url('${product.image}')"></div>
 
         <div class="product-body">
-
           <h3>${product.title}</h3>
+          <div class="sub">${product.subcategory}</div>
+          <div class="desc">${product.desc}</div>
 
-          <div class="sub">
-            ${product.subcategory}
-          </div>
-
-          <div class="desc">
-            ${product.desc}
-          </div>
-
-          <div class="price">
-            ${product.price} грн
-          </div>
-
-          <div class="unit">
-            за ${product.unit}
-          </div>
+          <div class="price">${product.price} грн</div>
+          <div class="unit">за ${product.unit}</div>
 
           <div class="product-actions">
-
             <div class="qty">
-
-              <button onclick="changeQty('${product.id}',-1)">
-                −
-              </button>
-
-              <input
-                id="qty_${product.id}"
-                value="1"
-                inputmode="numeric"
-              >
-
-              <button onclick="changeQty('${product.id}',1)">
-                +
-              </button>
-
+              <button onclick="changeQty('${product.id}',-1)">−</button>
+              <input id="qty_${product.id}" value="1" inputmode="numeric">
+              <button onclick="changeQty('${product.id}',1)">+</button>
             </div>
 
-            <button
-              class="add"
-              onclick="addToCart('${product.id}')"
-            >
+            <button class="add" onclick="addToCart('${product.id}')">
               Додати
             </button>
-
           </div>
-
         </div>
       `;
 
       grid.appendChild(card);
-
     });
 
     catalog.appendChild(section);
-
   });
-
 }
-
-/* CATEGORY NAVIGATION */
 
 function setActiveTab(button){
-
-  document
-    .querySelectorAll(".tab")
-    .forEach(tab=>tab.classList.remove("active"));
-
+  document.querySelectorAll(".tab").forEach(tab=>{
+    tab.classList.remove("active");
+  });
   button.classList.add("active");
-
 }
 
-function scrollToTop(){
-
-  window.scrollTo({
-    top:0,
-    behavior:"smooth"
-  });
-
+function scrollToTopBlock(button){
+  setActiveTab(button);
+  window.scrollTo({top:0,behavior:"smooth"});
 }
 
 function scrollToCategory(id,button){
-
   setActiveTab(button);
-
-  document
-    .getElementById("cat_" + id)
-    ?.scrollIntoView({
-      behavior:"smooth"
-    });
-
+  document.getElementById("cat_"+id)?.scrollIntoView({
+    behavior:"smooth"
+  });
 }
-
-/* QUANTITY */
 
 function changeQty(id,delta){
+  const input=document.getElementById("qty_"+id);
+  let value=Number(input.value||1)+delta;
 
-  const input = document.getElementById("qty_" + id);
+  if(value<1)value=1;
 
-  let value = Number(input.value || 1) + delta;
-
-  if(value < 1) value = 1;
-
-  input.value = value;
-
+  input.value=value;
 }
 
-/* ADD TO CART */
-
 async function addToCart(id){
+  const product=products.find(item=>item.id===id);
+  if(!product)return;
 
-  const product = products.find(
-    item => item.id === id
-  );
-
-  if(!product) return;
-
-  const qtyInput = document.getElementById("qty_" + id);
-
-  const qty = Number(qtyInput.value || 1);
-
-  const existing = cart[id] || {};
+  const qtyInput=document.getElementById("qty_"+id);
+  const qty=Number(qtyInput.value||1);
+  const existing=cart[id]||{};
 
   await cartRef.child(id).set({
-
     id:product.id,
-
     title:product.title,
-
     price:product.price,
-
     unit:product.unit,
-
     image:product.image,
-
-    qty:Number(existing.qty || 0) + qty
-
+    qty:Number(existing.qty||0)+qty
   });
 
   cartDrawer.classList.add("open");
-
 }
 
-/* LISTEN CART */
-
 cartRef.on("value",snapshot=>{
-
-  cart = snapshot.val() || {};
-
+  cart=snapshot.val()||{};
   renderCart();
-
 });
 
-/* RENDER CART */
-
 function renderCart(){
+  const items=Object.values(cart);
 
-  const items = Object.values(cart);
-
-  let total = 0;
-
-  let count = 0;
+  let total=0;
+  let count=0;
 
   items.forEach(item=>{
-
-    total += item.qty * item.price;
-
-    count += item.qty;
-
+    total+=item.qty*item.price;
+    count+=item.qty;
   });
 
-  floatingCount.textContent = count;
-
-  drawerTotal.textContent = total + " грн";
+  floatingCount.textContent=count;
+  drawerTotal.textContent=total+" грн";
 
   if(!items.length){
-
-    drawerItems.innerHTML = `
-      <div class="empty">
-        Кошик порожній
-      </div>
+    drawerItems.innerHTML=`
+      <div class="empty">Кошик порожній</div>
     `;
-
     return;
   }
 
-  drawerItems.innerHTML = "";
+  drawerItems.innerHTML="";
 
   items.forEach(item=>{
+    const card=document.createElement("div");
+    card.className="drawer-item";
 
-    const card = document.createElement("div");
-
-    card.className = "drawer-item";
-
-    card.innerHTML = `
-
+    card.innerHTML=`
       <img src="${item.image}">
 
       <div>
-
         <b>${item.title}</b>
-
-        <span>
-          ${item.price} грн / ${item.unit}
-        </span>
+        <span>${item.price} грн / ${item.unit}</span>
 
         <div class="drawer-controls">
-
-          <button onclick="decreaseCartItem('${item.id}')">
-            −
-          </button>
-
+          <button onclick="decreaseCartItem('${item.id}')">−</button>
           <strong>${item.qty}</strong>
-
-          <button onclick="increaseCartItem('${item.id}')">
-            +
-          </button>
-
+          <button onclick="increaseCartItem('${item.id}')">+</button>
         </div>
-
       </div>
     `;
 
     drawerItems.appendChild(card);
-
   });
-
 }
-
-/* INCREASE */
 
 async function increaseCartItem(id){
-
-  const item = cart[id];
-
-  if(!item) return;
+  const item=cart[id];
+  if(!item)return;
 
   await cartRef.child(id).update({
-
-    qty:item.qty + 1
-
+    qty:item.qty+1
   });
-
 }
-
-/* DECREASE */
 
 async function decreaseCartItem(id){
+  const item=cart[id];
+  if(!item)return;
 
-  const item = cart[id];
+  const newQty=item.qty-1;
 
-  if(!item) return;
-
-  const newQty = item.qty - 1;
-
-  if(newQty <= 0){
-
+  if(newQty<=0){
     await cartRef.child(id).remove();
-
   }else{
-
     await cartRef.child(id).update({
-
       qty:newQty
-
     });
-
   }
-
 }
-
-/* DRAWER */
 
 function toggleCart(){
-
   cartDrawer.classList.toggle("open");
-
 }
 
-/* INIT */
-
 renderTabs();
-
 renderCatalog();
-
 </script>
-
 </body>
 </html>
