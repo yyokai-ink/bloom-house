@@ -3,6 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+
 <title>Каталог | Квітковий Дім</title>
 
 <script src="https://www.gstatic.com/firebasejs/9.22.1/firebase-app-compat.js"></script>
@@ -16,35 +17,40 @@
   -webkit-tap-highlight-color:transparent;
 }
 
+:root{
+  --bg:#fffaf4;
+  --paper:#fffdf8;
+  --milk:#fff7ef;
+  --sage:#6f8f72;
+  --sage-dark:#3f5f44;
+  --berry:#8d465a;
+  --text:#2d2822;
+  --muted:#7f7468;
+  --line:rgba(63,95,68,.16);
+  --shadow:0 28px 90px rgba(63,95,68,.14);
+}
+
 html,body{
   min-height:100%;
-  touch-action:manipulation;
   font-family:Arial,sans-serif;
-  background:#fffaf4;
-  color:#2d2822;
+  color:var(--text);
+  background:var(--bg);
   scroll-behavior:smooth;
+  touch-action:manipulation;
 }
 
 body{
   overflow-x:hidden;
   background:
-    radial-gradient(circle at 12% 8%,rgba(217,162,173,.20),transparent 28%),
-    radial-gradient(circle at 88% 4%,rgba(111,143,114,.22),transparent 30%),
-    linear-gradient(180deg,#fffdf8 0%,#fff7ef 46%,#f4ecdf 100%);
-}
-
-:root{
-  --sage:#6f8f72;
-  --sage-dark:#3f5f44;
-  --berry:#8d465a;
-  --muted:#7f7468;
-  --line:rgba(63,95,68,.16);
-  --milk:#fff7ef;
+    radial-gradient(circle at 10% 0%,rgba(217,162,173,.24),transparent 32%),
+    radial-gradient(circle at 90% 0%,rgba(111,143,114,.22),transparent 34%),
+    linear-gradient(180deg,#fffdf8 0%,#fff8ee 45%,#f6ecdf 100%);
+  background-attachment:fixed;
 }
 
 a{
-  text-decoration:none;
   color:inherit;
+  text-decoration:none;
 }
 
 button,input{
@@ -58,43 +64,41 @@ button{
 
 .app{
   min-height:100vh;
+  padding-top:154px;
 }
 
-/* TOPBAR */
+/* FIXED BRAND HEADER */
 
 .topbar{
-  position:sticky;
-  top:14px;
-  z-index:80;
+  position:fixed;
+  top:12px;
+  left:50%;
+  transform:translateX(-50%);
+  z-index:100;
 
   width:min(1180px,calc(100% - 28px));
-  margin:14px auto 0;
 
-  display:grid;
-  grid-template-columns:1fr auto 1fr;
-  align-items:center;
-
-  padding:12px 14px;
+  padding:12px 18px;
 
   border-radius:999px;
 
-  background:rgba(255,253,248,.82);
-
-  border:1px solid rgba(255,255,255,.9);
+  background:rgba(255,253,248,.9);
+  border:1px solid rgba(255,255,255,.95);
 
   backdrop-filter:blur(24px);
-
   box-shadow:0 20px 70px rgba(63,95,68,.12);
-}
-
-.brand{
-  grid-column:2;
 
   display:flex;
   align-items:center;
-  justify-content:flex-start;
+  justify-content:center;
+}
 
-  gap:14px;
+.brand{
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  gap:13px;
+  text-align:center;
 }
 
 .logo{
@@ -107,7 +111,6 @@ button{
   place-items:center;
 
   background:linear-gradient(145deg,#fff,#f0e1d5);
-
   border:1px solid rgba(198,165,107,.28);
 
   box-shadow:
@@ -115,12 +118,12 @@ button{
     0 16px 34px rgba(63,95,68,.14);
 
   color:var(--sage-dark);
-
   font-size:25px;
+  flex:none;
 }
 
 .brand-title{
-  text-align:left;
+  text-align:center;
 }
 
 .brand-title strong{
@@ -137,97 +140,28 @@ button{
   color:var(--muted);
 }
 
-.nav{
-  grid-column:3;
-  justify-self:end;
-}
-
-.season-pill{
-  padding:13px 16px;
-  border-radius:999px;
-
-  background:
-    linear-gradient(
-      135deg,
-      var(--sage-dark),
-      var(--sage)
-    );
-
-  color:#fff;
-
-  font-size:14px;
-  font-weight:900;
-
-  box-shadow:0 14px 28px rgba(63,95,68,.2);
-}
-
-/* HERO */
-
-.hero{
-  width:min(1180px,calc(100% - 28px));
-  margin:24px auto 0;
-}
-
-.hero-card{
-  padding:44px;
-
-  border-radius:46px;
-
-  background:
-    linear-gradient(
-      135deg,
-      rgba(255,255,255,.96),
-      rgba(236,245,231,.82) 50%,
-      rgba(255,250,244,.92)
-    );
-
-  border:1px solid rgba(255,255,255,.92);
-
-  box-shadow:0 28px 90px rgba(63,95,68,.14);
-}
-
-.hero h1{
-  font-size:clamp(42px,7vw,78px);
-
-  line-height:.9;
-
-  letter-spacing:-.07em;
-}
-
-.hero p{
-  margin-top:18px;
-
-  color:var(--muted);
-
-  font-size:18px;
-
-  line-height:1.65;
-
-  max-width:760px;
-}
-
-/* CATEGORY MENU */
+/* FIXED CATEGORY MENU */
 
 .menu-wrap{
-  position:sticky;
+  position:fixed;
   top:92px;
-  z-index:70;
+  left:50%;
+  transform:translateX(-50%);
+  z-index:95;
 
   width:min(1180px,calc(100% - 28px));
-
-  margin:16px auto 0;
 
   padding:10px;
 
   border-radius:999px;
 
-  background:rgba(255,253,248,.86);
-
-  border:1px solid rgba(255,255,255,.9);
+  background:rgba(255,253,248,.92);
+  border:1px solid rgba(255,255,255,.95);
 
   backdrop-filter:blur(22px);
+  box-shadow:0 18px 55px rgba(63,95,68,.1);
 
-  overflow:auto;
+  overflow-x:auto;
 }
 
 .menu-tabs{
@@ -256,16 +190,56 @@ button{
   color:#fff;
 }
 
+/* HERO */
+
+.hero{
+  width:min(1180px,calc(100% - 28px));
+  margin:0 auto 24px;
+}
+
+.hero-card{
+  padding:34px 38px;
+
+  border-radius:42px;
+
+  background:
+    linear-gradient(
+      135deg,
+      rgba(255,255,255,.96),
+      rgba(236,245,231,.86),
+      rgba(255,250,244,.95)
+    );
+
+  border:1px solid rgba(255,255,255,.92);
+  box-shadow:var(--shadow);
+}
+
+.hero h1{
+  font-size:clamp(38px,7vw,72px);
+  line-height:.92;
+  letter-spacing:-.07em;
+}
+
+.hero p{
+  margin-top:16px;
+  max-width:760px;
+
+  color:var(--muted);
+
+  font-size:17px;
+  line-height:1.6;
+}
+
 /* CATALOG */
 
 .layout{
   width:min(1180px,calc(100% - 28px));
-  margin:24px auto 0;
+  margin:0 auto;
 }
 
 .catalog{
   display:grid;
-  gap:28px;
+  gap:30px;
 }
 
 .category-section{
@@ -276,7 +250,7 @@ button{
   display:flex;
   align-items:end;
   justify-content:space-between;
-
+  gap:12px;
   margin-bottom:12px;
 }
 
@@ -306,7 +280,6 @@ button{
   border-radius:30px;
 
   background:rgba(255,255,255,.78);
-
   border:1px solid rgba(255,255,255,.9);
 
   box-shadow:0 18px 50px rgba(63,95,68,.09);
@@ -314,9 +287,7 @@ button{
 
 .product-img{
   height:150px;
-
   border-radius:24px;
-
   background:#eee center/cover no-repeat;
 }
 
@@ -332,30 +303,23 @@ button{
 
 .sub{
   margin-top:4px;
-
   color:var(--sage-dark);
-
   font-size:12px;
   font-weight:900;
 }
 
 .desc{
   margin-top:7px;
+  flex:1;
 
   color:var(--muted);
 
   font-size:14px;
-
   line-height:1.45;
-
-  flex:1;
-}
-
-.price-row{
-  margin-top:12px;
 }
 
 .price{
+  margin-top:12px;
   font-size:24px;
   font-weight:950;
   color:var(--berry);
@@ -371,7 +335,6 @@ button{
 
   display:grid;
   grid-template-columns:108px 1fr;
-
   gap:8px;
 }
 
@@ -381,11 +344,12 @@ button{
   border-radius:999px;
 
   background:var(--milk);
-
   border:1px solid var(--line);
 
   display:grid;
   grid-template-columns:34px 1fr 34px;
+
+  overflow:hidden;
 }
 
 .qty button{
@@ -409,7 +373,6 @@ button{
   border-radius:999px;
 
   background:var(--sage-dark);
-
   color:#fff;
 
   font-weight:950;
@@ -424,13 +387,11 @@ button{
   z-index:200;
 
   height:62px;
-
   padding:0 22px;
 
   border-radius:999px;
 
   background:var(--sage-dark);
-
   color:#fff;
 
   display:flex;
@@ -449,7 +410,6 @@ button{
   border-radius:50%;
 
   background:#fff;
-
   color:var(--sage-dark);
 
   display:grid;
@@ -458,7 +418,7 @@ button{
   font-size:12px;
 }
 
-/* DRAWER */
+/* CART DRAWER */
 
 .cart-drawer{
   position:fixed;
@@ -507,7 +467,6 @@ button{
   border-radius:50%;
 
   background:#fff;
-
   color:var(--sage-dark);
 
   font-size:20px;
@@ -515,22 +474,18 @@ button{
 
 #drawerItems{
   flex:1;
-
   overflow:auto;
 
   padding:14px;
 
   display:flex;
   flex-direction:column;
-
   gap:8px;
 }
 
 .drawer-item{
   display:grid;
-
   grid-template-columns:54px 1fr;
-
   gap:10px;
 
   padding:8px;
@@ -538,7 +493,6 @@ button{
   border-radius:18px;
 
   background:#fff;
-
   border:1px solid var(--line);
 
   align-items:center;
@@ -549,23 +503,14 @@ button{
 .drawer-item img{
   width:54px;
   height:54px;
-
   object-fit:cover;
-
   border-radius:14px;
-}
-
-.drawer-item-content{
-  display:flex;
-  flex-direction:column;
-  justify-content:center;
 }
 
 .drawer-item b{
   display:block;
 
   font-size:14px;
-
   line-height:1.15;
 
   white-space:nowrap;
@@ -575,11 +520,8 @@ button{
 
 .drawer-item span{
   display:block;
-
   margin-top:4px;
-
   color:var(--muted);
-
   font-size:12px;
 }
 
@@ -587,7 +529,6 @@ button{
   margin-top:7px;
 
   display:inline-grid;
-
   grid-template-columns:30px 34px 30px;
 
   height:30px;
@@ -597,17 +538,13 @@ button{
   overflow:hidden;
 
   border:1px solid var(--line);
-
   background:var(--milk);
 }
 
 .drawer-controls button{
   background:transparent;
-
   color:var(--sage-dark);
-
   font-weight:950;
-
   font-size:16px;
 }
 
@@ -640,7 +577,6 @@ button{
   border-radius:999px;
 
   background:var(--berry);
-
   color:#fff;
 
   display:flex;
@@ -648,6 +584,19 @@ button{
   justify-content:center;
 
   font-weight:950;
+}
+
+.empty{
+  padding:20px;
+
+  border-radius:22px;
+
+  text-align:center;
+
+  color:var(--muted);
+
+  background:var(--milk);
+  border:1px solid var(--line);
 }
 
 /* FOOTER */
@@ -664,9 +613,9 @@ button{
   display:flex;
   justify-content:space-between;
   align-items:center;
+  gap:18px;
 
   background:rgba(255,255,255,.56);
-
   border:1px solid rgba(255,255,255,.82);
 
   color:var(--muted);
@@ -685,22 +634,41 @@ button{
 }
 
 @media(max-width:640px){
-
-  .season-pill{
-    display:none;
+  .app{
+    padding-top:146px;
   }
 
-  .hero-card{
-    padding:30px 22px;
-    border-radius:34px;
+  .topbar{
+    top:8px;
+    width:calc(100% - 18px);
+    padding:10px;
   }
 
-  .hero h1{
-    font-size:44px;
+  .logo{
+    width:46px;
+    height:46px;
+  }
+
+  .brand-title strong{
+    font-size:18px;
+  }
+
+  .brand-title span{
+    font-size:11px;
   }
 
   .menu-wrap{
-    top:84px;
+    top:82px;
+    width:calc(100% - 18px);
+  }
+
+  .hero-card{
+    padding:28px 22px;
+    border-radius:32px;
+  }
+
+  .hero h1{
+    font-size:42px;
   }
 
   .product{
@@ -724,10 +692,11 @@ button{
 }
 </style>
 </head>
-
 <body>
 
 <div class="app">
+
+<!-- FIXED HEADER -->
 
 <header class="topbar">
 
@@ -742,46 +711,66 @@ button{
 
   </a>
 
-  <nav class="nav">
-    <div class="season-pill">Сезон 2026</div>
-  </nav>
-
 </header>
+
+<!-- FIXED CATEGORY MENU -->
+
+<div class="menu-wrap">
+
+  <div class="menu-tabs" id="menuTabs"></div>
+
+</div>
+
+<!-- HERO -->
 
 <section class="hero">
 
   <div class="hero-card">
 
-    <h1>Оберіть рослини для свого саду</h1>
+    <h1>
+      Оберіть рослини
+      для свого саду
+    </h1>
 
     <p>
-      Каталог зроблений як зручне меню:
-      зверху категорії, нижче всі рослини.
+      Каталог зроблений як сучасне меню:
+      зверху категорії, нижче всі товари.
       Оберіть кількість, додайте в кошик
-      і оформіть замовлення.
+      та оформіть замовлення.
     </p>
 
   </div>
 
 </section>
 
-<div class="menu-wrap">
-  <div class="menu-tabs" id="menuTabs"></div>
-</div>
+<!-- CATALOG -->
 
 <section class="layout">
+
   <main class="catalog" id="catalog"></main>
+
 </section>
 
+<!-- FLOATING CART -->
+
 <div class="floating-cart-btn" onclick="toggleCart()">
-  🛒 <span id="floatingCount">0</span>
+
+  🛒
+
+  <span id="floatingCount">0</span>
+
 </div>
+
+<!-- CART DRAWER -->
 
 <div class="cart-drawer" id="cartDrawer">
 
   <div class="drawer-head">
+
     <h3>Ваш кошик</h3>
+
     <button onclick="toggleCart()">×</button>
+
   </div>
 
   <div id="drawerItems"></div>
@@ -789,17 +778,24 @@ button{
   <div class="drawer-footer">
 
     <div class="drawer-total">
+
       <span>Разом:</span>
+
       <strong id="drawerTotal">0 грн</strong>
+
     </div>
 
     <a href="cart.html" class="drawer-checkout">
+
       Оформити замовлення
+
     </a>
 
   </div>
 
 </div>
+
+<!-- FOOTER -->
 
 <footer class="footer">
 
@@ -818,74 +814,173 @@ button{
 
 <script>
 
-const firebaseConfig={
+/* FIREBASE */
+
+const firebaseConfig = {
+
   apiKey:"AIzaSyALs-ZgFX7auGxRQ2EeQnVngjnejimPLV4",
+
   authDomain:"yyokai-tattoo-system.firebaseapp.com",
+
   databaseURL:"https://yyokai-tattoo-system-default-rtdb.europe-west1.firebasedatabase.app/",
+
   projectId:"yyokai-tattoo-system",
+
   storageBucket:"yyokai-tattoo-system.firebasestorage.app",
+
   messagingSenderId:"995298614954",
+
   appId:"1:995298614954:web:e4039c69fcb0541a95fad3"
+
 };
 
 firebase.initializeApp(firebaseConfig);
 
-const db=firebase.database();
+const db = firebase.database();
 
-const categories=[
-  {id:"flowers",title:"Квіти",emoji:"🌸"},
-  {id:"hydrangeas",title:"Гортензії",emoji:"💠"},
-  {id:"chrysanthemums",title:"Хризантеми",emoji:"🌼"},
-  {id:"berries",title:"Ягоди",emoji:"🍓"},
-  {id:"seedlings",title:"Розсада",emoji:"🌱"}
+/* CATEGORIES */
+
+const categories = [
+
+  {
+    id:"flowers",
+    title:"Квіти",
+    emoji:"🌸"
+  },
+
+  {
+    id:"hydrangeas",
+    title:"Гортензії",
+    emoji:"💠"
+  },
+
+  {
+    id:"chrysanthemums",
+    title:"Хризантеми",
+    emoji:"🌼"
+  },
+
+  {
+    id:"berries",
+    title:"Ягоди",
+    emoji:"🍓"
+  },
+
+  {
+    id:"seedlings",
+    title:"Розсада",
+    emoji:"🌱"
+  }
+
 ];
 
-const defaultProducts=[
+/*
+========================================
+ADD PRODUCTS HERE
+========================================
+*/
+
+const defaultProducts = [
+
   {
     id:"hydrangea-blue",
+
     title:"Гортензія блакитна",
+
     category:"hydrangeas",
+
     subcategory:"Крупнолиста",
+
     price:280,
+
     unit:"шт",
-    desc:"Ніжна садова гортензія.",
+
+    desc:"Ніжна садова гортензія для клумб і композицій.",
+
     image:"https://images.unsplash.com/photo-1622396481322-6a2b82de51fc?auto=format&fit=crop&w=900&q=90",
+
     sort:1
   },
+
   {
     id:"hydrangea-pink",
+
     title:"Гортензія рожева",
+
     category:"hydrangeas",
+
     subcategory:"Садова",
+
     price:300,
+
     unit:"шт",
-    desc:"Пишне цвітіння.",
+
+    desc:"Пишне рожеве цвітіння для декоративного саду.",
+
     image:"https://images.unsplash.com/photo-1596438459194-f275f413d6ff?auto=format&fit=crop&w=900&q=90",
+
     sort:2
   },
+
   {
     id:"chrysanthemum-white",
+
     title:"Хризантема біла",
+
     category:"chrysanthemums",
+
     subcategory:"Кущова",
+
     price:120,
+
     unit:"шт",
-    desc:"Осіння класика.",
+
+    desc:"Осіння класика для клумб та вазонів.",
+
     image:"https://images.unsplash.com/photo-1606041008023-472dfb5e530f?auto=format&fit=crop&w=900&q=90",
+
     sort:3
+  },
+
+  {
+    id:"strawberry",
+
+    title:"Розсада полуниці",
+
+    category:"seedlings",
+
+    subcategory:"Солодка",
+
+    price:35,
+
+    unit:"кущ",
+
+    desc:"Сильна розсада для домашнього врожаю.",
+
+    image:"https://images.unsplash.com/photo-1464965911861-746a04b4bca6?auto=format&fit=crop&w=900&q=90",
+
+    sort:4
   }
+
 ];
 
-let products=defaultProducts;
-let cart={};
+/* PRODUCTS */
+
+let products = defaultProducts;
+
+/* CART */
+
+let cart = {};
+
+/* VISITOR */
 
 function getVisitorId(){
 
-  let id=localStorage.getItem("garden_visitor_id");
+  let id = localStorage.getItem("garden_visitor_id");
 
   if(!id){
 
-    id="visitor_"+Date.now();
+    id = "visitor_" + Date.now() + "_" + Math.random().toString(16).slice(2);
 
     localStorage.setItem("garden_visitor_id",id);
   }
@@ -893,90 +988,131 @@ function getVisitorId(){
   return id;
 }
 
-const visitorId=getVisitorId();
+const visitorId = getVisitorId();
 
-const cartRef=db.ref("gardenCarts/"+visitorId+"/items");
+const cartRef = db.ref("gardenCarts/" + visitorId + "/items");
+
+/* RENDER TABS */
 
 function renderTabs(){
 
-  menuTabs.innerHTML=`<button class="tab active">Усе</button>`;
+  menuTabs.innerHTML = `
+    <button class="tab active" onclick="scrollToTop()">
+      Усе
+    </button>
+  `;
 
   categories.forEach(cat=>{
 
-    menuTabs.innerHTML+=`
-      <button class="tab">
+    menuTabs.innerHTML += `
+      <button
+        class="tab"
+        onclick="scrollToCategory('${cat.id}',this)"
+      >
         ${cat.emoji} ${cat.title}
       </button>
     `;
+
   });
+
 }
+
+/* RENDER CATALOG */
 
 function renderCatalog(){
 
-  catalog.innerHTML="";
+  catalog.innerHTML = "";
 
   categories.forEach(cat=>{
 
-    const list=products.filter(p=>p.category===cat.id);
+    const list = products.filter(
+      p => p.category === cat.id
+    );
 
-    if(!list.length)return;
+    if(!list.length) return;
 
-    const section=document.createElement("section");
+    const section = document.createElement("section");
 
-    section.className="category-section";
+    section.className = "category-section";
 
-    section.innerHTML=`
+    section.id = "cat_" + cat.id;
+
+    section.innerHTML = `
+
       <div class="category-head">
-        <h2>${cat.emoji} ${cat.title}</h2>
-        <span>${list.length} позицій</span>
+
+        <h2>
+          ${cat.emoji} ${cat.title}
+        </h2>
+
+        <span>
+          ${list.length} позицій
+        </span>
+
       </div>
 
       <div class="products"></div>
     `;
 
-    const grid=section.querySelector(".products");
+    const grid = section.querySelector(".products");
 
-    list.forEach(p=>{
+    list.forEach(product=>{
 
-      const card=document.createElement("article");
+      const card = document.createElement("article");
 
-      card.className="product";
+      card.className = "product";
 
-      card.innerHTML=`
-        <div class="product-img"
-             style="background-image:url('${p.image}')">
-        </div>
+      card.innerHTML = `
+
+        <div
+          class="product-img"
+          style="background-image:url('${product.image}')"
+        ></div>
 
         <div class="product-body">
 
-          <h3>${p.title}</h3>
+          <h3>${product.title}</h3>
 
-          <div class="sub">${p.subcategory}</div>
+          <div class="sub">
+            ${product.subcategory}
+          </div>
 
-          <div class="desc">${p.desc}</div>
+          <div class="desc">
+            ${product.desc}
+          </div>
 
-          <div class="price-row">
+          <div class="price">
+            ${product.price} грн
+          </div>
 
-            <div>
-              <div class="price">${p.price} грн</div>
-              <div class="unit">за ${p.unit}</div>
-            </div>
-
+          <div class="unit">
+            за ${product.unit}
           </div>
 
           <div class="product-actions">
 
             <div class="qty">
 
-              <button onclick="changeQty('${p.id}',-1)">−</button>
+              <button onclick="changeQty('${product.id}',-1)">
+                −
+              </button>
 
-              <input id="qty_${p.id}" value="1">
+              <input
+                id="qty_${product.id}"
+                value="1"
+                inputmode="numeric"
+              >
 
-              <button onclick="changeQty('${p.id}',1)">+</button>
+              <button onclick="changeQty('${product.id}',1)">
+                +
+              </button>
 
             </div>
 
-            <button class="add" onclick="addToCart('${p.id}')">
+            <button
+              class="add"
+              onclick="addToCart('${product.id}')"
+            >
               Додати
             </button>
 
@@ -995,95 +1131,151 @@ function renderCatalog(){
 
 }
 
+/* CATEGORY NAVIGATION */
+
+function setActiveTab(button){
+
+  document
+    .querySelectorAll(".tab")
+    .forEach(tab=>tab.classList.remove("active"));
+
+  button.classList.add("active");
+
+}
+
+function scrollToTop(){
+
+  window.scrollTo({
+    top:0,
+    behavior:"smooth"
+  });
+
+}
+
+function scrollToCategory(id,button){
+
+  setActiveTab(button);
+
+  document
+    .getElementById("cat_" + id)
+    ?.scrollIntoView({
+      behavior:"smooth"
+    });
+
+}
+
+/* QUANTITY */
+
 function changeQty(id,delta){
 
-  const input=document.getElementById("qty_"+id);
+  const input = document.getElementById("qty_" + id);
 
-  let value=Number(input.value||1)+delta;
+  let value = Number(input.value || 1) + delta;
 
-  if(value<1)value=1;
+  if(value < 1) value = 1;
 
-  input.value=value;
+  input.value = value;
+
 }
+
+/* ADD TO CART */
 
 async function addToCart(id){
 
-  const p=products.find(x=>x.id===id);
+  const product = products.find(
+    item => item.id === id
+  );
 
-  const input=document.getElementById("qty_"+id);
+  if(!product) return;
 
-  const qty=Number(input.value||1);
+  const qtyInput = document.getElementById("qty_" + id);
 
-  const existing=cart[id]||{};
+  const qty = Number(qtyInput.value || 1);
+
+  const existing = cart[id] || {};
 
   await cartRef.child(id).set({
-    id:p.id,
-    title:p.title,
-    price:p.price,
-    unit:p.unit,
-    image:p.image,
-    qty:Number(existing.qty||0)+qty
+
+    id:product.id,
+
+    title:product.title,
+
+    price:product.price,
+
+    unit:product.unit,
+
+    image:product.image,
+
+    qty:Number(existing.qty || 0) + qty
+
   });
 
   cartDrawer.classList.add("open");
-}
-
-function listenCart(){
-
-  cartRef.on("value",snap=>{
-
-    cart=snap.val()||{};
-
-    renderCart();
-
-  });
 
 }
+
+/* LISTEN CART */
+
+cartRef.on("value",snapshot=>{
+
+  cart = snapshot.val() || {};
+
+  renderCart();
+
+});
+
+/* RENDER CART */
 
 function renderCart(){
 
-  const items=Object.values(cart);
+  const items = Object.values(cart);
 
-  let total=0;
-  let count=0;
+  let total = 0;
+
+  let count = 0;
 
   items.forEach(item=>{
 
-    total+=item.qty*item.price;
+    total += item.qty * item.price;
 
-    count+=item.qty;
+    count += item.qty;
 
   });
 
-  floatingCount.textContent=count;
+  floatingCount.textContent = count;
 
-  drawerTotal.textContent=total+" грн";
+  drawerTotal.textContent = total + " грн";
 
   if(!items.length){
 
-    drawerItems.innerHTML=`
-      <div class="empty">Кошик порожній</div>
+    drawerItems.innerHTML = `
+      <div class="empty">
+        Кошик порожній
+      </div>
     `;
 
     return;
   }
 
-  drawerItems.innerHTML="";
+  drawerItems.innerHTML = "";
 
   items.forEach(item=>{
 
-    const div=document.createElement("div");
+    const card = document.createElement("div");
 
-    div.className="drawer-item";
+    card.className = "drawer-item";
 
-    div.innerHTML=`
+    card.innerHTML = `
+
       <img src="${item.image}">
 
-      <div class="drawer-item-content">
+      <div>
 
         <b>${item.title}</b>
 
-        <span>${item.price} грн / ${item.unit}</span>
+        <span>
+          ${item.price} грн / ${item.unit}
+        </span>
 
         <div class="drawer-controls">
 
@@ -1102,50 +1294,67 @@ function renderCart(){
       </div>
     `;
 
-    drawerItems.appendChild(div);
+    drawerItems.appendChild(card);
 
   });
 
 }
+
+/* INCREASE */
 
 async function increaseCartItem(id){
 
-  const item=cart[id];
+  const item = cart[id];
+
+  if(!item) return;
 
   await cartRef.child(id).update({
-    qty:item.qty+1
+
+    qty:item.qty + 1
+
   });
+
 }
+
+/* DECREASE */
 
 async function decreaseCartItem(id){
 
-  const item=cart[id];
+  const item = cart[id];
 
-  const newQty=item.qty-1;
+  if(!item) return;
 
-  if(newQty<=0){
+  const newQty = item.qty - 1;
+
+  if(newQty <= 0){
 
     await cartRef.child(id).remove();
 
   }else{
 
     await cartRef.child(id).update({
+
       qty:newQty
+
     });
 
   }
 
 }
 
+/* DRAWER */
+
 function toggleCart(){
+
   cartDrawer.classList.toggle("open");
+
 }
+
+/* INIT */
 
 renderTabs();
 
 renderCatalog();
-
-listenCart();
 
 </script>
 
