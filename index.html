@@ -1,0 +1,714 @@
+<!DOCTYPE html>
+<html lang="uk">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Квіткова Садиба | Розсада, квіти та ягоди</title>
+
+<script src="https://www.gstatic.com/firebasejs/9.22.1/firebase-app-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/9.22.1/firebase-database-compat.js"></script>
+
+<style>
+*{margin:0;padding:0;box-sizing:border-box;-webkit-tap-highlight-color:transparent}
+:root{
+  --cream:#fffaf2;
+  --milk:#fffdf8;
+  --green:#496b45;
+  --soft:#eaf1df;
+  --rose:#d98b9a;
+  --berry:#8f3e55;
+  --text:#2d2a24;
+  --muted:#81796d;
+  --line:rgba(73,107,69,.18);
+  --shadow:0 24px 80px rgba(73,107,69,.14);
+}
+html,body{min-height:100%;font-family:Arial,sans-serif;background:var(--cream);color:var(--text);scroll-behavior:smooth}
+body{
+  background:
+    radial-gradient(circle at 10% 0%,rgba(217,139,154,.24),transparent 30%),
+    radial-gradient(circle at 90% 10%,rgba(136,184,119,.25),transparent 32%),
+    linear-gradient(180deg,#fffdf8,#fff7ed 45%,#f5efe3);
+}
+button,input,textarea,select{font-family:inherit}
+button{cursor:pointer;border:0;transition:.18s}
+button:active{transform:scale(.97)}
+.app{min-height:100vh;overflow:hidden}
+
+.topbar{
+  position:sticky;top:12px;z-index:50;
+  width:min(1180px,calc(100% - 28px));
+  margin:12px auto 0;
+  display:flex;align-items:center;justify-content:space-between;gap:14px;
+  padding:12px 14px;border-radius:999px;
+  background:rgba(255,255,255,.76);
+  border:1px solid rgba(255,255,255,.8);
+  backdrop-filter:blur(22px);
+  box-shadow:0 18px 60px rgba(73,107,69,.12);
+}
+.brand{display:flex;align-items:center;gap:12px}
+.logo{
+  width:48px;height:48px;border-radius:50%;
+  display:grid;place-items:center;
+  background:linear-gradient(135deg,#fff,#eaf1df);
+  border:1px solid var(--line);
+  box-shadow:0 12px 30px rgba(73,107,69,.14);
+  font-size:23px;
+}
+.brand-text strong{display:block;font-size:18px;color:var(--green)}
+.brand-text span{display:block;font-size:12px;color:var(--muted);margin-top:2px}
+.nav{display:flex;gap:8px;align-items:center}
+.nav a,.cart-btn{
+  padding:12px 16px;border-radius:999px;
+  background:rgba(255,255,255,.65);
+  color:var(--green);text-decoration:none;font-weight:800;font-size:14px;
+}
+.cart-btn{
+  background:var(--green);color:#fff;
+  display:flex;align-items:center;gap:8px;
+}
+.cart-count{
+  min-width:22px;height:22px;border-radius:999px;
+  display:grid;place-items:center;background:#fff;color:var(--green);font-size:12px;
+}
+
+.hero{
+  width:min(1180px,calc(100% - 28px));
+  margin:22px auto 0;
+  min-height:620px;
+  display:grid;grid-template-columns:1.05fr .95fr;gap:18px;
+}
+.hero-card{
+  position:relative;overflow:hidden;
+  border-radius:44px;padding:46px;
+  background:
+    linear-gradient(135deg,rgba(255,255,255,.88),rgba(255,250,242,.72)),
+    radial-gradient(circle at 80% 10%,rgba(217,139,154,.24),transparent 30%);
+  border:1px solid rgba(255,255,255,.9);
+  box-shadow:var(--shadow);
+}
+.kicker{
+  display:inline-flex;align-items:center;gap:8px;
+  padding:10px 14px;border-radius:999px;
+  background:rgba(73,107,69,.09);
+  color:var(--green);font-weight:900;font-size:13px;
+}
+.hero h1{
+  margin-top:24px;
+  font-size:clamp(44px,7vw,88px);
+  line-height:.92;letter-spacing:-.06em;color:#25231e;
+}
+.hero p{
+  margin-top:22px;max-width:640px;
+  color:#70685f;font-size:19px;line-height:1.65;
+}
+.hero-actions{margin-top:28px;display:flex;gap:10px;flex-wrap:wrap}
+.primary,.secondary{
+  padding:16px 22px;border-radius:999px;font-weight:950;font-size:15px;
+}
+.primary{background:var(--green);color:#fff;box-shadow:0 16px 36px rgba(73,107,69,.22)}
+.secondary{background:#fff;color:var(--green);border:1px solid var(--line)}
+.hero-image{
+  min-height:620px;border-radius:44px;overflow:hidden;position:relative;
+  background:
+    linear-gradient(rgba(0,0,0,.04),rgba(0,0,0,.16)),
+    url("https://images.unsplash.com/photo-1490750967868-88aa4486c946?auto=format&fit=crop&w=1200&q=80")
+    center/cover no-repeat;
+  box-shadow:var(--shadow);
+  border:1px solid rgba(255,255,255,.8);
+}
+.float-card{
+  position:absolute;left:22px;right:22px;bottom:22px;
+  padding:20px;border-radius:30px;
+  background:rgba(255,255,255,.82);
+  backdrop-filter:blur(22px);
+  border:1px solid rgba(255,255,255,.8);
+}
+.float-card strong{font-size:24px;color:var(--green)}
+.float-card p{margin-top:7px;color:var(--muted);line-height:1.45}
+
+.section{
+  width:min(1180px,calc(100% - 28px));
+  margin:34px auto 0;
+}
+.section-head{
+  display:flex;justify-content:space-between;align-items:end;gap:18px;margin-bottom:16px;
+}
+.section-head h2{
+  font-size:clamp(32px,5vw,56px);
+  letter-spacing:-.05em;color:#27241f;
+}
+.section-head p{color:var(--muted);max-width:520px;line-height:1.55}
+.filters{display:flex;gap:8px;overflow:auto;padding-bottom:4px}
+.filter-btn{
+  white-space:nowrap;padding:12px 16px;border-radius:999px;
+  background:#fff;color:var(--green);border:1px solid var(--line);font-weight:900;
+}
+.filter-btn.active{background:var(--green);color:#fff}
+
+.grid{
+  display:grid;
+  grid-template-columns:repeat(4,1fr);
+  gap:14px;
+}
+.product{
+  position:relative;overflow:hidden;border-radius:32px;
+  background:rgba(255,255,255,.76);
+  border:1px solid rgba(255,255,255,.9);
+  box-shadow:0 18px 50px rgba(73,107,69,.1);
+}
+.product-img{
+  height:230px;background:#eee center/cover no-repeat;
+  position:relative;
+}
+.badge{
+  position:absolute;top:12px;left:12px;
+  padding:8px 11px;border-radius:999px;
+  background:rgba(255,255,255,.82);backdrop-filter:blur(12px);
+  color:var(--green);font-size:12px;font-weight:950;
+}
+.product-body{padding:18px}
+.product h3{font-size:20px;line-height:1.15}
+.product-desc{margin-top:8px;color:var(--muted);font-size:14px;line-height:1.45;min-height:40px}
+.price-row{margin-top:14px;display:flex;align-items:center;justify-content:space-between;gap:8px}
+.price{font-size:24px;font-weight:950;color:var(--berry)}
+.unit{font-size:12px;color:var(--muted)}
+.qty-row{margin-top:14px;display:grid;grid-template-columns:44px 1fr 44px;gap:8px}
+.qty-row button{
+  height:44px;border-radius:14px;background:var(--soft);color:var(--green);font-size:20px;font-weight:950;
+}
+.qty-row input{
+  height:44px;border-radius:14px;text-align:center;border:1px solid var(--line);
+  background:#fff;color:var(--text);font-weight:900;font-size:16px;
+}
+.add-btn{
+  width:100%;margin-top:10px;padding:14px;border-radius:999px;
+  background:var(--green);color:#fff;font-weight:950;
+}
+
+.info-strip{
+  margin-top:34px;
+  display:grid;grid-template-columns:repeat(3,1fr);gap:14px;
+}
+.info-card{
+  padding:24px;border-radius:32px;background:rgba(255,255,255,.75);
+  border:1px solid rgba(255,255,255,.9);box-shadow:0 18px 45px rgba(73,107,69,.09);
+}
+.info-card b{display:block;font-size:21px;color:var(--green)}
+.info-card span{display:block;margin-top:9px;color:var(--muted);line-height:1.5}
+
+.cart-panel{
+  position:fixed;inset:0;z-index:100;display:none;
+  background:rgba(39,36,31,.42);backdrop-filter:blur(10px);
+}
+.cart-panel.open{display:block}
+.cart-box{
+  position:absolute;right:0;top:0;height:100%;width:min(520px,100%);
+  background:#fffaf2;box-shadow:-20px 0 80px rgba(0,0,0,.18);
+  padding:18px;overflow:auto;
+}
+.cart-head{display:flex;justify-content:space-between;align-items:center;gap:12px}
+.cart-head h2{font-size:30px;color:var(--green)}
+.close-btn{width:44px;height:44px;border-radius:50%;background:#fff;color:var(--green);font-size:24px;border:1px solid var(--line)}
+.cart-items{margin-top:18px;display:grid;gap:10px}
+.cart-item{
+  display:grid;grid-template-columns:70px 1fr auto;gap:12px;align-items:center;
+  padding:10px;border-radius:22px;background:#fff;border:1px solid var(--line);
+}
+.cart-thumb{width:70px;height:70px;border-radius:18px;background:#eee center/cover no-repeat}
+.cart-item h4{font-size:15px}
+.cart-item p{font-size:13px;color:var(--muted);margin-top:4px}
+.remove-btn{background:transparent;color:#b34a5d;font-size:20px;padding:8px}
+.total{
+  margin-top:18px;padding:18px;border-radius:24px;background:#fff;border:1px solid var(--line);
+  display:flex;justify-content:space-between;font-size:22px;font-weight:950;color:var(--green);
+}
+.checkout{margin-top:14px;padding:18px;border-radius:28px;background:#fff;border:1px solid var(--line)}
+.checkout h3{font-size:22px;color:var(--green);margin-bottom:12px}
+.form-grid{display:grid;gap:10px}
+.form-grid input,.form-grid textarea,.form-grid select{
+  width:100%;border:1px solid var(--line);background:#fffdf8;border-radius:16px;
+  padding:14px;font-size:15px;outline:none;color:var(--text);
+}
+.form-grid textarea{min-height:90px;resize:vertical}
+.checkout-btn{
+  width:100%;margin-top:12px;padding:16px;border-radius:999px;
+  background:var(--berry);color:#fff;font-weight:950;font-size:16px;
+}
+.empty{padding:28px;text-align:center;color:var(--muted);background:#fff;border-radius:24px;border:1px solid var(--line)}
+
+.toast{
+  position:fixed;left:50%;bottom:22px;transform:translateX(-50%) translateY(20px);
+  z-index:200;width:min(430px,calc(100% - 28px));
+  padding:15px 18px;border-radius:999px;background:var(--green);color:#fff;text-align:center;
+  opacity:0;pointer-events:none;transition:.22s;font-weight:850;
+}
+.toast.open{opacity:1;transform:translateX(-50%) translateY(0)}
+
+.footer{
+  margin-top:50px;padding:40px 18px;text-align:center;color:var(--muted);
+}
+.footer strong{color:var(--green)}
+@media(max-width:980px){
+  .hero{grid-template-columns:1fr}
+  .hero-image{min-height:430px}
+  .grid{grid-template-columns:repeat(2,1fr)}
+  .info-strip{grid-template-columns:1fr}
+}
+@media(max-width:620px){
+  .topbar{top:8px}
+  .brand-text span{display:none}
+  .nav a{display:none}
+  .hero-card{padding:30px 22px;border-radius:34px}
+  .hero-image{min-height:360px;border-radius:34px}
+  .grid{grid-template-columns:1fr}
+  .product-img{height:260px}
+}
+</style>
+</head>
+<body>
+<div class="app">
+
+<header class="topbar">
+  <div class="brand">
+    <div class="logo">🌸</div>
+    <div class="brand-text">
+      <strong>Квіткова Садиба</strong>
+      <span>квіти • ягоди • розсада</span>
+    </div>
+  </div>
+
+  <nav class="nav">
+    <a href="#catalog">Каталог</a>
+    <a href="#delivery">Доставка</a>
+    <button class="cart-btn" onclick="openCart()">
+      🧺 Кошик <span class="cart-count" id="cartCount">0</span>
+    </button>
+  </nav>
+</header>
+
+<section class="hero">
+  <div class="hero-card">
+    <div class="kicker">🌿 Сезонна розсада та квіти</div>
+
+    <h1>Ніжний сад починається з любові</h1>
+
+    <p>
+      Гортензії, хризантеми, розсада полуниці, малини, ягідні кущі та квіти
+      для дому, саду й дачі. Обирайте рослини онлайн — ми підготуємо ваше замовлення з турботою.
+    </p>
+
+    <div class="hero-actions">
+      <a href="#catalog"><button class="primary">Переглянути каталог</button></a>
+      <button class="secondary" onclick="openCart()">Оформити замовлення</button>
+    </div>
+  </div>
+
+  <div class="hero-image">
+    <div class="float-card">
+      <strong>Свіжі рослини до вашого саду</strong>
+      <p>Дбайливо вирощені квіти, ягоди та розсада з можливістю доставки Новою Поштою.</p>
+    </div>
+  </div>
+</section>
+
+<section class="section" id="catalog">
+  <div class="section-head">
+    <div>
+      <h2>Каталог</h2>
+      <p>Оберіть рослини, вкажіть кількість і додайте до кошика.</p>
+    </div>
+  </div>
+
+  <div class="filters">
+    <button class="filter-btn active" onclick="setFilter('all',this)">Усе</button>
+    <button class="filter-btn" onclick="setFilter('flowers',this)">Квіти</button>
+    <button class="filter-btn" onclick="setFilter('berries',this)">Ягоди</button>
+    <button class="filter-btn" onclick="setFilter('seedlings',this)">Розсада</button>
+    <button class="filter-btn" onclick="setFilter('decor',this)">Для саду</button>
+  </div>
+
+  <div class="grid" id="productsGrid"></div>
+</section>
+
+<section class="section" id="delivery">
+  <div class="info-strip">
+    <div class="info-card">
+      <b>🌿 Дбайливе пакування</b>
+      <span>Рослини пакуються акуратно, щоб вони доїхали максимально безпечно.</span>
+    </div>
+
+    <div class="info-card">
+      <b>🚚 Нова Пошта</b>
+      <span>Можна обрати доставку у відділення Нової Пошти або самовивіз.</span>
+    </div>
+
+    <div class="info-card">
+      <b>💳 Гнучка оплата</b>
+      <span>Оплата при отриманні, повна оплата або депозит для бронювання замовлення.</span>
+    </div>
+  </div>
+</section>
+
+<footer class="footer">
+  <strong>Квіткова Садиба</strong><br>
+  Квіти, ягоди та розсада для красивого саду.
+</footer>
+
+<section class="cart-panel" id="cartPanel">
+  <div class="cart-box">
+    <div class="cart-head">
+      <h2>Ваш кошик</h2>
+      <button class="close-btn" onclick="closeCart()">×</button>
+    </div>
+
+    <div class="cart-items" id="cartItems"></div>
+
+    <div class="total">
+      <span>Разом:</span>
+      <span id="cartTotal">0 грн</span>
+    </div>
+
+    <div class="checkout">
+      <h3>Оформлення замовлення</h3>
+
+      <div class="form-grid">
+        <input id="customerName" placeholder="Ваше імʼя">
+        <input id="customerPhone" placeholder="Телефон">
+        <input id="customerCity" placeholder="Місто">
+
+        <select id="deliveryType">
+          <option value="Нова Пошта">Нова Пошта</option>
+          <option value="Самовивіз">Самовивіз</option>
+        </select>
+
+        <input id="novaPost" placeholder="Відділення Нової Пошти">
+
+        <select id="paymentType">
+          <option value="Оплата при отриманні">Оплата при отриманні</option>
+          <option value="Депозит">Депозит</option>
+          <option value="Повна оплата">Повна оплата</option>
+        </select>
+
+        <textarea id="orderComment" placeholder="Коментар до замовлення"></textarea>
+      </div>
+
+      <button class="checkout-btn" onclick="submitOrder()">Замовити</button>
+    </div>
+  </div>
+</section>
+
+<div class="toast" id="toast"></div>
+<script>
+const firebaseConfig={
+  apiKey:"ВСТАВЬ_API_KEY",
+  authDomain:"ВСТАВЬ_AUTH_DOMAIN",
+  databaseURL:"ВСТАВЬ_DATABASE_URL",
+  projectId:"ВСТАВЬ_PROJECT_ID",
+  storageBucket:"ВСТАВЬ_STORAGE_BUCKET",
+  messagingSenderId:"ВСТАВЬ_SENDER_ID",
+  appId:"ВСТАВЬ_APP_ID"
+};
+
+firebase.initializeApp(firebaseConfig);
+const db=firebase.database();
+
+let products=[];
+let cart=[];
+let currentFilter="all";
+
+const demoProducts=[
+  {
+    id:"hydrangea-blue",
+    title:"Гортензія блакитна",
+    category:"flowers",
+    price:280,
+    unit:"шт",
+    desc:"Ніжна садова гортензія для клумб і декоративних композицій.",
+    image:"https://images.unsplash.com/photo-1622396481322-6a2b82de51fc?auto=format&fit=crop&w=900&q=80",
+    active:true,
+    sort:1
+  },
+  {
+    id:"chrysanthemum",
+    title:"Хризантема садова",
+    category:"flowers",
+    price:120,
+    unit:"шт",
+    desc:"Яскраві осінні квіти для саду, горщиків і клумб.",
+    image:"https://images.unsplash.com/photo-1606041008023-472dfb5e530f?auto=format&fit=crop&w=900&q=80",
+    active:true,
+    sort:2
+  },
+  {
+    id:"strawberry",
+    title:"Розсада полуниці",
+    category:"seedlings",
+    price:35,
+    unit:"кущ",
+    desc:"Сильна розсада полуниці для домашнього врожаю.",
+    image:"https://images.unsplash.com/photo-1464965911861-746a04b4bca6?auto=format&fit=crop&w=900&q=80",
+    active:true,
+    sort:3
+  },
+  {
+    id:"raspberry",
+    title:"Саджанець малини",
+    category:"berries",
+    price:90,
+    unit:"шт",
+    desc:"Ягідний саджанець для солодкого літнього врожаю.",
+    image:"https://images.unsplash.com/photo-1577069861033-55d04cec4ef5?auto=format&fit=crop&w=900&q=80",
+    active:true,
+    sort:4
+  }
+];
+
+async function loadProducts(){
+  try{
+    const snap=await db.ref("gardenProducts").once("value");
+    const data=snap.val();
+
+    if(data){
+      products=Object.keys(data).map(id=>({
+        id,
+        ...data[id]
+      })).filter(p=>p.active!==false);
+    }else{
+      products=demoProducts;
+    }
+
+    products.sort((a,b)=>Number(a.sort||0)-Number(b.sort||0));
+    renderProducts();
+  }catch(e){
+    console.log(e);
+    products=demoProducts;
+    renderProducts();
+  }
+}
+
+function renderProducts(){
+  const list=currentFilter==="all"
+    ? products
+    : products.filter(p=>p.category===currentFilter);
+
+  productsGrid.innerHTML="";
+
+  if(!list.length){
+    productsGrid.innerHTML=`<div class="empty">Товарів поки немає</div>`;
+    return;
+  }
+
+  list.forEach(product=>{
+    const card=document.createElement("div");
+    card.className="product";
+
+    card.innerHTML=`
+      <div class="product-img" style="background-image:url('${product.image}')">
+        <div class="badge">${categoryName(product.category)}</div>
+      </div>
+
+      <div class="product-body">
+        <h3>${product.title}</h3>
+        <div class="product-desc">${product.desc||""}</div>
+
+        <div class="price-row">
+          <div>
+            <div class="price">${product.price} грн</div>
+            <div class="unit">за ${product.unit||"шт"}</div>
+          </div>
+        </div>
+
+        <div class="qty-row">
+          <button onclick="changeQty('${product.id}',-1)">−</button>
+          <input id="qty_${product.id}" value="1" inputmode="numeric">
+          <button onclick="changeQty('${product.id}',1)">+</button>
+        </div>
+
+        <button class="add-btn" onclick="addToCart('${product.id}')">Додати до кошика</button>
+      </div>
+    `;
+
+    productsGrid.appendChild(card);
+  });
+}
+
+function categoryName(category){
+  const names={
+    flowers:"Квіти",
+    berries:"Ягоди",
+    seedlings:"Розсада",
+    decor:"Для саду"
+  };
+
+  return names[category]||"Рослини";
+}
+
+function setFilter(filter,btn){
+  currentFilter=filter;
+
+  document.querySelectorAll(".filter-btn").forEach(b=>b.classList.remove("active"));
+  btn.classList.add("active");
+
+  renderProducts();
+}
+
+function changeQty(id,delta){
+  const input=document.getElementById("qty_"+id);
+  let value=Number(input.value||1);
+  value+=delta;
+  if(value<1)value=1;
+  input.value=value;
+}
+
+function addToCart(id){
+  const product=products.find(p=>p.id===id);
+  if(!product)return;
+
+  const input=document.getElementById("qty_"+id);
+  const qty=Math.max(1,Number(input.value||1));
+
+  const existing=cart.find(item=>item.id===id);
+
+  if(existing){
+    existing.qty+=qty;
+  }else{
+    cart.push({
+      id:product.id,
+      title:product.title,
+      price:Number(product.price||0),
+      unit:product.unit||"шт",
+      image:product.image,
+      qty
+    });
+  }
+
+  saveCart();
+  renderCart();
+  showToast("Додано до кошика 🌿");
+}
+
+function saveCart(){
+  localStorage.setItem("garden_cart",JSON.stringify(cart));
+}
+
+function loadCart(){
+  cart=JSON.parse(localStorage.getItem("garden_cart")||"[]");
+  renderCart();
+}
+
+function renderCart(){
+  cartCount.textContent=cart.reduce((sum,item)=>sum+item.qty,0);
+
+  if(!cart.length){
+    cartItems.innerHTML=`<div class="empty">Кошик порожній</div>`;
+    cartTotal.textContent="0 грн";
+    return;
+  }
+
+  cartItems.innerHTML="";
+
+  cart.forEach(item=>{
+    const row=document.createElement("div");
+    row.className="cart-item";
+
+    row.innerHTML=`
+      <div class="cart-thumb" style="background-image:url('${item.image}')"></div>
+      <div>
+        <h4>${item.title}</h4>
+        <p>${item.qty} ${item.unit} × ${item.price} грн</p>
+      </div>
+      <button class="remove-btn" onclick="removeFromCart('${item.id}')">×</button>
+    `;
+
+    cartItems.appendChild(row);
+  });
+
+  cartTotal.textContent=getTotal()+" грн";
+}
+
+function getTotal(){
+  return cart.reduce((sum,item)=>sum+item.price*item.qty,0);
+}
+
+function removeFromCart(id){
+  cart=cart.filter(item=>item.id!==id);
+  saveCart();
+  renderCart();
+}
+
+function openCart(){
+  cartPanel.classList.add("open");
+}
+
+function closeCart(){
+  cartPanel.classList.remove("open");
+}
+
+async function submitOrder(){
+  if(!cart.length){
+    showToast("Кошик порожній");
+    return;
+  }
+
+  const name=customerName.value.trim();
+  const phone=customerPhone.value.trim();
+
+  if(!name||!phone){
+    showToast("Вкажіть імʼя та телефон");
+    return;
+  }
+
+  const order={
+    customer:{
+      name,
+      phone,
+      city:customerCity.value.trim()
+    },
+    delivery:{
+      type:deliveryType.value,
+      novaPost:novaPost.value.trim()
+    },
+    payment:paymentType.value,
+    comment:orderComment.value.trim(),
+    items:cart,
+    total:getTotal(),
+    status:"new",
+    createdAt:Date.now()
+  };
+
+  try{
+    await db.ref("gardenOrders").push(order);
+
+    cart=[];
+    saveCart();
+    renderCart();
+
+    customerName.value="";
+    customerPhone.value="";
+    customerCity.value="";
+    novaPost.value="";
+    orderComment.value="";
+
+    closeCart();
+    showToast("Замовлення прийнято 🌸 Ми скоро звʼяжемося");
+  }catch(e){
+    console.log(e);
+    showToast("Помилка. Спробуйте ще раз");
+  }
+}
+
+function showToast(text){
+  toast.textContent=text;
+  toast.classList.add("open");
+
+  setTimeout(()=>{
+    toast.classList.remove("open");
+  },3000);
+}
+
+loadCart();
+loadProducts();
+</script>
+</div>
+</body>
+</html>
