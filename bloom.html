@@ -3,7 +3,6 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-
 <title>Каталог | Квітковий Дім</title>
 
 <script src="https://www.gstatic.com/firebasejs/9.22.1/firebase-app-compat.js"></script>
@@ -31,7 +30,6 @@ a{text-decoration:none;color:inherit}
 button,input{font-family:inherit}
 button{border:0;cursor:pointer;transition:.18s}
 button:active{transform:scale(.97)}
-
 .app{min-height:100vh;overflow:hidden}
 
 .topbar{
@@ -57,30 +55,26 @@ button:active{transform:scale(.97)}
 .brand-title strong{display:block;font-size:20px;letter-spacing:-.03em;color:var(--sage-dark)}
 .brand-title span{display:block;margin-top:4px;font-size:12px;color:var(--muted)}
 .nav{display:flex;align-items:center;gap:8px}
-.nav a{
+.nav a,.season-pill{
   padding:13px 16px;border-radius:999px;
   color:var(--sage-dark);font-size:14px;font-weight:900;
   background:rgba(255,255,255,.55);
 }
-.cart-link{
-  background:var(--sage-dark)!important;color:#fff!important;
+.season-pill{
+  background:linear-gradient(135deg,var(--sage-dark),var(--sage));
+  color:#fff;
   box-shadow:0 14px 28px rgba(63,95,68,.2);
-  display:flex;gap:8px;align-items:center;
-}
-.cart-count{
-  min-width:22px;height:22px;border-radius:999px;
-  background:#fff;color:var(--sage-dark);
-  display:grid;place-items:center;font-size:12px;
 }
 
 .hero{
   width:min(1180px,calc(100% - 28px));
   margin:24px auto 0;
-  display:block;
 }
 .hero-card{
   padding:44px;border-radius:46px;
-  background:linear-gradient(135deg,rgba(255,255,255,.94),rgba(255,250,244,.78));
+  background:
+    linear-gradient(135deg,rgba(255,255,255,.94),rgba(255,250,244,.78)),
+    radial-gradient(circle at 88% 15%,rgba(217,162,173,.22),transparent 30%);
   border:1px solid rgba(255,255,255,.9);
   box-shadow:var(--shadow);
 }
@@ -122,8 +116,6 @@ button:active{transform:scale(.97)}
 .layout{
   width:min(1180px,calc(100% - 28px));
   margin:24px auto 0;
-  display:grid;grid-template-columns:1fr 360px;
-  gap:18px;align-items:start;
 }
 .catalog{display:grid;gap:28px}
 .category-section{scroll-margin-top:170px}
@@ -146,10 +138,7 @@ button:active{transform:scale(.97)}
   border:1px solid rgba(255,255,255,.9);
   box-shadow:0 18px 50px rgba(63,95,68,.09);
 }
-.product-img{
-  height:150px;border-radius:24px;
-  background:#eee center/cover no-repeat;
-}
+.product-img{height:150px;border-radius:24px;background:#eee center/cover no-repeat}
 .product-body{padding:6px 6px 6px 0;display:flex;flex-direction:column}
 .product h3{font-size:21px;letter-spacing:-.03em;color:#28231e}
 .sub{margin-top:4px;color:var(--sage-dark);font-size:12px;font-weight:900}
@@ -166,39 +155,6 @@ button:active{transform:scale(.97)}
 .qty button{height:44px;background:transparent;color:var(--sage-dark);font-size:18px;font-weight:950}
 .qty input{width:100%;height:44px;text-align:center;border:0;background:transparent;font-weight:950;color:var(--text);outline:none}
 .add{height:44px;border-radius:999px;background:var(--sage-dark);color:#fff;font-weight:950}
-
-.side-cart{
-  position:sticky;top:170px;
-  padding:18px;border-radius:34px;
-  background:rgba(255,255,255,.78);
-  border:1px solid rgba(255,255,255,.9);
-  box-shadow:0 24px 70px rgba(63,95,68,.12);
-}
-.side-cart h3{font-size:26px;color:var(--sage-dark);letter-spacing:-.04em}
-.cart-mini{margin-top:12px;display:grid;gap:10px;max-height:380px;overflow:auto}
-.cart-row{
-  display:grid;grid-template-columns:1fr auto;gap:10px;
-  padding:12px;border-radius:20px;
-  background:var(--milk);border:1px solid var(--line);
-}
-.cart-row b{font-size:14px}
-.cart-row span{display:block;margin-top:4px;color:var(--muted);font-size:13px}
-.cart-row button{background:transparent;color:var(--berry);font-size:18px}
-.empty{
-  padding:20px;border-radius:22px;text-align:center;
-  color:var(--muted);background:var(--milk);border:1px solid var(--line);
-}
-.total{
-  margin-top:14px;padding:16px;border-radius:22px;background:#fff;
-  border:1px solid var(--line);
-  display:flex;justify-content:space-between;
-  font-size:20px;font-weight:950;color:var(--sage-dark);
-}
-.checkout{
-  display:flex;margin-top:12px;height:54px;align-items:center;justify-content:center;
-  border-radius:999px;background:var(--berry);color:#fff;font-weight:950;
-}
-.note{margin-top:12px;color:var(--muted);font-size:13px;line-height:1.45}
 
 .floating-cart-btn{
   position:fixed;right:18px;bottom:18px;z-index:200;
@@ -245,7 +201,10 @@ button:active{transform:scale(.97)}
   background:var(--berry);color:#fff;
   display:flex;align-items:center;justify-content:center;font-weight:950;
 }
-
+.empty{
+  padding:20px;border-radius:22px;text-align:center;
+  color:var(--muted);background:var(--milk);border:1px solid var(--line);
+}
 .toast{
   position:fixed;left:50%;bottom:22px;transform:translateX(-50%) translateY(20px);
   z-index:350;width:min(430px,calc(100% - 28px));
@@ -254,7 +213,6 @@ button:active{transform:scale(.97)}
   opacity:0;pointer-events:none;transition:.22s;font-weight:900;
 }
 .toast.open{opacity:1;transform:translateX(-50%) translateY(0)}
-
 .footer{
   width:min(1180px,calc(100% - 28px));
   margin:40px auto 100px;padding:28px;border-radius:34px;
@@ -264,15 +222,11 @@ button:active{transform:scale(.97)}
   color:var(--muted);
 }
 .footer strong{color:var(--sage-dark)}
-
-@media(max-width:980px){
-  .layout{grid-template-columns:1fr}
-  .side-cart{display:none}
-  .products{grid-template-columns:1fr}
-}
+@media(max-width:980px){.products{grid-template-columns:1fr}}
 @media(max-width:640px){
   .brand-title span{display:none}
-  .nav a:not(.cart-link){display:none}
+  .nav a:nth-child(2){display:none}
+  .season-pill{display:none}
   .hero-card{padding:30px 22px;border-radius:34px}
   .hero h1{font-size:44px}
   .menu-wrap{top:84px}
@@ -283,7 +237,6 @@ button:active{transform:scale(.97)}
 }
 </style>
 </head>
-
 <body>
 <div class="app">
 
@@ -299,7 +252,7 @@ button:active{transform:scale(.97)}
   <nav class="nav">
     <a href="index.html">Головна</a>
     <a href="bloom.html">Каталог</a>
-    <a href="cart.html" class="cart-link">Кошик <span class="cart-count" id="cartCount">0</span></a>
+    <div class="season-pill">Сезон 2026</div>
   </nav>
 </header>
 
@@ -320,17 +273,6 @@ button:active{transform:scale(.97)}
 
 <section class="layout">
   <main class="catalog" id="catalog"></main>
-
-  <aside class="side-cart">
-    <h3>Ваш кошик</h3>
-    <div class="cart-mini" id="cartMini"></div>
-    <div class="total">
-      <span>Разом:</span>
-      <span id="cartTotal">0 грн</span>
-    </div>
-    <a href="cart.html" class="checkout">Оформити замовлення</a>
-    <div class="note">Кошик зберігається для вас через Firebase.</div>
-  </aside>
 </section>
 
 <div class="floating-cart-btn" onclick="toggleCart()">
@@ -376,12 +318,6 @@ const firebaseConfig={
 firebase.initializeApp(firebaseConfig);
 const db=firebase.database();
 
-/*
-  ДОБАВЛЯТЬ КАТЕГОРИИ ТУТ.
-  id — служебное имя
-  title — название на сайте
-  emoji — иконка
-*/
 const categories=[
   {id:"flowers",title:"Квіти",emoji:"🌸"},
   {id:"hydrangeas",title:"Гортензії",emoji:"💠"},
@@ -390,11 +326,6 @@ const categories=[
   {id:"seedlings",title:"Розсада",emoji:"🌱"}
 ];
 
-/*
-  ДОБАВЛЯТЬ ТОВАРЫ ТУТ.
-  category должен совпадать с id категории выше.
-  subcategory можно писать любую: "крупнолиста", "ремонтантна", "рання" и т.д.
-*/
 const defaultProducts=[
   {
     id:"hydrangea-blue",
@@ -474,7 +405,9 @@ async function loadProducts(){
     const data=snap.val();
 
     if(data){
-      products=Object.keys(data).map(id=>({id,...data[id]})).filter(p=>p.active!==false);
+      products=Object.keys(data)
+        .map(id=>({id,...data[id]}))
+        .filter(p=>p.active!==false);
     }else{
       products=defaultProducts;
     }
@@ -617,32 +550,17 @@ function renderCart(){
     total+=Number(item.qty||0)*Number(item.price||0);
   });
 
-  cartCount.textContent=count;
   floatingCount.textContent=count;
-  cartTotal.textContent=total+" грн";
   drawerTotal.textContent=total+" грн";
 
   if(!items.length){
-    cartMini.innerHTML=`<div class="empty">Кошик порожній</div>`;
     drawerItems.innerHTML=`<div class="empty">Кошик порожній</div>`;
     return;
   }
 
-  cartMini.innerHTML="";
   drawerItems.innerHTML="";
 
   items.forEach(item=>{
-    const row=document.createElement("div");
-    row.className="cart-row";
-    row.innerHTML=`
-      <div>
-        <b>${item.title}</b>
-        <span>${item.qty} ${item.unit} × ${item.price} грн</span>
-      </div>
-      <button onclick="removeCartItem('${item.id}')">×</button>
-    `;
-    cartMini.appendChild(row);
-
     const drawer=document.createElement("div");
     drawer.className="drawer-item";
     drawer.innerHTML=`
