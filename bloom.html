@@ -9,16 +9,22 @@
 <script src="https://www.gstatic.com/firebasejs/9.22.1/firebase-database-compat.js"></script>
 
 <style>
-*{margin:0;padding:0;box-sizing:border-box;-webkit-tap-highlight-color:transparent}
-html,body{touch-action:manipulation}
-:root{
-  --bg:#fffaf4;--paper:#fffdf8;--milk:#fff7ef;
-  --sage:#6f8f72;--sage-dark:#3f5f44;
-  --rose:#d9a2ad;--berry:#8d465a;
-  --text:#2d2822;--muted:#7f7468;--line:rgba(63,95,68,.16);
-  --shadow:0 28px 90px rgba(63,95,68,.14);
+*{
+  margin:0;
+  padding:0;
+  box-sizing:border-box;
+  -webkit-tap-highlight-color:transparent;
 }
-html,body{min-height:100%;font-family:Arial,sans-serif;background:var(--bg);color:var(--text);scroll-behavior:smooth}
+
+html,body{
+  min-height:100%;
+  touch-action:manipulation;
+  font-family:Arial,sans-serif;
+  background:#fffaf4;
+  color:#2d2822;
+  scroll-behavior:smooth;
+}
+
 body{
   overflow-x:hidden;
   background:
@@ -26,297 +32,737 @@ body{
     radial-gradient(circle at 88% 4%,rgba(111,143,114,.22),transparent 30%),
     linear-gradient(180deg,#fffdf8 0%,#fff7ef 46%,#f4ecdf 100%);
 }
-a{text-decoration:none;color:inherit}
-button,input{font-family:inherit}
-button{border:0;cursor:pointer;transition:.18s}
-button:active{transform:scale(.97)}
-.app{min-height:100vh;overflow:hidden}
+
+:root{
+  --sage:#6f8f72;
+  --sage-dark:#3f5f44;
+  --berry:#8d465a;
+  --muted:#7f7468;
+  --line:rgba(63,95,68,.16);
+  --milk:#fff7ef;
+}
+
+a{
+  text-decoration:none;
+  color:inherit;
+}
+
+button,input{
+  font-family:inherit;
+}
+
+button{
+  border:0;
+  cursor:pointer;
+}
+
+.app{
+  min-height:100vh;
+}
+
+/* TOPBAR */
 
 .topbar{
-  position:sticky;top:14px;z-index:80;
+  position:sticky;
+  top:14px;
+  z-index:80;
+
   width:min(1180px,calc(100% - 28px));
   margin:14px auto 0;
+
   display:grid;
   grid-template-columns:1fr auto 1fr;
   align-items:center;
-  gap:18px;
+
   padding:12px 14px;
+
   border-radius:999px;
+
   background:rgba(255,253,248,.82);
+
   border:1px solid rgba(255,255,255,.9);
+
   backdrop-filter:blur(24px);
+
   box-shadow:0 20px 70px rgba(63,95,68,.12);
 }
+
 .brand{
   grid-column:2;
+
   display:flex;
   align-items:center;
-  justify-content:center;
-  gap:12px;
+  justify-content:flex-start;
+
+  gap:14px;
 }
+
 .logo{
-  width:52px;height:52px;border-radius:50%;
-  display:grid;place-items:center;
+  width:52px;
+  height:52px;
+
+  border-radius:50%;
+
+  display:grid;
+  place-items:center;
+
   background:linear-gradient(145deg,#fff,#f0e1d5);
+
   border:1px solid rgba(198,165,107,.28);
-  box-shadow:inset 0 0 0 6px rgba(255,255,255,.5),0 16px 34px rgba(63,95,68,.14);
-  color:var(--sage-dark);font-size:25px;
+
+  box-shadow:
+    inset 0 0 0 6px rgba(255,255,255,.5),
+    0 16px 34px rgba(63,95,68,.14);
+
+  color:var(--sage-dark);
+
+  font-size:25px;
 }
-.brand-title{text-align:left}
-.brand-title strong{display:block;font-size:20px;letter-spacing:-.03em;color:var(--sage-dark)}
-.brand-title span{display:block;margin-top:4px;font-size:12px;color:var(--muted)}
+
+.brand-title{
+  text-align:left;
+}
+
+.brand-title strong{
+  display:block;
+  font-size:20px;
+  letter-spacing:-.03em;
+  color:var(--sage-dark);
+}
+
+.brand-title span{
+  display:block;
+  margin-top:4px;
+  font-size:12px;
+  color:var(--muted);
+}
+
 .nav{
   grid-column:3;
   justify-self:end;
-  display:flex;align-items:center;gap:8px;
 }
+
 .season-pill{
-  padding:13px 16px;border-radius:999px;
-  background:linear-gradient(135deg,var(--sage-dark),var(--sage));
-  color:#fff;font-size:14px;font-weight:900;
+  padding:13px 16px;
+  border-radius:999px;
+
+  background:
+    linear-gradient(
+      135deg,
+      var(--sage-dark),
+      var(--sage)
+    );
+
+  color:#fff;
+
+  font-size:14px;
+  font-weight:900;
+
   box-shadow:0 14px 28px rgba(63,95,68,.2);
 }
+
+/* HERO */
 
 .hero{
   width:min(1180px,calc(100% - 28px));
   margin:24px auto 0;
 }
+
 .hero-card{
   padding:44px;
+
   border-radius:46px;
+
   background:
-    linear-gradient(135deg,rgba(255,255,255,.96),rgba(236,245,231,.82) 50%,rgba(255,250,244,.92)),
-    radial-gradient(circle at 88% 15%,rgba(111,143,114,.22),transparent 32%),
-    radial-gradient(circle at 8% 85%,rgba(217,162,173,.16),transparent 30%);
+    linear-gradient(
+      135deg,
+      rgba(255,255,255,.96),
+      rgba(236,245,231,.82) 50%,
+      rgba(255,250,244,.92)
+    );
+
   border:1px solid rgba(255,255,255,.92);
-  box-shadow:var(--shadow);
+
+  box-shadow:0 28px 90px rgba(63,95,68,.14);
 }
+
 .hero h1{
   font-size:clamp(42px,7vw,78px);
+
   line-height:.9;
+
   letter-spacing:-.07em;
-  color:#28231e;
 }
+
 .hero p{
   margin-top:18px;
+
   color:var(--muted);
+
   font-size:18px;
+
   line-height:1.65;
+
   max-width:760px;
 }
 
+/* CATEGORY MENU */
+
 .menu-wrap{
-  position:sticky;top:92px;z-index:70;
+  position:sticky;
+  top:92px;
+  z-index:70;
+
   width:min(1180px,calc(100% - 28px));
-  margin:16px auto 0;padding:10px;
+
+  margin:16px auto 0;
+
+  padding:10px;
+
   border-radius:999px;
+
   background:rgba(255,253,248,.86);
+
   border:1px solid rgba(255,255,255,.9);
+
   backdrop-filter:blur(22px);
-  box-shadow:0 18px 55px rgba(63,95,68,.1);
+
   overflow:auto;
 }
-.menu-tabs{display:flex;gap:8px;min-width:max-content}
+
+.menu-tabs{
+  display:flex;
+  gap:8px;
+  min-width:max-content;
+}
+
 .tab{
-  padding:13px 17px;border-radius:999px;
-  background:#fff;color:var(--sage-dark);
-  font-size:14px;font-weight:950;
+  padding:13px 17px;
+
+  border-radius:999px;
+
+  background:#fff;
+
+  color:var(--sage-dark);
+
+  font-size:14px;
+  font-weight:950;
+
   border:1px solid var(--line);
 }
-.tab.active{background:var(--sage-dark);color:#fff}
+
+.tab.active{
+  background:var(--sage-dark);
+  color:#fff;
+}
+
+/* CATALOG */
 
 .layout{
   width:min(1180px,calc(100% - 28px));
   margin:24px auto 0;
 }
-.catalog{display:grid;gap:28px}
-.category-section{scroll-margin-top:170px}
+
+.catalog{
+  display:grid;
+  gap:28px;
+}
+
+.category-section{
+  scroll-margin-top:170px;
+}
+
 .category-head{
-  display:flex;align-items:end;justify-content:space-between;gap:12px;
+  display:flex;
+  align-items:end;
+  justify-content:space-between;
+
   margin-bottom:12px;
 }
-.category-head h2{font-size:clamp(30px,5vw,50px);letter-spacing:-.05em}
-.category-head span{color:var(--muted);font-weight:900}
+
+.category-head h2{
+  font-size:clamp(30px,5vw,50px);
+  letter-spacing:-.05em;
+}
+
+.category-head span{
+  color:var(--muted);
+  font-weight:900;
+}
 
 .products{
   display:grid;
   grid-template-columns:repeat(2,1fr);
   gap:14px;
 }
+
 .product{
-  display:grid;grid-template-columns:150px 1fr;gap:14px;
-  padding:12px;border-radius:30px;
+  display:grid;
+  grid-template-columns:150px 1fr;
+  gap:14px;
+
+  padding:12px;
+
+  border-radius:30px;
+
   background:rgba(255,255,255,.78);
+
   border:1px solid rgba(255,255,255,.9);
+
   box-shadow:0 18px 50px rgba(63,95,68,.09);
 }
-.product-img{height:150px;border-radius:24px;background:#eee center/cover no-repeat}
-.product-body{padding:6px 6px 6px 0;display:flex;flex-direction:column}
-.product h3{font-size:21px;letter-spacing:-.03em;color:#28231e}
-.sub{margin-top:4px;color:var(--sage-dark);font-size:12px;font-weight:900}
-.desc{margin-top:7px;color:var(--muted);font-size:14px;line-height:1.45;flex:1}
-.price-row{margin-top:12px;display:flex;align-items:end;justify-content:space-between;gap:10px}
-.price{font-size:24px;font-weight:950;color:var(--berry)}
-.unit{font-size:12px;color:var(--muted)}
-.product-actions{margin-top:12px;display:grid;grid-template-columns:108px 1fr;gap:8px}
-.qty{
-  height:44px;border-radius:999px;background:var(--milk);
-  border:1px solid var(--line);
-  display:grid;grid-template-columns:34px 1fr 34px;align-items:center;overflow:hidden;
+
+.product-img{
+  height:150px;
+
+  border-radius:24px;
+
+  background:#eee center/cover no-repeat;
 }
-.qty button{height:44px;background:transparent;color:var(--sage-dark);font-size:18px;font-weight:950}
-.qty input{width:100%;height:44px;text-align:center;border:0;background:transparent;font-weight:950;color:var(--text);outline:none}
-.add{height:44px;border-radius:999px;background:var(--sage-dark);color:#fff;font-weight:950}
+
+.product-body{
+  display:flex;
+  flex-direction:column;
+}
+
+.product h3{
+  font-size:21px;
+  letter-spacing:-.03em;
+}
+
+.sub{
+  margin-top:4px;
+
+  color:var(--sage-dark);
+
+  font-size:12px;
+  font-weight:900;
+}
+
+.desc{
+  margin-top:7px;
+
+  color:var(--muted);
+
+  font-size:14px;
+
+  line-height:1.45;
+
+  flex:1;
+}
+
+.price-row{
+  margin-top:12px;
+}
+
+.price{
+  font-size:24px;
+  font-weight:950;
+  color:var(--berry);
+}
+
+.unit{
+  font-size:12px;
+  color:var(--muted);
+}
+
+.product-actions{
+  margin-top:12px;
+
+  display:grid;
+  grid-template-columns:108px 1fr;
+
+  gap:8px;
+}
+
+.qty{
+  height:44px;
+
+  border-radius:999px;
+
+  background:var(--milk);
+
+  border:1px solid var(--line);
+
+  display:grid;
+  grid-template-columns:34px 1fr 34px;
+}
+
+.qty button{
+  background:transparent;
+  color:var(--sage-dark);
+  font-size:18px;
+  font-weight:950;
+}
+
+.qty input{
+  border:0;
+  background:transparent;
+  text-align:center;
+  font-weight:950;
+  outline:none;
+}
+
+.add{
+  height:44px;
+
+  border-radius:999px;
+
+  background:var(--sage-dark);
+
+  color:#fff;
+
+  font-weight:950;
+}
+
+/* FLOAT CART */
 
 .floating-cart-btn{
-  position:fixed;right:18px;bottom:18px;z-index:200;
-  height:62px;padding:0 22px;border-radius:999px;
-  background:var(--sage-dark);color:#fff;
-  display:flex;align-items:center;gap:10px;font-weight:950;
+  position:fixed;
+  right:18px;
+  bottom:18px;
+  z-index:200;
+
+  height:62px;
+
+  padding:0 22px;
+
+  border-radius:999px;
+
+  background:var(--sage-dark);
+
+  color:#fff;
+
+  display:flex;
+  align-items:center;
+  gap:10px;
+
+  font-weight:950;
+
   box-shadow:0 18px 50px rgba(0,0,0,.18);
 }
+
 .floating-cart-btn span{
-  width:24px;height:24px;border-radius:50%;
-  background:#fff;color:var(--sage-dark);
-  display:grid;place-items:center;font-size:12px;
+  width:24px;
+  height:24px;
+
+  border-radius:50%;
+
+  background:#fff;
+
+  color:var(--sage-dark);
+
+  display:grid;
+  place-items:center;
+
+  font-size:12px;
 }
+
+/* DRAWER */
+
 .cart-drawer{
-  position:fixed;top:0;right:-430px;
-  width:420px;max-width:100%;height:100vh;
-  background:#fffaf4;z-index:300;transition:.28s;
-  display:flex;flex-direction:column;
+  position:fixed;
+  top:0;
+  right:-430px;
+
+  width:420px;
+  max-width:100%;
+  height:100vh;
+
+  background:#fffaf4;
+
+  z-index:300;
+
+  transition:.28s;
+
+  display:flex;
+  flex-direction:column;
+
   box-shadow:-20px 0 80px rgba(0,0,0,.12);
 }
-.cart-drawer.open{right:0}
+
+.cart-drawer.open{
+  right:0;
+}
+
 .drawer-head{
-  padding:20px;display:flex;justify-content:space-between;align-items:center;
+  padding:20px;
+
+  display:flex;
+  justify-content:space-between;
+  align-items:center;
+
   border-bottom:1px solid var(--line);
 }
-.drawer-head h3{font-size:28px;color:var(--sage-dark)}
-.drawer-head button{
-  width:42px;height:42px;border-radius:50%;
-  background:#fff;color:var(--sage-dark);font-size:20px;
+
+.drawer-head h3{
+  font-size:28px;
+  color:var(--sage-dark);
 }
-#drawerItems{flex:1;overflow:auto;padding:14px;display:grid;gap:8px}
+
+.drawer-head button{
+  width:42px;
+  height:42px;
+
+  border-radius:50%;
+
+  background:#fff;
+
+  color:var(--sage-dark);
+
+  font-size:20px;
+}
+
+#drawerItems{
+  flex:1;
+
+  overflow:auto;
+
+  padding:14px;
+
+  display:flex;
+  flex-direction:column;
+
+  gap:8px;
+}
+
 .drawer-item{
   display:grid;
+
   grid-template-columns:54px 1fr;
+
   gap:10px;
+
   padding:8px;
+
   border-radius:18px;
+
   background:#fff;
+
   border:1px solid var(--line);
+
+  align-items:center;
+
+  min-height:72px;
 }
+
 .drawer-item img{
-  width:54px;height:54px;
+  width:54px;
+  height:54px;
+
   object-fit:cover;
+
   border-radius:14px;
 }
-.drawer-item-content{min-width:0}
+
+.drawer-item-content{
+  display:flex;
+  flex-direction:column;
+  justify-content:center;
+}
+
 .drawer-item b{
   display:block;
+
   font-size:14px;
+
   line-height:1.15;
+
   white-space:nowrap;
   overflow:hidden;
   text-overflow:ellipsis;
 }
+
 .drawer-item span{
   display:block;
+
   margin-top:4px;
+
   color:var(--muted);
+
   font-size:12px;
 }
+
 .drawer-controls{
   margin-top:7px;
+
   display:inline-grid;
+
   grid-template-columns:30px 34px 30px;
+
   height:30px;
+
   border-radius:999px;
+
   overflow:hidden;
+
   border:1px solid var(--line);
+
   background:var(--milk);
 }
+
 .drawer-controls button{
   background:transparent;
+
   color:var(--sage-dark);
+
   font-weight:950;
+
   font-size:16px;
 }
+
 .drawer-controls strong{
   display:grid;
   place-items:center;
   font-size:13px;
 }
-.drawer-footer{padding:18px;border-top:1px solid var(--line)}
-.drawer-total{display:flex;justify-content:space-between;font-size:24px;font-weight:950;color:var(--sage-dark)}
+
+.drawer-footer{
+  padding:18px;
+  border-top:1px solid var(--line);
+}
+
+.drawer-total{
+  display:flex;
+  justify-content:space-between;
+
+  font-size:24px;
+  font-weight:950;
+
+  color:var(--sage-dark);
+}
+
 .drawer-checkout{
-  margin-top:14px;height:56px;border-radius:999px;
-  background:var(--berry);color:#fff;
-  display:flex;align-items:center;justify-content:center;font-weight:950;
+  margin-top:14px;
+
+  height:56px;
+
+  border-radius:999px;
+
+  background:var(--berry);
+
+  color:#fff;
+
+  display:flex;
+  align-items:center;
+  justify-content:center;
+
+  font-weight:950;
 }
-.empty{
-  padding:20px;border-radius:22px;text-align:center;
-  color:var(--muted);background:var(--milk);border:1px solid var(--line);
-}
-.toast{
-  position:fixed;left:50%;bottom:22px;transform:translateX(-50%) translateY(20px);
-  z-index:350;width:min(430px,calc(100% - 28px));
-  padding:15px 18px;border-radius:999px;
-  background:var(--sage-dark);color:#fff;text-align:center;
-  opacity:0;pointer-events:none;transition:.22s;font-weight:900;
-}
-.toast.open{opacity:1;transform:translateX(-50%) translateY(0)}
+
+/* FOOTER */
+
 .footer{
   width:min(1180px,calc(100% - 28px));
-  margin:40px auto 100px;padding:28px;border-radius:34px;
-  display:flex;justify-content:space-between;gap:18px;align-items:center;
+
+  margin:40px auto 100px;
+
+  padding:28px;
+
+  border-radius:34px;
+
+  display:flex;
+  justify-content:space-between;
+  align-items:center;
+
   background:rgba(255,255,255,.56);
+
   border:1px solid rgba(255,255,255,.82);
+
   color:var(--muted);
 }
-.footer strong{color:var(--sage-dark)}
 
-@media(max-width:980px){.products{grid-template-columns:1fr}}
+.footer strong{
+  color:var(--sage-dark);
+}
+
+/* MOBILE */
+
+@media(max-width:980px){
+  .products{
+    grid-template-columns:1fr;
+  }
+}
+
 @media(max-width:640px){
-  .topbar{grid-template-columns:1fr auto 1fr}
-  .brand-title span{display:none}
-  .season-pill{display:none}
-  .hero-card{padding:30px 22px;border-radius:34px}
-  .hero h1{font-size:44px}
-  .menu-wrap{top:84px}
-  .product{grid-template-columns:118px 1fr;border-radius:26px}
-  .product-img{height:128px;border-radius:20px}
-  .product-actions{grid-template-columns:1fr}
-  .footer{display:block;text-align:center}
+
+  .season-pill{
+    display:none;
+  }
+
+  .hero-card{
+    padding:30px 22px;
+    border-radius:34px;
+  }
+
+  .hero h1{
+    font-size:44px;
+  }
+
+  .menu-wrap{
+    top:84px;
+  }
+
+  .product{
+    grid-template-columns:118px 1fr;
+    border-radius:26px;
+  }
+
+  .product-img{
+    height:128px;
+    border-radius:20px;
+  }
+
+  .product-actions{
+    grid-template-columns:1fr;
+  }
+
+  .footer{
+    display:block;
+    text-align:center;
+  }
 }
 </style>
 </head>
-  <body>
+
+<body>
+
 <div class="app">
 
 <header class="topbar">
+
   <a href="index.html" class="brand">
+
     <div class="logo">✿</div>
+
     <div class="brand-title">
       <strong>Квітковий Дім</strong>
       <span>квіти • ягоди • розсада</span>
     </div>
+
   </a>
 
   <nav class="nav">
     <div class="season-pill">Сезон 2026</div>
   </nav>
+
 </header>
 
 <section class="hero">
+
   <div class="hero-card">
+
     <h1>Оберіть рослини для свого саду</h1>
+
     <p>
-      Каталог зроблений як зручне меню: зверху категорії, нижче всі рослини.
-      Оберіть кількість, додайте в кошик і оформіть замовлення.
+      Каталог зроблений як зручне меню:
+      зверху категорії, нижче всі рослини.
+      Оберіть кількість, додайте в кошик
+      і оформіть замовлення.
     </p>
+
   </div>
+
 </section>
 
 <div class="menu-wrap">
@@ -332,6 +778,7 @@ button:active{transform:scale(.97)}
 </div>
 
 <div class="cart-drawer" id="cartDrawer">
+
   <div class="drawer-head">
     <h3>Ваш кошик</h3>
     <button onclick="toggleCart()">×</button>
@@ -340,23 +787,37 @@ button:active{transform:scale(.97)}
   <div id="drawerItems"></div>
 
   <div class="drawer-footer">
+
     <div class="drawer-total">
       <span>Разом:</span>
       <strong id="drawerTotal">0 грн</strong>
     </div>
-    <a href="cart.html" class="drawer-checkout">Оформити замовлення</a>
+
+    <a href="cart.html" class="drawer-checkout">
+      Оформити замовлення
+    </a>
+
   </div>
+
 </div>
 
 <footer class="footer">
-  <div><strong>Квітковий Дім</strong><br>квіти • ягоди • розсада</div>
-  <div>© 2026. Вирощено з любовʼю.</div>
+
+  <div>
+    <strong>Квітковий Дім</strong><br>
+    квіти • ягоди • розсада
+  </div>
+
+  <div>
+    © 2026. Вирощено з любовʼю.
+  </div>
+
 </footer>
 
-<div class="toast" id="toast"></div>
 </div>
 
 <script>
+
 const firebaseConfig={
   apiKey:"AIzaSyALs-ZgFX7auGxRQ2EeQnVngjnejimPLV4",
   authDomain:"yyokai-tattoo-system.firebaseapp.com",
@@ -368,6 +829,7 @@ const firebaseConfig={
 };
 
 firebase.initializeApp(firebaseConfig);
+
 const db=firebase.database();
 
 const categories=[
@@ -386,7 +848,7 @@ const defaultProducts=[
     subcategory:"Крупнолиста",
     price:280,
     unit:"шт",
-    desc:"Ніжна садова гортензія для клумб і декоративних композицій.",
+    desc:"Ніжна садова гортензія.",
     image:"https://images.unsplash.com/photo-1622396481322-6a2b82de51fc?auto=format&fit=crop&w=900&q=90",
     sort:1
   },
@@ -397,7 +859,7 @@ const defaultProducts=[
     subcategory:"Садова",
     price:300,
     unit:"шт",
-    desc:"Пишне цвітіння, мʼякий рожевий відтінок, преміальний вигляд.",
+    desc:"Пишне цвітіння.",
     image:"https://images.unsplash.com/photo-1596438459194-f275f413d6ff?auto=format&fit=crop&w=900&q=90",
     sort:2
   },
@@ -408,78 +870,41 @@ const defaultProducts=[
     subcategory:"Кущова",
     price:120,
     unit:"шт",
-    desc:"Осіння класика для саду, вазонів і святкових композицій.",
+    desc:"Осіння класика.",
     image:"https://images.unsplash.com/photo-1606041008023-472dfb5e530f?auto=format&fit=crop&w=900&q=90",
     sort:3
-  },
-  {
-    id:"strawberry",
-    title:"Розсада полуниці",
-    category:"seedlings",
-    subcategory:"Солодка",
-    price:35,
-    unit:"кущ",
-    desc:"Сильна розсада полуниці для домашнього солодкого врожаю.",
-    image:"https://images.unsplash.com/photo-1464965911861-746a04b4bca6?auto=format&fit=crop&w=900&q=90",
-    sort:4
-  },
-  {
-    id:"raspberry",
-    title:"Саджанець малини",
-    category:"berries",
-    subcategory:"Ягідні кущі",
-    price:90,
-    unit:"шт",
-    desc:"Ягідний саджанець для ароматного літнього врожаю.",
-    image:"https://images.unsplash.com/photo-1577069861033-55d04cec4ef5?auto=format&fit=crop&w=900&q=90",
-    sort:5
   }
 ];
 
-let products=[];
+let products=defaultProducts;
 let cart={};
 
 function getVisitorId(){
+
   let id=localStorage.getItem("garden_visitor_id");
+
   if(!id){
-    id="visitor_"+Date.now()+"_"+Math.random().toString(16).slice(2);
+
+    id="visitor_"+Date.now();
+
     localStorage.setItem("garden_visitor_id",id);
   }
+
   return id;
 }
 
 const visitorId=getVisitorId();
+
 const cartRef=db.ref("gardenCarts/"+visitorId+"/items");
 
-async function loadProducts(){
-  try{
-    const snap=await db.ref("gardenProducts").once("value");
-    const data=snap.val();
-
-    if(data){
-      products=Object.keys(data)
-        .map(id=>({id,...data[id]}))
-        .filter(p=>p.active!==false);
-    }else{
-      products=defaultProducts;
-    }
-
-    products.sort((a,b)=>Number(a.sort||0)-Number(b.sort||0));
-    renderTabs();
-    renderCatalog();
-  }catch(e){
-    products=defaultProducts;
-    renderTabs();
-    renderCatalog();
-  }
-}
-
 function renderTabs(){
-  menuTabs.innerHTML=`<button class="tab active" onclick="scrollToCategory('all',this)">Усе</button>`;
+
+  menuTabs.innerHTML=`<button class="tab active">Усе</button>`;
 
   categories.forEach(cat=>{
+
     menuTabs.innerHTML+=`
-      <button class="tab" onclick="scrollToCategory('${cat.id}',this)">
+      <button class="tab">
         ${cat.emoji} ${cat.title}
       </button>
     `;
@@ -487,189 +912,242 @@ function renderTabs(){
 }
 
 function renderCatalog(){
+
   catalog.innerHTML="";
 
   categories.forEach(cat=>{
+
     const list=products.filter(p=>p.category===cat.id);
+
     if(!list.length)return;
 
     const section=document.createElement("section");
+
     section.className="category-section";
-    section.id="cat_"+cat.id;
 
     section.innerHTML=`
       <div class="category-head">
         <h2>${cat.emoji} ${cat.title}</h2>
         <span>${list.length} позицій</span>
       </div>
+
       <div class="products"></div>
     `;
 
     const grid=section.querySelector(".products");
 
     list.forEach(p=>{
+
       const card=document.createElement("article");
+
       card.className="product";
 
       card.innerHTML=`
-        <div class="product-img" style="background-image:url('${p.image}')"></div>
+        <div class="product-img"
+             style="background-image:url('${p.image}')">
+        </div>
 
         <div class="product-body">
+
           <h3>${p.title}</h3>
-          <div class="sub">${p.subcategory||""}</div>
-          <div class="desc">${p.desc||""}</div>
+
+          <div class="sub">${p.subcategory}</div>
+
+          <div class="desc">${p.desc}</div>
 
           <div class="price-row">
+
             <div>
               <div class="price">${p.price} грн</div>
-              <div class="unit">за ${p.unit||"шт"}</div>
+              <div class="unit">за ${p.unit}</div>
             </div>
+
           </div>
 
           <div class="product-actions">
+
             <div class="qty">
+
               <button onclick="changeQty('${p.id}',-1)">−</button>
-              <input id="qty_${p.id}" value="1" inputmode="numeric">
+
+              <input id="qty_${p.id}" value="1">
+
               <button onclick="changeQty('${p.id}',1)">+</button>
+
             </div>
-            <button class="add" onclick="addToCart('${p.id}')">Додати</button>
+
+            <button class="add" onclick="addToCart('${p.id}')">
+              Додати
+            </button>
+
           </div>
+
         </div>
       `;
 
       grid.appendChild(card);
+
     });
 
     catalog.appendChild(section);
+
   });
-}
 
-function scrollToCategory(id,btn){
-  document.querySelectorAll(".tab").forEach(t=>t.classList.remove("active"));
-  btn.classList.add("active");
-
-  if(id==="all"){
-    window.scrollTo({top:0,behavior:"smooth"});
-    return;
-  }
-
-  document.getElementById("cat_"+id)?.scrollIntoView({behavior:"smooth"});
 }
 
 function changeQty(id,delta){
+
   const input=document.getElementById("qty_"+id);
+
   let value=Number(input.value||1)+delta;
+
   if(value<1)value=1;
+
   input.value=value;
 }
 
 async function addToCart(id){
+
   const p=products.find(x=>x.id===id);
-  if(!p)return;
 
   const input=document.getElementById("qty_"+id);
+
   const qty=Number(input.value||1);
+
   const existing=cart[id]||{};
 
   await cartRef.child(id).set({
     id:p.id,
     title:p.title,
-    price:Number(p.price||0),
-    unit:p.unit||"шт",
+    price:p.price,
+    unit:p.unit,
     image:p.image,
-    qty:Number(existing.qty||0)+qty,
-    addedAt:Date.now()
+    qty:Number(existing.qty||0)+qty
   });
 
-  showToast("Додано до кошика 🌿");
   cartDrawer.classList.add("open");
 }
 
 function listenCart(){
+
   cartRef.on("value",snap=>{
+
     cart=snap.val()||{};
+
     renderCart();
+
   });
+
 }
 
 function renderCart(){
+
   const items=Object.values(cart);
-  let count=0;
+
   let total=0;
+  let count=0;
 
   items.forEach(item=>{
-    count+=Number(item.qty||0);
-    total+=Number(item.qty||0)*Number(item.price||0);
+
+    total+=item.qty*item.price;
+
+    count+=item.qty;
+
   });
 
   floatingCount.textContent=count;
+
   drawerTotal.textContent=total+" грн";
 
   if(!items.length){
-    drawerItems.innerHTML=`<div class="empty">Кошик порожній</div>`;
+
+    drawerItems.innerHTML=`
+      <div class="empty">Кошик порожній</div>
+    `;
+
     return;
   }
 
   drawerItems.innerHTML="";
 
   items.forEach(item=>{
-    const drawer=document.createElement("div");
-    drawer.className="drawer-item";
 
-    drawer.innerHTML=`
+    const div=document.createElement("div");
+
+    div.className="drawer-item";
+
+    div.innerHTML=`
       <img src="${item.image}">
+
       <div class="drawer-item-content">
+
         <b>${item.title}</b>
+
         <span>${item.price} грн / ${item.unit}</span>
 
         <div class="drawer-controls">
-          <button onclick="decreaseCartItem('${item.id}')">−</button>
+
+          <button onclick="decreaseCartItem('${item.id}')">
+            −
+          </button>
+
           <strong>${item.qty}</strong>
-          <button onclick="increaseCartItem('${item.id}')">+</button>
+
+          <button onclick="increaseCartItem('${item.id}')">
+            +
+          </button>
+
         </div>
+
       </div>
     `;
 
-    drawerItems.appendChild(drawer);
+    drawerItems.appendChild(div);
+
   });
+
 }
 
 async function increaseCartItem(id){
+
   const item=cart[id];
-  if(!item)return;
 
   await cartRef.child(id).update({
-    qty:Number(item.qty||0)+1
+    qty:item.qty+1
   });
 }
 
 async function decreaseCartItem(id){
-  const item=cart[id];
-  if(!item)return;
 
-  const newQty=Number(item.qty||0)-1;
+  const item=cart[id];
+
+  const newQty=item.qty-1;
 
   if(newQty<=0){
+
     await cartRef.child(id).remove();
+
   }else{
+
     await cartRef.child(id).update({
       qty:newQty
     });
+
   }
+
 }
 
 function toggleCart(){
   cartDrawer.classList.toggle("open");
 }
 
-function showToast(text){
-  toast.textContent=text;
-  toast.classList.add("open");
-  setTimeout(()=>toast.classList.remove("open"),2600);
-}
+renderTabs();
 
-loadProducts();
+renderCatalog();
+
 listenCart();
+
 </script>
+
 </body>
 </html>
