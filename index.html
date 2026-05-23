@@ -463,7 +463,7 @@ button{border:0;cursor:pointer;font-family:inherit}
 #drawerItems{
   flex:1;
   overflow:auto;
-  padding:14px;
+  padding:14px 14px 120px;
   display:flex;
   flex-direction:column;
   gap:8px;
@@ -530,6 +530,13 @@ button{border:0;cursor:pointer;font-family:inherit}
 .drawer-footer{
   padding:18px;
   border-top:1px solid var(--line);
+
+  position:sticky;
+  bottom:0;
+
+  background:#fffaf4;
+
+  margin-top:auto;
 }
 
 .drawer-total{
