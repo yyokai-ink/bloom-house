@@ -432,6 +432,7 @@ button{border:0;cursor:pointer;font-family:inherit}
   display:flex;
   flex-direction:column;
   box-shadow:-20px 0 80px rgba(0,0,0,.16);
+padding-bottom:env(safe-area-inset-bottom);
 }
 
 .cart-drawer.open{
@@ -528,7 +529,8 @@ button{border:0;cursor:pointer;font-family:inherit}
 }
 
 .drawer-footer{
-  padding:18px;
+  padding:18px 18px calc(18px + env(safe-area-inset-bottom));
+
   border-top:1px solid var(--line);
 
   position:sticky;
@@ -537,7 +539,10 @@ button{border:0;cursor:pointer;font-family:inherit}
   background:#fffaf4;
 
   margin-top:auto;
-  transform:translateY(-5px);
+
+  transform:translateY(-14px);
+
+  z-index:20;
 }
 
 .drawer-total{
