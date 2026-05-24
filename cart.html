@@ -1,0 +1,515 @@
+<!DOCTYPE html>
+<html lang="uk">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Оформлення замовлення | Квітковий Дім</title>
+
+<script src="https://www.gstatic.com/firebasejs/9.22.1/firebase-app-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/9.22.1/firebase-database-compat.js"></script>
+
+<style>
+*{margin:0;padding:0;box-sizing:border-box}
+:root{
+  --milk:#fff7ef;
+  --sage-dark:#3f5f44;
+  --berry:#8d465a;
+  --text:#2d2822;
+  --muted:#7f7468;
+  --line:rgba(63,95,68,.16);
+}
+body{
+  min-height:100vh;
+  font-family:Arial,sans-serif;
+  color:var(--text);
+  background:
+    radial-gradient(circle at 10% -10%,rgba(217,162,173,.22),transparent 34%),
+    radial-gradient(circle at 90% 0%,rgba(111,143,114,.26),transparent 34%),
+    linear-gradient(180deg,#fffdf8 0%,#f8f0e4 45%,#edf2e7 100%);
+}
+a{text-decoration:none;color:inherit}
+button,input,textarea,select{font-family:inherit}
+button{border:0;cursor:pointer}
+
+.page{
+  width:min(1100px,calc(100% - 28px));
+  margin:0 auto;
+  padding:24px 0 50px;
+}
+
+.top{
+  margin-bottom:22px;
+  padding:28px;
+  border-radius:34px;
+  background:rgba(255,255,255,.76);
+  border:1px solid rgba(255,255,255,.9);
+  box-shadow:0 24px 70px rgba(63,95,68,.12);
+}
+
+.back{
+  display:inline-flex;
+  margin-bottom:18px;
+  color:var(--sage-dark);
+  font-weight:950;
+}
+
+h1{
+  font-size:clamp(36px,7vw,64px);
+  line-height:.92;
+  letter-spacing:-.07em;
+  color:var(--sage-dark);
+}
+
+.top p{
+  margin-top:14px;
+  color:var(--muted);
+  line-height:1.55;
+}
+
+.grid{
+  display:grid;
+  grid-template-columns:1fr 380px;
+  gap:18px;
+  align-items:start;
+}
+
+.card{
+  padding:22px;
+  border-radius:30px;
+  background:rgba(255,255,255,.82);
+  border:1px solid rgba(255,255,255,.9);
+  box-shadow:0 18px 50px rgba(63,95,68,.09);
+}
+
+.card h2{
+  margin-bottom:16px;
+  font-size:28px;
+  color:var(--sage-dark);
+  letter-spacing:-.04em;
+}
+
+.form-grid{
+  display:grid;
+  grid-template-columns:1fr 1fr;
+  gap:12px;
+}
+
+.field{
+  display:flex;
+  flex-direction:column;
+  gap:7px;
+}
+
+.field.full{grid-column:1/-1}
+
+label{
+  color:var(--sage-dark);
+  font-size:13px;
+  font-weight:950;
+}
+
+input,textarea,select{
+  width:100%;
+  min-height:50px;
+  border-radius:18px;
+  border:1px solid var(--line);
+  background:#fff;
+  padding:0 15px;
+  outline:none;
+  color:var(--text);
+  font-size:15px;
+}
+
+textarea{
+  min-height:94px;
+  padding-top:14px;
+  resize:vertical;
+}
+
+.payments{
+  display:grid;
+  gap:10px;
+  margin-top:6px;
+}
+
+.payment{
+  display:flex;
+  gap:10px;
+  align-items:flex-start;
+  padding:14px;
+  border-radius:20px;
+  background:#fff;
+  border:1px solid var(--line);
+  cursor:pointer;
+}
+
+.payment input{
+  width:auto;
+  min-height:auto;
+  margin-top:3px;
+}
+
+.payment b{
+  color:var(--sage-dark);
+}
+
+.payment span{
+  display:block;
+  margin-top:4px;
+  color:var(--muted);
+  font-size:13px;
+  line-height:1.35;
+}
+
+.order-list{
+  display:grid;
+  gap:10px;
+}
+
+.item{
+  display:grid;
+  grid-template-columns:58px 1fr;
+  gap:10px;
+  padding:9px;
+  border-radius:18px;
+  background:#fff;
+  border:1px solid var(--line);
+}
+
+.item img{
+  width:58px;
+  height:58px;
+  object-fit:cover;
+  border-radius:14px;
+}
+
+.item b{
+  font-size:14px;
+}
+
+.item span{
+  display:block;
+  margin-top:5px;
+  color:var(--muted);
+  font-size:13px;
+}
+
+.total{
+  margin-top:16px;
+  padding-top:16px;
+  border-top:1px solid var(--line);
+  display:flex;
+  justify-content:space-between;
+  font-size:24px;
+  font-weight:950;
+  color:var(--sage-dark);
+}
+
+.submit{
+  margin-top:16px;
+  width:100%;
+  height:56px;
+  border-radius:999px;
+  background:var(--berry);
+  color:#fff;
+  font-weight:950;
+  font-size:16px;
+}
+
+.note{
+  margin-top:12px;
+  color:var(--muted);
+  font-size:13px;
+  line-height:1.45;
+}
+
+.empty{
+  padding:18px;
+  border-radius:20px;
+  background:var(--milk);
+  color:var(--muted);
+  text-align:center;
+}
+
+.success{
+  display:none;
+  margin-top:14px;
+  padding:16px;
+  border-radius:20px;
+  background:#eef7ee;
+  color:var(--sage-dark);
+  font-weight:900;
+}
+
+@media(max-width:900px){
+  .grid{grid-template-columns:1fr}
+}
+
+@media(max-width:640px){
+  .form-grid{grid-template-columns:1fr}
+  .card{padding:18px;border-radius:26px}
+}
+</style>
+</head>
+
+<body>
+<div class="page">
+
+<section class="top">
+  <a class="back" href="index.html">← Повернутися до каталогу</a>
+  <h1>Оформлення замовлення</h1>
+  <p>Заповніть дані для доставки Новою поштою та оберіть спосіб оплати.</p>
+</section>
+
+<div class="grid">
+
+<form class="card" id="orderForm">
+  <h2>Дані покупця</h2>
+
+  <div class="form-grid">
+    <div class="field">
+      <label>Імʼя</label>
+      <input id="firstName" required placeholder="Наприклад: Олена">
+    </div>
+
+    <div class="field">
+      <label>Прізвище</label>
+      <input id="lastName" required placeholder="Наприклад: Коваль">
+    </div>
+
+    <div class="field">
+      <label>Номер телефону</label>
+      <input id="phone" required placeholder="+380 XX XXX XX XX">
+    </div>
+
+    <div class="field">
+      <label>Місто</label>
+      <input id="city" required placeholder="Київ, Львів, Ужгород...">
+    </div>
+
+    <div class="field full">
+      <label>Відділення Нової пошти</label>
+      <input id="novaPost" required placeholder="Відділення №1, поштомат або адреса">
+    </div>
+
+    <div class="field full">
+      <label>Коментар до замовлення</label>
+      <textarea id="comment" placeholder="Зручний час дзвінка, побажання, деталі доставки..."></textarea>
+    </div>
+
+    <div class="field full">
+      <label>Спосіб оплати</label>
+
+      <div class="payments">
+        <label class="payment">
+          <input type="radio" name="payment" value="Повна оплата на карту" checked>
+          <div>
+            <b>Повна оплата на карту</b>
+            <span>Карта для оплати: 0000 0000 0000 0000. Адмін вручну підтвердить оплату.</span>
+          </div>
+        </label>
+
+        <label class="payment">
+          <input type="radio" name="payment" value="Оплата карткою після підтвердження">
+          <div>
+            <b>Карткою після підтвердження</b>
+            <span>Після оформлення з вами звʼяжеться адміністратор.</span>
+          </div>
+        </label>
+
+        <label class="payment">
+          <input type="radio" name="payment" value="Накладений платіж Новою поштою">
+          <div>
+            <b>Накладений платіж Новою поштою</b>
+            <span>Оплата при отриманні у відділенні Нової пошти.</span>
+          </div>
+        </label>
+      </div>
+    </div>
+  </div>
+
+  <button class="submit" type="submit">Підтвердити замовлення</button>
+
+  <div class="success" id="successBox">
+    Замовлення прийнято. Ми скоро звʼяжемося з вами.
+  </div>
+
+  <p class="note">
+    Дані замовлення будуть відправлені адміністратору в Telegram.
+  </p>
+</form>
+
+<aside class="card">
+  <h2>Ваше замовлення</h2>
+  <div class="order-list" id="orderItems"></div>
+
+  <div class="total">
+    <span>Разом:</span>
+    <strong id="orderTotal">0 грн</strong>
+  </div>
+</aside>
+
+</div>
+</div>
+
+<script>
+const firebaseConfig={
+  apiKey:"AIzaSyALs-ZgFX7auGxRQ2EeQnVngjnejimPLV4",
+  authDomain:"yyokai-tattoo-system.firebaseapp.com",
+  databaseURL:"https://yyokai-tattoo-system-default-rtdb.europe-west1.firebasedatabase.app/",
+  projectId:"yyokai-tattoo-system",
+  storageBucket:"yyokai-tattoo-system.firebasestorage.app",
+  messagingSenderId:"995298614954",
+  appId:"1:995298614954:web:e4039c69fcb0541a95fad3"
+};
+
+firebase.initializeApp(firebaseConfig);
+const db=firebase.database();
+
+const BOT_TOKEN="PASTE_YOUR_BOT_TOKEN_HERE";
+const CHAT_ID="PASTE_YOUR_CHAT_ID_HERE";
+
+let cart={};
+let total=0;
+
+function getVisitorId(){
+  let id=localStorage.getItem("garden_visitor_id");
+  if(!id){
+    id="visitor_"+Date.now()+"_"+Math.random().toString(16).slice(2);
+    localStorage.setItem("garden_visitor_id",id);
+  }
+  return id;
+}
+
+const visitorId=getVisitorId();
+const cartRef=db.ref("gardenCarts/"+visitorId+"/items");
+const ordersRef=db.ref("gardenOrders");
+
+cartRef.on("value",snapshot=>{
+  cart=snapshot.val()||{};
+  renderOrder();
+});
+
+function renderOrder(){
+  const items=Object.values(cart);
+  const box=document.getElementById("orderItems");
+  total=0;
+
+  if(!items.length){
+    box.innerHTML=`<div class="empty">Кошик порожній</div>`;
+    document.getElementById("orderTotal").textContent="0 грн";
+    return;
+  }
+
+  box.innerHTML="";
+
+  items.forEach(item=>{
+    total+=item.qty*item.price;
+
+    const div=document.createElement("div");
+    div.className="item";
+    div.innerHTML=`
+      <img src="${item.image}">
+      <div>
+        <b>${item.title}</b>
+        <span>${item.qty} × ${item.price} грн / ${item.unit}</span>
+      </div>
+    `;
+    box.appendChild(div);
+  });
+
+  document.getElementById("orderTotal").textContent=total+" грн";
+}
+
+function getPayment(){
+  return document.querySelector('input[name="payment"]:checked').value;
+}
+
+function buildTelegramMessage(order){
+  const productsText=order.items.map(item=>{
+    return `• ${item.title} — ${item.qty} x ${item.price} грн = ${item.qty*item.price} грн`;
+  }).join("\\n");
+
+  return `
+🌿 НОВЕ ЗАМОВЛЕННЯ
+
+👤 Клієнт: ${order.firstName} ${order.lastName}
+📞 Телефон: ${order.phone}
+
+🚚 Доставка:
+Місто: ${order.city}
+Нова пошта: ${order.novaPost}
+
+💳 Оплата:
+${order.payment}
+
+🛒 Товари:
+${productsText}
+
+💰 Разом: ${order.total} грн
+
+💬 Коментар:
+${order.comment || "Без коментаря"}
+
+🆔 ID замовлення:
+${order.id}
+`;
+}
+
+async function sendToTelegram(text){
+  if(BOT_TOKEN==="PASTE_YOUR_BOT_TOKEN_HERE" || CHAT_ID==="PASTE_YOUR_CHAT_ID_HERE"){
+    console.warn("Telegram не налаштований: встав BOT_TOKEN і CHAT_ID");
+    return;
+  }
+
+  await fetch(`https://api.telegram.org/bot${BOT_TOKEN}/sendMessage`,{
+    method:"POST",
+    headers:{"Content-Type":"application/json"},
+    body:JSON.stringify({
+      chat_id:CHAT_ID,
+      text:text
+    })
+  });
+}
+
+document.getElementById("orderForm").addEventListener("submit",async function(e){
+  e.preventDefault();
+
+  const items=Object.values(cart);
+
+  if(!items.length){
+    alert("Кошик порожній");
+    return;
+  }
+
+  const orderId="order_"+Date.now();
+
+  const order={
+    id:orderId,
+    visitorId:visitorId,
+    firstName:document.getElementById("firstName").value.trim(),
+    lastName:document.getElementById("lastName").value.trim(),
+    phone:document.getElementById("phone").value.trim(),
+    city:document.getElementById("city").value.trim(),
+    novaPost:document.getElementById("novaPost").value.trim(),
+    comment:document.getElementById("comment").value.trim(),
+    payment:getPayment(),
+    paymentStatus:"Очікує підтвердження адміном",
+    status:"Нове замовлення",
+    items:items,
+    total:total,
+    createdAt:new Date().toISOString()
+  };
+
+  await ordersRef.child(orderId).set(order);
+
+  await sendToTelegram(buildTelegramMessage(order));
+
+  await cartRef.remove();
+
+  document.getElementById("successBox").style.display="block";
+  document.getElementById("orderForm").reset();
+});
+</script>
+</body>
+</html>
