@@ -9,7 +9,12 @@
 <script src="https://www.gstatic.com/firebasejs/9.22.1/firebase-database-compat.js"></script>
 
 <style>
-*{margin:0;padding:0;box-sizing:border-box;-webkit-tap-highlight-color:transparent}
+*{
+  margin:0;
+  padding:0;
+  box-sizing:border-box;
+  -webkit-tap-highlight-color:transparent
+}
 
 :root{
   --cream:#fffaf2;
@@ -22,7 +27,6 @@
   --text:#2b261f;
   --muted:#7c7164;
   --line:rgba(49,79,55,.16);
-  --shadow:0 30px 90px rgba(49,79,55,.14);
 }
 
 body{
@@ -37,22 +41,19 @@ body{
   background-attachment:fixed;
 }
 
-body::before{
-  content:"";
-  position:fixed;
-  inset:0;
-  pointer-events:none;
-  z-index:-1;
-  background:
-    linear-gradient(rgba(255,255,255,.25) 1px,transparent 1px),
-    linear-gradient(90deg,rgba(255,255,255,.22) 1px,transparent 1px);
-  background-size:46px 46px;
-  mask-image:linear-gradient(to bottom,rgba(0,0,0,.45),transparent 75%);
+a{
+  text-decoration:none;
+  color:inherit
 }
 
-a{text-decoration:none;color:inherit}
-button,input,textarea{font-family:inherit}
-button{border:0;cursor:pointer}
+button,input,textarea{
+  font-family:inherit
+}
+
+button{
+  border:0;
+  cursor:pointer
+}
 
 .page{
   width:min(1180px,calc(100% - 28px));
@@ -67,20 +68,7 @@ button{border:0;cursor:pointer}
   background:
     linear-gradient(135deg,rgba(255,255,255,.92),rgba(255,246,233,.84),rgba(235,244,229,.9));
   border:1px solid rgba(255,255,255,.92);
-  box-shadow:var(--shadow);
-  position:relative;
-  overflow:hidden;
-}
-
-.hero::after{
-  content:"";
-  position:absolute;
-  right:-80px;
-  top:-80px;
-  width:260px;
-  height:260px;
-  border-radius:50%;
-  background:rgba(198,161,91,.2);
+  box-shadow:0 30px 90px rgba(49,79,55,.14);
 }
 
 .back{
@@ -145,7 +133,9 @@ h1{
   gap:7px;
 }
 
-.field.full{grid-column:1/-1}
+.field.full{
+  grid-column:1/-1
+}
 
 label{
   color:var(--sage-dark);
@@ -163,12 +153,6 @@ input,textarea{
   outline:none;
   color:var(--text);
   font-size:15px;
-  box-shadow:inset 0 1px 0 rgba(255,255,255,.9);
-}
-
-input:focus,textarea:focus{
-  border-color:rgba(198,161,91,.75);
-  box-shadow:0 0 0 4px rgba(198,161,91,.13);
 }
 
 textarea{
@@ -189,16 +173,8 @@ textarea{
   align-items:flex-start;
   padding:17px;
   border-radius:24px;
-  background:
-    linear-gradient(135deg,#fff,#fff7ed);
+  background:linear-gradient(135deg,#fff,#fff7ed);
   border:1px solid var(--line);
-  cursor:pointer;
-  transition:.18s;
-}
-
-.payment:hover{
-  transform:translateY(-1px);
-  box-shadow:0 14px 34px rgba(49,79,55,.09);
 }
 
 .payment input{
@@ -222,23 +198,35 @@ textarea{
 }
 
 .card-info{
-  margin-top:10px;
-  padding:16px;
-  border-radius:22px;
+  margin-top:12px;
+  padding:20px;
+  border-radius:24px;
   background:linear-gradient(135deg,#314f37,#496d4f);
   color:#fff;
 }
 
-.card-info small{
-  display:block;
-  opacity:.72;
-  margin-bottom:6px;
+.copy-card{
+  cursor:pointer;
+  text-align:center;
+  transition:.18s;
 }
 
-.card-info strong{
+.copy-card:hover{
+  transform:translateY(-1px);
+  box-shadow:0 18px 40px rgba(0,0,0,.12);
+}
+
+.card-info small{
   display:block;
-  font-size:20px;
-  letter-spacing:.04em;
+  opacity:.78;
+}
+
+.card-number{
+  margin-top:10px;
+  font-size:24px;
+  font-weight:950;
+  letter-spacing:.08em;
+  text-align:center;
 }
 
 .order-list{
@@ -265,7 +253,6 @@ textarea{
 
 .item b{
   font-size:15px;
-  color:var(--text);
 }
 
 .item span{
@@ -299,24 +286,11 @@ textarea{
   box-shadow:0 18px 42px rgba(141,70,90,.24);
 }
 
-.submit:active{
-  transform:scale(.99);
-}
-
 .note{
   margin-top:14px;
   color:var(--muted);
   font-size:13px;
   line-height:1.45;
-}
-
-.empty{
-  padding:20px;
-  border-radius:22px;
-  background:var(--milk);
-  color:var(--muted);
-  text-align:center;
-  border:1px solid var(--line);
 }
 
 .success{
@@ -327,63 +301,67 @@ textarea{
   background:#eef7ee;
   color:var(--sage-dark);
   font-weight:950;
-  border:1px solid rgba(49,79,55,.14);
 }
 
-.support{
-  margin-top:18px;
-  display:grid;
-  gap:10px;
-}
-
-.support-row{
-  padding:13px 15px;
-  border-radius:20px;
-  background:rgba(255,255,255,.72);
-  border:1px solid var(--line);
+.empty{
+  padding:20px;
+  border-radius:22px;
+  background:var(--milk);
   color:var(--muted);
-  font-size:13px;
-  line-height:1.4;
-}
-
-.support-row b{
-  display:block;
-  color:var(--sage-dark);
-  margin-bottom:3px;
+  text-align:center;
 }
 
 @media(max-width:920px){
-  .grid{grid-template-columns:1fr}
+  .grid{
+    grid-template-columns:1fr
+  }
 }
 
 @media(max-width:640px){
-  .page{padding-top:14px}
-  .hero{padding:26px 22px;border-radius:32px}
-  h1{font-size:42px}
-  .form-grid{grid-template-columns:1fr}
-  .card{padding:18px;border-radius:28px}
+  .hero{
+    padding:26px 22px;
+    border-radius:32px;
+  }
+
+  h1{
+    font-size:42px
+  }
+
+  .form-grid{
+    grid-template-columns:1fr
+  }
+
+  .card{
+    padding:18px;
+    border-radius:28px;
+  }
 }
 </style>
 </head>
 
 <body>
+
 <div class="page">
 
 <section class="hero">
   <a class="back" href="index.html">← Повернутися до каталогу</a>
+
   <h1>Оформлення замовлення</h1>
+
   <p>
-    Заповніть контактні дані, вкажіть відділення Нової пошти та оберіть зручний спосіб оплати.
-    Після оформлення адміністратор перевірить замовлення вручну.
+    Заповніть контактні дані та оберіть спосіб оплати.
+    Після оформлення адміністратор вручну підтвердить замовлення.
   </p>
 </section>
 
 <div class="grid">
 
 <form class="card" id="orderForm">
+
   <h2>Дані покупця</h2>
 
   <div class="form-grid">
+
     <div class="field">
       <label>Імʼя</label>
       <input id="firstName" required placeholder="Олена">
@@ -401,59 +379,83 @@ textarea{
 
     <div class="field">
       <label>Місто</label>
-      <input id="city" required placeholder="Київ, Львів, Ужгород...">
+      <input id="city" required placeholder="Київ, Львів...">
     </div>
 
     <div class="field full">
       <label>Відділення Нової пошти</label>
-      <input id="novaPost" required placeholder="Відділення №1 / поштомат / адресна доставка">
+      <input id="novaPost" required placeholder="Відділення №1 / поштомат">
     </div>
 
     <div class="field full">
-      <label>Коментар до замовлення</label>
-      <textarea id="comment" placeholder="Побажання, зручний час дзвінка, деталі доставки..."></textarea>
+      <label>Коментар</label>
+      <textarea id="comment" placeholder="Деталі доставки..."></textarea>
     </div>
 
     <div class="field full">
+
       <label>Спосіб оплати</label>
 
       <div class="payments">
+
         <label class="payment">
           <input type="radio" name="payment" value="Повна оплата на карту" checked>
+
           <div>
             <b>Повна оплата на карту</b>
-            <span>Після оформлення замовлення адміністратор вручну перевірить оплату та підтвердить відправку.</span>
+
+            <span>
+              Адміністратор вручну перевірить оплату та підтвердить замовлення.
+            </span>
           </div>
         </label>
 
         <label class="payment">
           <input type="radio" name="payment" value="Накладений платіж Новою поштою">
+
           <div>
-            <b>Накладений платіж Новою поштою</b>
-            <span>Оплата при отриманні у відділенні або поштоматі Нової пошти.</span>
+            <b>Накладений платіж</b>
+
+            <span>
+              Оплата при отриманні у відділенні Нової пошти.
+            </span>
           </div>
         </label>
+
       </div>
 
-      <div class="card-info">
-        <small>Карта для повної оплати</small>
-        <strong>0000 0000 0000 0000</strong>
+      <div class="card-info copy-card" onclick="copyCardNumber()">
+
+        <small>
+          Натисніть, щоб скопіювати номер картки
+        </small>
+
+        <div class="card-number" id="cardNumber">
+          0000 0000 0000 0000
+        </div>
+
       </div>
+
     </div>
+
   </div>
 
-  <button class="submit" type="submit">Підтвердити замовлення</button>
+  <button class="submit" type="submit">
+    Підтвердити замовлення
+  </button>
 
   <div class="success" id="successBox">
-    Замовлення прийнято. Ми скоро звʼяжемося з вами.
+    Замовлення успішно оформлено
   </div>
 
   <p class="note">
-    Дані замовлення будуть збережені в адмін-базі та відправлені адміністратору в Telegram.
+    Замовлення буде надіслано адміністратору в Telegram.
   </p>
+
 </form>
 
 <aside class="card">
+
   <h2>Ваше замовлення</h2>
 
   <div class="order-list" id="orderItems"></div>
@@ -463,17 +465,6 @@ textarea{
     <strong id="orderTotal">0 грн</strong>
   </div>
 
-  <div class="support">
-    <div class="support-row">
-      <b>Підтримка</b>
-      Якщо виникли питання — адміністратор звʼяжеться з вами після оформлення.
-    </div>
-
-    <div class="support-row">
-      <b>Доставка</b>
-      Відправлення здійснюється через Нову пошту після підтвердження замовлення.
-    </div>
-  </div>
 </aside>
 
 </div>
@@ -481,34 +472,38 @@ textarea{
 
 <script>
 const firebaseConfig={
-  apiKey:"AIzaSyALs-ZgFX7auGxRQ2EeQnVngjnejimPLV4",
-  authDomain:"yyokai-tattoo-system.firebaseapp.com",
-  databaseURL:"https://yyokai-tattoo-system-default-rtdb.europe-west1.firebasedatabase.app/",
-  projectId:"yyokai-tattoo-system",
-  storageBucket:"yyokai-tattoo-system.firebasestorage.app",
-  messagingSenderId:"995298614954",
-  appId:"1:995298614954:web:e4039c69fcb0541a95fad3"
+  apiKey:"YOUR_API_KEY",
+  authDomain:"YOUR_AUTH_DOMAIN",
+  databaseURL:"YOUR_DB_URL",
+  projectId:"YOUR_PROJECT_ID",
+  storageBucket:"YOUR_STORAGE",
+  messagingSenderId:"YOUR_SENDER_ID",
+  appId:"YOUR_APP_ID"
 };
 
 firebase.initializeApp(firebaseConfig);
+
 const db=firebase.database();
 
-const BOT_TOKEN="PASTE_YOUR_BOT_TOKEN_HERE";
-const CHAT_ID="PASTE_YOUR_CHAT_ID_HERE";
+const BOT_TOKEN="YOUR_BOT_TOKEN";
+const CHAT_ID="YOUR_CHAT_ID";
 
 let cart={};
 let total=0;
 
 function getVisitorId(){
   let id=localStorage.getItem("garden_visitor_id");
+
   if(!id){
-    id="visitor_"+Date.now()+"_"+Math.random().toString(16).slice(2);
+    id="visitor_"+Date.now();
     localStorage.setItem("garden_visitor_id",id);
   }
+
   return id;
 }
 
 const visitorId=getVisitorId();
+
 const cartRef=db.ref("gardenCarts/"+visitorId+"/items");
 const ordersRef=db.ref("gardenOrders");
 
@@ -518,31 +513,42 @@ cartRef.on("value",snapshot=>{
 });
 
 function renderOrder(){
+
   const items=Object.values(cart);
+
   const box=document.getElementById("orderItems");
+
   total=0;
 
   if(!items.length){
     box.innerHTML=`<div class="empty">Кошик порожній</div>`;
-    document.getElementById("orderTotal").textContent="0 грн";
     return;
   }
 
   box.innerHTML="";
 
   items.forEach(item=>{
+
     total+=Number(item.qty)*Number(item.price);
 
     const div=document.createElement("div");
+
     div.className="item";
+
     div.innerHTML=`
       <img src="${item.image}">
+
       <div>
         <b>${item.title}</b>
-        <span>${item.qty} × ${item.price} грн / ${item.unit}</span>
+
+        <span>
+          ${item.qty} × ${item.price} грн
+        </span>
       </div>
     `;
+
     box.appendChild(div);
+
   });
 
   document.getElementById("orderTotal").textContent=total+" грн";
@@ -552,49 +558,64 @@ function getPayment(){
   return document.querySelector('input[name="payment"]:checked').value;
 }
 
+function copyCardNumber(){
+
+  const text=document.getElementById("cardNumber").textContent.trim();
+
+  navigator.clipboard.writeText(text);
+
+  const block=document.querySelector(".copy-card");
+
+  const old=block.innerHTML;
+
+  block.innerHTML=`
+    <small>Скопійовано</small>
+
+    <div class="card-number">${text}</div>
+  `;
+
+  setTimeout(()=>{
+    block.innerHTML=old;
+  },1600);
+}
+
 function buildTelegramMessage(order){
+
   const productsText=order.items.map(item=>{
-    return `• ${item.title} — ${item.qty} x ${item.price} грн = ${item.qty*item.price} грн`;
+    return `• ${item.title} — ${item.qty} x ${item.price} грн`;
   }).join("\n");
 
   return `
 🌿 НОВЕ ЗАМОВЛЕННЯ
 
-👤 Клієнт: ${order.firstName} ${order.lastName}
-📞 Телефон: ${order.phone}
+👤 ${order.firstName} ${order.lastName}
 
-🚚 Доставка:
-Місто: ${order.city}
-Нова пошта: ${order.novaPost}
+📞 ${order.phone}
 
-💳 Оплата:
-${order.payment}
+🏙 ${order.city}
+
+📦 ${order.novaPost}
+
+💳 ${order.payment}
 
 🛒 Товари:
 ${productsText}
 
 💰 Разом: ${order.total} грн
 
-💬 Коментар:
-${order.comment || "Без коментаря"}
-
-📌 Статус:
-${order.status}
-
-🆔 ID:
-${order.id}
+💬 ${order.comment || "Без коментаря"}
 `;
 }
 
 async function sendToTelegram(text){
-  if(BOT_TOKEN==="PASTE_YOUR_BOT_TOKEN_HERE" || CHAT_ID==="PASTE_YOUR_CHAT_ID_HERE"){
-    console.warn("Telegram не налаштований");
-    return;
-  }
+
+  if(BOT_TOKEN==="YOUR_BOT_TOKEN") return;
 
   await fetch(`https://api.telegram.org/bot${BOT_TOKEN}/sendMessage`,{
     method:"POST",
-    headers:{"Content-Type":"application/json"},
+    headers:{
+      "Content-Type":"application/json"
+    },
     body:JSON.stringify({
       chat_id:CHAT_ID,
       text:text
@@ -603,6 +624,7 @@ async function sendToTelegram(text){
 }
 
 document.getElementById("orderForm").addEventListener("submit",async function(e){
+
   e.preventDefault();
 
   const items=Object.values(cart);
@@ -616,7 +638,7 @@ document.getElementById("orderForm").addEventListener("submit",async function(e)
 
   const order={
     id:orderId,
-    visitorId:visitorId,
+    visitorId,
     firstName:document.getElementById("firstName").value.trim(),
     lastName:document.getElementById("lastName").value.trim(),
     phone:document.getElementById("phone").value.trim(),
@@ -624,20 +646,23 @@ document.getElementById("orderForm").addEventListener("submit",async function(e)
     novaPost:document.getElementById("novaPost").value.trim(),
     comment:document.getElementById("comment").value.trim(),
     payment:getPayment(),
-    paymentStatus:"Очікує перевірки",
+    items,
+    total,
     status:"Нове замовлення",
-    items:items,
-    total:total,
     createdAt:new Date().toISOString()
   };
 
   await ordersRef.child(orderId).set(order);
+
   await sendToTelegram(buildTelegramMessage(order));
+
   await cartRef.remove();
 
   document.getElementById("successBox").style.display="block";
+
   document.getElementById("orderForm").reset();
 });
 </script>
+
 </body>
 </html>
