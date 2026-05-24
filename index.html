@@ -2,7 +2,8 @@
 <html lang="uk">
 <head>
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+<meta name="viewport"
+content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
 <title>Квітковий Дім | Квіти, ягоди та розсада</title>
 
 <script src="https://www.gstatic.com/firebasejs/9.22.1/firebase-app-compat.js"></script>
@@ -596,6 +597,13 @@ padding-bottom:env(safe-area-inset-bottom);
   .btn{width:100%}
   .hero h1{font-size:52px}
 }
+  button,
+a,
+.qty,
+.drawer-controls{
+  touch-action:manipulation;
+}
+  
 </style>
 </head>
 
@@ -837,6 +845,18 @@ async function decreaseCartItem(id){
     });
   }
 }
+  let lastTouchEnd = 0;
+
+document.addEventListener("touchend", function(event){
+  const now = Date.now();
+
+  if(now - lastTouchEnd <= 300){
+    event.preventDefault();
+  }
+
+  lastTouchEnd = now;
+}, false);
+  
 </script>
 </body>
 </html>
