@@ -9,89 +9,134 @@
 <script src="https://www.gstatic.com/firebasejs/9.22.1/firebase-database-compat.js"></script>
 
 <style>
-*{margin:0;padding:0;box-sizing:border-box}
+*{margin:0;padding:0;box-sizing:border-box;-webkit-tap-highlight-color:transparent}
+
 :root{
-  --milk:#fff7ef;
-  --sage-dark:#3f5f44;
+  --cream:#fffaf2;
+  --paper:#fffdf8;
+  --milk:#fff4ea;
+  --sage:#6f8f72;
+  --sage-dark:#314f37;
+  --gold:#c6a15b;
   --berry:#8d465a;
-  --text:#2d2822;
-  --muted:#7f7468;
-  --line:rgba(63,95,68,.16);
+  --text:#2b261f;
+  --muted:#7c7164;
+  --line:rgba(49,79,55,.16);
+  --shadow:0 30px 90px rgba(49,79,55,.14);
 }
+
 body{
   min-height:100vh;
   font-family:Arial,sans-serif;
   color:var(--text);
   background:
-    radial-gradient(circle at 10% -10%,rgba(217,162,173,.22),transparent 34%),
-    radial-gradient(circle at 90% 0%,rgba(111,143,114,.26),transparent 34%),
-    linear-gradient(180deg,#fffdf8 0%,#f8f0e4 45%,#edf2e7 100%);
+    radial-gradient(circle at 8% -8%,rgba(198,161,91,.22),transparent 32%),
+    radial-gradient(circle at 92% 4%,rgba(111,143,114,.28),transparent 34%),
+    radial-gradient(circle at 50% 100%,rgba(141,70,90,.12),transparent 38%),
+    linear-gradient(180deg,#fffdf8 0%,#f8efe1 48%,#eaf1e4 100%);
+  background-attachment:fixed;
 }
+
+body::before{
+  content:"";
+  position:fixed;
+  inset:0;
+  pointer-events:none;
+  z-index:-1;
+  background:
+    linear-gradient(rgba(255,255,255,.25) 1px,transparent 1px),
+    linear-gradient(90deg,rgba(255,255,255,.22) 1px,transparent 1px);
+  background-size:46px 46px;
+  mask-image:linear-gradient(to bottom,rgba(0,0,0,.45),transparent 75%);
+}
+
 a{text-decoration:none;color:inherit}
-button,input,textarea,select{font-family:inherit}
+button,input,textarea{font-family:inherit}
 button{border:0;cursor:pointer}
 
 .page{
-  width:min(1100px,calc(100% - 28px));
+  width:min(1180px,calc(100% - 28px));
   margin:0 auto;
-  padding:24px 0 50px;
+  padding:24px 0 60px;
 }
 
-.top{
+.hero{
   margin-bottom:22px;
-  padding:28px;
-  border-radius:34px;
-  background:rgba(255,255,255,.76);
-  border:1px solid rgba(255,255,255,.9);
-  box-shadow:0 24px 70px rgba(63,95,68,.12);
+  padding:34px;
+  border-radius:42px;
+  background:
+    linear-gradient(135deg,rgba(255,255,255,.92),rgba(255,246,233,.84),rgba(235,244,229,.9));
+  border:1px solid rgba(255,255,255,.92);
+  box-shadow:var(--shadow);
+  position:relative;
+  overflow:hidden;
+}
+
+.hero::after{
+  content:"";
+  position:absolute;
+  right:-80px;
+  top:-80px;
+  width:260px;
+  height:260px;
+  border-radius:50%;
+  background:rgba(198,161,91,.2);
 }
 
 .back{
   display:inline-flex;
-  margin-bottom:18px;
+  margin-bottom:22px;
+  padding:11px 16px;
+  border-radius:999px;
+  background:#fff;
   color:var(--sage-dark);
   font-weight:950;
+  border:1px solid var(--line);
 }
 
 h1{
-  font-size:clamp(36px,7vw,64px);
-  line-height:.92;
-  letter-spacing:-.07em;
+  max-width:820px;
+  font-size:clamp(40px,7vw,76px);
+  line-height:.9;
+  letter-spacing:-.075em;
   color:var(--sage-dark);
 }
 
-.top p{
-  margin-top:14px;
+.hero p{
+  margin-top:18px;
+  max-width:700px;
   color:var(--muted);
-  line-height:1.55;
+  font-size:17px;
+  line-height:1.6;
 }
 
 .grid{
   display:grid;
-  grid-template-columns:1fr 380px;
+  grid-template-columns:1fr 400px;
   gap:18px;
   align-items:start;
 }
 
 .card{
-  padding:22px;
-  border-radius:30px;
+  padding:24px;
+  border-radius:34px;
   background:rgba(255,255,255,.82);
-  border:1px solid rgba(255,255,255,.9);
-  box-shadow:0 18px 50px rgba(63,95,68,.09);
+  border:1px solid rgba(255,255,255,.95);
+  box-shadow:0 20px 60px rgba(49,79,55,.1);
+  backdrop-filter:blur(18px);
 }
 
 .card h2{
-  margin-bottom:16px;
-  font-size:28px;
+  margin-bottom:18px;
+  font-size:31px;
   color:var(--sage-dark);
-  letter-spacing:-.04em;
+  letter-spacing:-.05em;
 }
 
 .form-grid{
   display:grid;
   grid-template-columns:1fr 1fr;
-  gap:12px;
+  gap:13px;
 }
 
 .field{
@@ -108,57 +153,92 @@ label{
   font-weight:950;
 }
 
-input,textarea,select{
+input,textarea{
   width:100%;
-  min-height:50px;
-  border-radius:18px;
+  min-height:54px;
+  border-radius:20px;
   border:1px solid var(--line);
   background:#fff;
-  padding:0 15px;
+  padding:0 16px;
   outline:none;
   color:var(--text);
   font-size:15px;
+  box-shadow:inset 0 1px 0 rgba(255,255,255,.9);
+}
+
+input:focus,textarea:focus{
+  border-color:rgba(198,161,91,.75);
+  box-shadow:0 0 0 4px rgba(198,161,91,.13);
 }
 
 textarea{
-  min-height:94px;
-  padding-top:14px;
+  min-height:104px;
+  padding-top:15px;
   resize:vertical;
 }
 
 .payments{
   display:grid;
-  gap:10px;
-  margin-top:6px;
+  gap:12px;
+  margin-top:4px;
 }
 
 .payment{
   display:flex;
-  gap:10px;
+  gap:12px;
   align-items:flex-start;
-  padding:14px;
-  border-radius:20px;
-  background:#fff;
+  padding:17px;
+  border-radius:24px;
+  background:
+    linear-gradient(135deg,#fff,#fff7ed);
   border:1px solid var(--line);
   cursor:pointer;
+  transition:.18s;
+}
+
+.payment:hover{
+  transform:translateY(-1px);
+  box-shadow:0 14px 34px rgba(49,79,55,.09);
 }
 
 .payment input{
   width:auto;
   min-height:auto;
-  margin-top:3px;
+  margin-top:4px;
+  accent-color:var(--sage-dark);
 }
 
 .payment b{
   color:var(--sage-dark);
+  font-size:16px;
 }
 
 .payment span{
   display:block;
-  margin-top:4px;
+  margin-top:5px;
   color:var(--muted);
   font-size:13px;
-  line-height:1.35;
+  line-height:1.4;
+}
+
+.card-info{
+  margin-top:10px;
+  padding:16px;
+  border-radius:22px;
+  background:linear-gradient(135deg,#314f37,#496d4f);
+  color:#fff;
+}
+
+.card-info small{
+  display:block;
+  opacity:.72;
+  margin-bottom:6px;
+}
+
+.card-info strong{
+  display:block;
+  font-size:20px;
+  letter-spacing:.04em;
 }
 
 .order-list{
@@ -168,86 +248,120 @@ textarea{
 
 .item{
   display:grid;
-  grid-template-columns:58px 1fr;
-  gap:10px;
-  padding:9px;
-  border-radius:18px;
+  grid-template-columns:62px 1fr;
+  gap:11px;
+  padding:10px;
+  border-radius:22px;
   background:#fff;
   border:1px solid var(--line);
 }
 
 .item img{
-  width:58px;
-  height:58px;
+  width:62px;
+  height:62px;
   object-fit:cover;
-  border-radius:14px;
+  border-radius:17px;
 }
 
 .item b{
-  font-size:14px;
+  font-size:15px;
+  color:var(--text);
 }
 
 .item span{
   display:block;
-  margin-top:5px;
+  margin-top:6px;
   color:var(--muted);
   font-size:13px;
 }
 
 .total{
-  margin-top:16px;
-  padding-top:16px;
+  margin-top:18px;
+  padding-top:18px;
   border-top:1px solid var(--line);
   display:flex;
   justify-content:space-between;
-  font-size:24px;
+  align-items:center;
+  font-size:25px;
   font-weight:950;
   color:var(--sage-dark);
 }
 
 .submit{
-  margin-top:16px;
+  margin-top:18px;
   width:100%;
-  height:56px;
+  height:60px;
   border-radius:999px;
-  background:var(--berry);
+  background:linear-gradient(135deg,var(--berry),#a95b6f);
   color:#fff;
   font-weight:950;
   font-size:16px;
+  box-shadow:0 18px 42px rgba(141,70,90,.24);
+}
+
+.submit:active{
+  transform:scale(.99);
 }
 
 .note{
-  margin-top:12px;
+  margin-top:14px;
   color:var(--muted);
   font-size:13px;
   line-height:1.45;
 }
 
 .empty{
-  padding:18px;
-  border-radius:20px;
+  padding:20px;
+  border-radius:22px;
   background:var(--milk);
   color:var(--muted);
   text-align:center;
+  border:1px solid var(--line);
 }
 
 .success{
   display:none;
-  margin-top:14px;
-  padding:16px;
-  border-radius:20px;
+  margin-top:16px;
+  padding:17px;
+  border-radius:22px;
   background:#eef7ee;
   color:var(--sage-dark);
-  font-weight:900;
+  font-weight:950;
+  border:1px solid rgba(49,79,55,.14);
 }
 
-@media(max-width:900px){
+.support{
+  margin-top:18px;
+  display:grid;
+  gap:10px;
+}
+
+.support-row{
+  padding:13px 15px;
+  border-radius:20px;
+  background:rgba(255,255,255,.72);
+  border:1px solid var(--line);
+  color:var(--muted);
+  font-size:13px;
+  line-height:1.4;
+}
+
+.support-row b{
+  display:block;
+  color:var(--sage-dark);
+  margin-bottom:3px;
+}
+
+@media(max-width:920px){
   .grid{grid-template-columns:1fr}
 }
 
 @media(max-width:640px){
+  .page{padding-top:14px}
+  .hero{padding:26px 22px;border-radius:32px}
+  h1{font-size:42px}
   .form-grid{grid-template-columns:1fr}
-  .card{padding:18px;border-radius:26px}
+  .card{padding:18px;border-radius:28px}
 }
 </style>
 </head>
@@ -255,10 +369,13 @@ textarea{
 <body>
 <div class="page">
 
-<section class="top">
+<section class="hero">
   <a class="back" href="index.html">← Повернутися до каталогу</a>
   <h1>Оформлення замовлення</h1>
-  <p>Заповніть дані для доставки Новою поштою та оберіть спосіб оплати.</p>
+  <p>
+    Заповніть контактні дані, вкажіть відділення Нової пошти та оберіть зручний спосіб оплати.
+    Після оформлення адміністратор перевірить замовлення вручну.
+  </p>
 </section>
 
 <div class="grid">
@@ -269,12 +386,12 @@ textarea{
   <div class="form-grid">
     <div class="field">
       <label>Імʼя</label>
-      <input id="firstName" required placeholder="Наприклад: Олена">
+      <input id="firstName" required placeholder="Олена">
     </div>
 
     <div class="field">
       <label>Прізвище</label>
-      <input id="lastName" required placeholder="Наприклад: Коваль">
+      <input id="lastName" required placeholder="Коваль">
     </div>
 
     <div class="field">
@@ -289,12 +406,12 @@ textarea{
 
     <div class="field full">
       <label>Відділення Нової пошти</label>
-      <input id="novaPost" required placeholder="Відділення №1, поштомат або адреса">
+      <input id="novaPost" required placeholder="Відділення №1 / поштомат / адресна доставка">
     </div>
 
     <div class="field full">
       <label>Коментар до замовлення</label>
-      <textarea id="comment" placeholder="Зручний час дзвінка, побажання, деталі доставки..."></textarea>
+      <textarea id="comment" placeholder="Побажання, зручний час дзвінка, деталі доставки..."></textarea>
     </div>
 
     <div class="field full">
@@ -305,15 +422,7 @@ textarea{
           <input type="radio" name="payment" value="Повна оплата на карту" checked>
           <div>
             <b>Повна оплата на карту</b>
-            <span>Карта для оплати: 0000 0000 0000 0000. Адмін вручну підтвердить оплату.</span>
-          </div>
-        </label>
-
-        <label class="payment">
-          <input type="radio" name="payment" value="Оплата карткою після підтвердження">
-          <div>
-            <b>Карткою після підтвердження</b>
-            <span>Після оформлення з вами звʼяжеться адміністратор.</span>
+            <span>Після оформлення замовлення адміністратор вручну перевірить оплату та підтвердить відправку.</span>
           </div>
         </label>
 
@@ -321,9 +430,14 @@ textarea{
           <input type="radio" name="payment" value="Накладений платіж Новою поштою">
           <div>
             <b>Накладений платіж Новою поштою</b>
-            <span>Оплата при отриманні у відділенні Нової пошти.</span>
+            <span>Оплата при отриманні у відділенні або поштоматі Нової пошти.</span>
           </div>
         </label>
+      </div>
+
+      <div class="card-info">
+        <small>Карта для повної оплати</small>
+        <strong>0000 0000 0000 0000</strong>
       </div>
     </div>
   </div>
@@ -335,17 +449,30 @@ textarea{
   </div>
 
   <p class="note">
-    Дані замовлення будуть відправлені адміністратору в Telegram.
+    Дані замовлення будуть збережені в адмін-базі та відправлені адміністратору в Telegram.
   </p>
 </form>
 
 <aside class="card">
   <h2>Ваше замовлення</h2>
+
   <div class="order-list" id="orderItems"></div>
 
   <div class="total">
     <span>Разом:</span>
     <strong id="orderTotal">0 грн</strong>
+  </div>
+
+  <div class="support">
+    <div class="support-row">
+      <b>Підтримка</b>
+      Якщо виникли питання — адміністратор звʼяжеться з вами після оформлення.
+    </div>
+
+    <div class="support-row">
+      <b>Доставка</b>
+      Відправлення здійснюється через Нову пошту після підтвердження замовлення.
+    </div>
   </div>
 </aside>
 
@@ -404,7 +531,7 @@ function renderOrder(){
   box.innerHTML="";
 
   items.forEach(item=>{
-    total+=item.qty*item.price;
+    total+=Number(item.qty)*Number(item.price);
 
     const div=document.createElement("div");
     div.className="item";
@@ -428,7 +555,7 @@ function getPayment(){
 function buildTelegramMessage(order){
   const productsText=order.items.map(item=>{
     return `• ${item.title} — ${item.qty} x ${item.price} грн = ${item.qty*item.price} грн`;
-  }).join("\\n");
+  }).join("\n");
 
   return `
 🌿 НОВЕ ЗАМОВЛЕННЯ
@@ -451,14 +578,17 @@ ${productsText}
 💬 Коментар:
 ${order.comment || "Без коментаря"}
 
-🆔 ID замовлення:
+📌 Статус:
+${order.status}
+
+🆔 ID:
 ${order.id}
 `;
 }
 
 async function sendToTelegram(text){
   if(BOT_TOKEN==="PASTE_YOUR_BOT_TOKEN_HERE" || CHAT_ID==="PASTE_YOUR_CHAT_ID_HERE"){
-    console.warn("Telegram не налаштований: встав BOT_TOKEN і CHAT_ID");
+    console.warn("Telegram не налаштований");
     return;
   }
 
@@ -494,7 +624,7 @@ document.getElementById("orderForm").addEventListener("submit",async function(e)
     novaPost:document.getElementById("novaPost").value.trim(),
     comment:document.getElementById("comment").value.trim(),
     payment:getPayment(),
-    paymentStatus:"Очікує підтвердження адміном",
+    paymentStatus:"Очікує перевірки",
     status:"Нове замовлення",
     items:items,
     total:total,
@@ -502,9 +632,7 @@ document.getElementById("orderForm").addEventListener("submit",async function(e)
   };
 
   await ordersRef.child(orderId).set(order);
-
   await sendToTelegram(buildTelegramMessage(order));
-
   await cartRef.remove();
 
   document.getElementById("successBox").style.display="block";
