@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="format-detection" content="telephone=no">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
 <title>Оформлення замовлення | Квітковий Дім</title>
 
 <script src="https://www.gstatic.com/firebasejs/9.22.1/firebase-app-compat.js"></script>
@@ -12,7 +12,7 @@
 <style>
 *{margin:0;padding:0;box-sizing:border-box;-webkit-tap-highlight-color:transparent}
 :root{--milk:#fff4ea;--sage-dark:#314f37;--berry:#8d465a;--text:#2b261f;--muted:#7c7164;--line:rgba(49,79,55,.16)}
-body{min-height:100vh;font-family:Arial,sans-serif;color:var(--text);background:radial-gradient(circle at 10% -10%,rgba(217,162,173,.18),transparent 30%),radial-gradient(circle at 90% 0%,rgba(111,143,114,.24),transparent 32%),linear-gradient(180deg,#fffdf8 0%,#f8f0e4 45%,#edf2e7 100%)}
+html,body{min-height:100%;font-family:Arial,sans-serif;color:var(--text);background:radial-gradient(circle at 10% -10%,rgba(217,162,173,.18),transparent 30%),radial-gradient(circle at 90% 0%,rgba(111,143,114,.24),transparent 32%),linear-gradient(180deg,#fffdf8 0%,#f8f0e4 45%,#edf2e7 100%);overflow-x:hidden;touch-action:manipulation}
 a{text-decoration:none;color:inherit}
 button,input,textarea,select{font-family:inherit}
 button{border:0;cursor:pointer}
@@ -38,8 +38,7 @@ textarea{min-height:110px;padding-top:16px;resize:vertical}
 .payment input{width:auto;min-height:auto;margin-top:4px;accent-color:var(--sage-dark)}
 .payment b{color:var(--sage-dark);font-size:16px}
 .payment span{display:block;margin-top:5px;color:var(--muted);font-size:13px;line-height:1.4}
-.copy-card{margin-top:14px;padding:24px 18px;border-radius:28px;background:linear-gradient(135deg,#314f37,#496d4f);color:#fff;cursor:pointer;transition:.18s;user-select:none;-webkit-user-select:none;-webkit-touch-callout:none;text-align:center}
-.copy-card:hover{transform:translateY(-2px)}
+.copy-card{margin-top:14px;padding:24px 18px;border-radius:28px;background:linear-gradient(135deg,#314f37,#496d4f);color:#fff;cursor:pointer;user-select:none;-webkit-user-select:none;-webkit-touch-callout:none;text-align:center}
 .copy-card small{display:block;opacity:.82;text-align:center}
 .card-number{margin-top:14px;font-size:28px;font-weight:950;letter-spacing:.08em;text-align:center;pointer-events:none;user-select:none;-webkit-user-select:none;-webkit-touch-callout:none}
 .card-bank{margin-top:12px;font-size:15px;opacity:.92;line-height:1.5;text-align:center;pointer-events:none;user-select:none;-webkit-user-select:none}
@@ -54,6 +53,12 @@ textarea{min-height:110px;padding-top:16px;resize:vertical}
 .submit:disabled{opacity:.55;cursor:not-allowed}
 .success{display:none;margin-top:16px;padding:18px;border-radius:24px;background:#eef7ee;color:var(--sage-dark);border:1px solid rgba(49,79,55,.14);text-align:center;line-height:1.5}
 .empty{padding:20px;border-radius:22px;background:var(--milk);color:var(--muted);text-align:center;border:1px solid var(--line)}
+.my-orders{display:grid;gap:10px}
+.my-order{padding:14px;border-radius:22px;background:#fff;border:1px solid var(--line)}
+.my-order-top{display:flex;justify-content:space-between;align-items:center;gap:10px}
+.my-order-status{padding:7px 10px;border-radius:999px;background:var(--milk);color:var(--berry);font-size:12px;font-weight:950;text-align:center}
+.my-order-products{margin-top:10px;color:var(--muted);font-size:13px;line-height:1.5}
+.my-order-message{margin-top:10px;padding:12px;border-radius:18px;background:#eef7ee;color:var(--sage-dark);font-size:13px;font-weight:900}
 @media(max-width:920px){.grid{grid-template-columns:1fr}}
 @media(max-width:640px){.hero{padding:26px 22px;border-radius:32px}.hero h1{font-size:42px}.form-grid{grid-template-columns:1fr}.card{padding:18px;border-radius:28px}.card-number{font-size:21px}}
 </style>
@@ -65,7 +70,7 @@ textarea{min-height:110px;padding-top:16px;resize:vertical}
 <section class="hero">
   <a href="bloom.html" class="back">← Назад до каталогу</a>
   <h1>Оформлення замовлення</h1>
-  <p>Оберіть, куди відсилати замовлення Новою Поштою. Після оформлення адміністратор вручну підтвердить замовлення.</p>
+  <p>Після оформлення адміністратор вручну підтвердить оплату та відправку.</p>
 </section>
 
 <div class="grid">
@@ -137,13 +142,12 @@ textarea{min-height:110px;padding-top:16px;resize:vertical}
 
       <button class="copy-card" id="copyCard" type="button" onclick="copyCardNumberOnly()">
         <small>Натисніть, щоб скопіювати номер картки</small>
-        <div class="card-number" id="cardNumber">5375 4112 3456 7890</div>
+        <div class="card-number">5375 4112 3456 7890</div>
         <div class="card-bank">MONOBANK<br>Іван Петренко</div>
       </button>
 
       <div class="warning" id="paymentWarning">
-        Після оплати на карту замовлення отримає статус:
-        «Очікує підтвердження адміністратором».
+        Після оплати замовлення очікує підтвердження адміністратором.
       </div>
     </div>
   </div>
@@ -152,17 +156,24 @@ textarea{min-height:110px;padding-top:16px;resize:vertical}
 
   <div class="success" id="successBox">
     Замовлення оформлено 🌿<br><br>
-    Адміністратор підтвердить оплату або відправку наложеним платежем.
+    Статус можна переглянути нижче у блоці «Мої замовлення».
   </div>
 </form>
 
-<div class="card">
-  <h2>Ваше замовлення</h2>
-  <div class="order-list" id="orderItems"></div>
+<div>
+  <div class="card">
+    <h2>Ваше замовлення</h2>
+    <div class="order-list" id="orderItems"></div>
 
-  <div class="total">
-    <span>Разом:</span>
-    <strong id="orderTotal">0 грн</strong>
+    <div class="total">
+      <span>Разом:</span>
+      <strong id="orderTotal">0 грн</strong>
+    </div>
+  </div>
+
+  <div class="card" style="margin-top:18px">
+    <h2>Мої замовлення</h2>
+    <div class="my-orders" id="myOrders"></div>
   </div>
 </div>
 
@@ -183,9 +194,11 @@ const firebaseConfig={
 firebase.initializeApp(firebaseConfig);
 const db=firebase.database();
 
+/* TELEGRAM */
 const BOT_TOKEN="YOUR_BOT_TOKEN";
 const CHAT_ID="YOUR_CHAT_ID";
 
+/* NOVA POSHTA */
 const NOVA_POSHTA_API_KEY="b445a9290ff926a8a7aa77c58ba53f3f";
 const NOVA_POSHTA_URL="https://api.novaposhta.ua/v2.0/json/";
 
@@ -201,7 +214,7 @@ const citySelect=document.getElementById("citySelect");
 const warehouseSelect=document.getElementById("warehouseSelect");
 const cityHint=document.getElementById("cityHint");
 const phoneLocal=document.getElementById("phoneLocal");
-const copyCard=document.getElementById("copyCard");
+const myOrders=document.getElementById("myOrders");
 
 function getVisitorId(){
   let id=localStorage.getItem("garden_visitor_id");
@@ -217,6 +230,7 @@ const cartRef=db.ref("gardenCarts/"+visitorId+"/items");
 const ordersRef=db.ref("gardenOrders");
 
 phoneLocal.value=localStorage.getItem("client_phone_local")||"";
+
 phoneLocal.addEventListener("input",()=>{
   phoneLocal.value=phoneLocal.value.replace(/\D/g,"").slice(0,9);
   localStorage.setItem("client_phone_local",phoneLocal.value);
@@ -227,6 +241,11 @@ cartRef.on("value",snapshot=>{
   renderCart();
 });
 
+ordersRef.orderByChild("visitorId").equalTo(visitorId).on("value",snapshot=>{
+  const orders=Object.values(snapshot.val()||{});
+  renderMyOrders(orders);
+});
+
 function renderCart(){
   const items=Object.values(cart);
   total=0;
@@ -234,11 +253,9 @@ function renderCart(){
   if(!items.length){
     orderItems.innerHTML=`<div class="empty">Кошик порожній</div>`;
     orderTotal.textContent="0 грн";
-    submitBtn.disabled=true;
     return;
   }
 
-  submitBtn.disabled=false;
   orderItems.innerHTML="";
 
   items.forEach(item=>{
@@ -246,7 +263,6 @@ function renderCart(){
 
     const div=document.createElement("div");
     div.className="item";
-
     div.innerHTML=`
       <img src="${item.image||""}">
       <div>
@@ -254,11 +270,44 @@ function renderCart(){
         <span>${item.qty} × ${item.price} грн / ${item.unit||"шт"}</span>
       </div>
     `;
-
     orderItems.appendChild(div);
   });
 
   orderTotal.textContent=total+" грн";
+}
+
+function renderMyOrders(orders){
+  if(!orders.length){
+    myOrders.innerHTML=`<div class="empty">Замовлень поки немає</div>`;
+    return;
+  }
+
+  orders.sort((a,b)=>String(b.createdAt||"").localeCompare(String(a.createdAt||"")));
+
+  myOrders.innerHTML=orders.map(order=>{
+    const products=(order.items||[]).map(item=>{
+      return `• ${item.title} — ${item.qty} × ${item.price} грн`;
+    }).join("<br>");
+
+    return `
+      <div class="my-order">
+        <div class="my-order-top">
+          <strong>${order.total||0} грн</strong>
+          <div class="my-order-status">${order.status || "Очікує"}</div>
+        </div>
+
+        <div class="my-order-products">
+          ${products}
+        </div>
+
+        ${
+          order.customerMessage
+          ? `<div class="my-order-message">${order.customerMessage}</div>`
+          : ""
+        }
+      </div>
+    `;
+  }).join("");
 }
 
 async function novaRequest(modelName,calledMethod,methodProperties={}){
@@ -272,6 +321,7 @@ async function novaRequest(modelName,calledMethod,methodProperties={}){
       methodProperties
     })
   });
+
   return await res.json();
 }
 
@@ -288,7 +338,9 @@ citySearch.addEventListener("input",()=>{
     return;
   }
 
-  cityTimer=setTimeout(()=>searchCities(value),500);
+  cityTimer=setTimeout(()=>{
+    searchCities(value);
+  },500);
 });
 
 async function searchCities(query){
@@ -329,7 +381,9 @@ citySelect.addEventListener("change",()=>{
   selectedCityRef=citySelect.value;
   selectedCityName=option.dataset.name||option.textContent;
 
-  if(selectedCityRef) loadWarehouses(selectedCityRef);
+  if(selectedCityRef){
+    loadWarehouses(selectedCityRef);
+  }
 });
 
 async function loadWarehouses(cityRef){
@@ -369,13 +423,12 @@ function togglePayment(){
     paymentWarning.textContent="Ви обрали накладений платіж. Адміністратор підтвердить замовлення вручну.";
   }else{
     copyCard.style.display="block";
-    paymentWarning.textContent="Після оплати на карту замовлення отримає статус: «Очікує підтвердження адміністратором».";
+    paymentWarning.textContent="Після оплати адміністратор підтвердить замовлення.";
   }
 }
 
 function copyCardNumberOnly(){
-  const pureNumber="5375411234567890";
-  navigator.clipboard.writeText(pureNumber);
+  navigator.clipboard.writeText("5375411234567890");
 
   const old=copyCard.innerHTML;
 
@@ -428,7 +481,10 @@ async function sendToTelegram(text){
   await fetch(`https://api.telegram.org/bot${BOT_TOKEN}/sendMessage`,{
     method:"POST",
     headers:{"Content-Type":"application/json"},
-    body:JSON.stringify({chat_id:CHAT_ID,text})
+    body:JSON.stringify({
+      chat_id:CHAT_ID,
+      text
+    })
   });
 }
 
@@ -457,29 +513,36 @@ orderForm.addEventListener("submit",async e=>{
     return;
   }
 
-  const fullPhone="+380"+phoneLocal.value;
   const payment=getPayment();
   const orderId="order_"+Date.now();
 
   const order={
     id:orderId,
     visitorId,
+
     firstName:firstName.value.trim(),
     lastName:lastName.value.trim(),
-    phone:fullPhone,
+    phone:"+380"+phoneLocal.value,
     messenger:messenger.value.trim(),
+
     city:selectedCityName,
     cityRef:selectedCityRef,
     novaPost:warehouseSelect.value,
     comment:comment.value.trim(),
+
     payment,
+
     paymentStatus:payment==="Повна оплата на карту" ? "Очікує перевірки" : "Накладений платіж",
     status:payment==="Повна оплата на карту" ? "Очікує підтвердження оплати" : "Нове замовлення",
+    customerMessage:"Після перевірки адміністратор підтвердить відправку.",
+
     total,
     items,
+
     adminConfirmed:false,
     paymentConfirmed:false,
     shipped:false,
+
     createdAt:new Date().toISOString()
   };
 
@@ -490,6 +553,8 @@ orderForm.addEventListener("submit",async e=>{
   await sendToTelegram(buildTelegramMessage(order));
   await cartRef.remove();
 
+  localStorage.setItem("last_order_id",orderId);
+
   successBox.style.display="block";
   orderForm.reset();
 
@@ -499,6 +564,7 @@ orderForm.addEventListener("submit",async e=>{
   selectedCityName="";
 
   togglePayment();
+
   submitBtn.textContent="Замовлення оформлено";
 });
 
