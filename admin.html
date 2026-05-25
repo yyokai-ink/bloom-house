@@ -23,8 +23,8 @@
 html,body{
   min-height:100%;
   font-family:Arial,sans-serif;
-  color:#2b261f;
   background:linear-gradient(180deg,#fffdf8,#edf2e7);
+  color:#2b261f;
   touch-action:manipulation;
   overflow-x:hidden;
 }
@@ -34,15 +34,25 @@ button,input,select,textarea{
   font-size:16px;
 }
 
-button{
-  border:0;
-  cursor:pointer;
-}
+button{border:0;cursor:pointer}
 
 .page{
   width:min(1120px,calc(100% - 24px));
   margin:0 auto;
   padding:16px 0 60px;
+}
+
+.card{
+  padding:20px;
+  border-radius:28px;
+  background:rgba(255,255,255,.92);
+  border:1px solid #fff;
+  box-shadow:0 16px 44px rgba(49,79,55,.08);
+}
+
+.login{
+  max-width:420px;
+  margin:80px auto;
 }
 
 .hero{
@@ -63,23 +73,9 @@ button{
 .hero p{
   margin-top:8px;
   color:var(--muted);
-  line-height:1.5;
 }
 
-.login{
-  max-width:420px;
-  margin:70px auto;
-}
-
-.card{
-  padding:20px;
-  border-radius:28px;
-  background:rgba(255,255,255,.9);
-  border:1px solid #fff;
-  box-shadow:0 16px 44px rgba(49,79,55,.08);
-}
-
-.card h2{
+h2{
   font-size:28px;
   color:var(--sage);
   margin-bottom:14px;
@@ -87,16 +83,14 @@ button{
 }
 
 .tabs{
-  display:flex;
+  display:grid;
+  grid-template-columns:1fr 1fr;
   gap:8px;
   margin:18px 0;
-  overflow:auto;
 }
 
 .tab{
-  flex:1;
-  min-height:50px;
-  padding:0 16px;
+  min-height:52px;
   border-radius:999px;
   background:#fff;
   color:var(--sage);
@@ -109,9 +103,23 @@ button{
   color:#fff;
 }
 
+.section{display:none}
+.section.active{display:block}
+
 .form{
   display:grid;
   gap:11px;
+}
+
+.field{
+  display:grid;
+  gap:6px;
+}
+
+label{
+  font-size:13px;
+  font-weight:950;
+  color:var(--sage);
 }
 
 input,select,textarea{
@@ -130,30 +138,22 @@ textarea{
   resize:vertical;
 }
 
-label{
-  font-size:13px;
-  font-weight:950;
-  color:var(--sage);
-}
-
-.field{
+.two{
   display:grid;
-  gap:6px;
+  grid-template-columns:1fr 1fr;
+  gap:11px;
 }
 
 .btn{
-  min-height:54px;
+  min-height:52px;
   border-radius:999px;
-  padding:0 18px;
+  padding:0 16px;
   font-weight:950;
   background:var(--sage);
   color:#fff;
 }
 
-.btn.red{
-  background:var(--berry);
-}
-
+.btn.red{background:var(--berry)}
 .btn.light{
   background:#fff;
   color:var(--sage);
@@ -163,10 +163,6 @@ label{
 .btn:disabled{
   opacity:.55;
   cursor:not-allowed;
-}
-
-.hidden{
-  display:none;
 }
 
 .list{
@@ -209,14 +205,14 @@ label{
 }
 
 .actions{
-  display:flex;
-  flex-wrap:wrap;
+  display:grid;
+  grid-template-columns:1fr 1fr;
   gap:8px;
   margin-top:10px;
 }
 
 .actions .btn{
-  min-height:42px;
+  min-height:44px;
   font-size:14px;
 }
 
@@ -236,17 +232,6 @@ label{
   color:var(--muted);
   font-size:14px;
   line-height:1.55;
-}
-
-.grid{
-  display:grid;
-  gap:16px;
-}
-
-.two{
-  display:grid;
-  grid-template-columns:1fr 1fr;
-  gap:11px;
 }
 
 .preview{
@@ -269,10 +254,11 @@ label{
   line-height:1.45;
 }
 
+.hidden{display:none!important}
+
 @media(max-width:720px){
   .hero h1{font-size:34px}
   .two{grid-template-columns:1fr}
-  .tabs{display:grid;grid-template-columns:1fr 1fr}
   .product-row{grid-template-columns:64px 1fr}
   .product-row img{width:64px;height:64px}
 }
@@ -285,8 +271,9 @@ label{
 
 <div class="card login" id="loginBox">
   <h2>Вхід в адмінку</h2>
+
   <div class="form">
-    <input id="adminPass" type="password" placeholder="Введіть пароль">
+    <input id="adminPass" type="password" placeholder="Пароль">
     <button class="btn" onclick="login()">Увійти</button>
   </div>
 </div>
@@ -295,7 +282,7 @@ label{
 
 <section class="hero">
   <h1>Квітковий Дім</h1>
-  <p>Проста адмінка: додати товар, змінити залишок, підтвердити замовлення.</p>
+  <p>Додати товар, змінити залишок, підтвердити замовлення.</p>
 </section>
 
 <div class="tabs">
@@ -303,88 +290,85 @@ label{
   <button class="tab" onclick="showTab('orders',this)">Замовлення</button>
 </div>
 
-<section id="productsTab" class="grid">
+<section id="productsTab" class="section active">
 
-<div class="card">
-  <h2>Додати товар</h2>
+  <div class="card">
+    <h2>Додати товар</h2>
 
-  <div class="notice">
-    Просто заповніть поля. Якщо підкатегорії ще немає — вона створиться автоматично.
+    <div class="notice">
+      Заповніть товар. Підкатегорія створиться автоматично.
+    </div>
+
+    <div class="form">
+
+      <div class="field">
+        <label>Фото товару</label>
+        <input id="productImageFile" type="file" accept="image/*" onchange="previewImage()">
+        <img id="imagePreview" class="preview">
+      </div>
+
+      <div class="two">
+        <div class="field">
+          <label>Категорія</label>
+          <select id="productCategory">
+            <option value="flowers">Квіти</option>
+            <option value="berries">Ягоди</option>
+            <option value="seedlings">Розсада</option>
+          </select>
+        </div>
+
+        <div class="field">
+          <label>Підкатегорія</label>
+          <input id="productSubcategoryText" placeholder="Хризантеми / Малина / Овочева">
+        </div>
+      </div>
+
+      <div class="field">
+        <label>Назва / сорт</label>
+        <input id="productTitle" placeholder="Наприклад: Попкорн">
+      </div>
+
+      <div class="two">
+        <div class="field">
+          <label>Ціна, грн</label>
+          <input id="productPrice" type="number" placeholder="120">
+        </div>
+
+        <div class="field">
+          <label>Кількість, шт</label>
+          <input id="productStock" type="number" placeholder="25">
+        </div>
+      </div>
+
+      <div class="two">
+        <div class="field">
+          <label>Тип</label>
+          <input id="productType" placeholder="Мультифлора / Ремонтантна">
+        </div>
+
+        <div class="field">
+          <label>Вік</label>
+          <input id="productAge" placeholder="2-річна / 1-річна">
+        </div>
+      </div>
+
+      <div class="field">
+        <label>Опис</label>
+        <textarea id="productDesc" placeholder="Короткий опис товару"></textarea>
+      </div>
+
+      <button class="btn" id="saveProductBtn" onclick="addProduct()">Зберегти товар</button>
+    </div>
   </div>
 
-  <div class="form">
-
-    <div class="field">
-      <label>Фото товару</label>
-      <input id="productImageFile" type="file" accept="image/*" onchange="previewImage()">
-      <img id="imagePreview" class="preview">
-    </div>
-
-    <div class="two">
-      <div class="field">
-        <label>Категорія</label>
-        <select id="productCategory">
-          <option value="flowers">Квіти</option>
-          <option value="berries">Ягоди</option>
-          <option value="seedlings">Розсада</option>
-        </select>
-      </div>
-
-      <div class="field">
-        <label>Підкатегорія</label>
-        <input id="productSubcategoryText" placeholder="Хризантеми / Гортензії / Малина">
-      </div>
-    </div>
-
-    <div class="field">
-      <label>Назва / сорт</label>
-      <input id="productTitle" placeholder="Наприклад: Попкорн">
-    </div>
-
-    <div class="two">
-      <div class="field">
-        <label>Ціна, грн</label>
-        <input id="productPrice" type="number" placeholder="120">
-      </div>
-
-      <div class="field">
-        <label>Кількість, шт</label>
-        <input id="productStock" type="number" placeholder="25">
-      </div>
-    </div>
-
-    <div class="two">
-      <div class="field">
-        <label>Тип</label>
-        <input id="productType" placeholder="Мультифлора / Ремонтантна">
-      </div>
-
-      <div class="field">
-        <label>Вік</label>
-        <input id="productAge" placeholder="2-річна / 1-річна">
-      </div>
-    </div>
-
-    <div class="field">
-      <label>Опис</label>
-      <textarea id="productDesc" placeholder="Короткий опис товару"></textarea>
-    </div>
-
-    <button class="btn" id="saveProductBtn" onclick="addProduct()">
-      Зберегти товар
-    </button>
-
+  <div class="card" style="margin-top:16px">
+    <h2>Список товарів</h2>
+    <div class="list" id="productsList"></div>
   </div>
-</div>
-
-<div class="card">
-  <h2>Список товарів</h2>
-  <div class="list" id="productsList"></div>
-</div>
 
 </section>
 
-<section id="ordersTab" class="hidden">
+<section id="ordersTab" class="section">
   <div class="card">
     <h2>Замовлення</h2>
     <div class="list" id="ordersList"></div>
@@ -441,11 +425,11 @@ function showTab(id,btn){
   document.querySelectorAll(".tab").forEach(tab=>tab.classList.remove("active"));
   btn.classList.add("active");
 
-  productsTab.classList.add("hidden");
-  ordersTab.classList.add("hidden");
+  productsTab.classList.remove("active");
+  ordersTab.classList.remove("active");
 
-  if(id==="products")productsTab.classList.remove("hidden");
-  if(id==="orders")ordersTab.classList.remove("hidden");
+  if(id==="products")productsTab.classList.add("active");
+  if(id==="orders")ordersTab.classList.add("active");
 }
 
 async function initAdmin(){
@@ -468,31 +452,12 @@ async function initAdmin(){
 
 async function ensureBaseCategories(){
   const snap=await categoriesRef.once("value");
-
   if(snap.exists())return;
 
   await categoriesRef.set({
-    flowers:{
-      id:"flowers",
-      title:"Квіти",
-      emoji:"🌸",
-      sort:1,
-      active:true
-    },
-    berries:{
-      id:"berries",
-      title:"Ягоди",
-      emoji:"🍓",
-      sort:2,
-      active:true
-    },
-    seedlings:{
-      id:"seedlings",
-      title:"Розсада",
-      emoji:"🌱",
-      sort:3,
-      active:true
-    }
+    flowers:{id:"flowers",title:"Квіти",emoji:"🌸",sort:1,active:true},
+    berries:{id:"berries",title:"Ягоди",emoji:"🍓",sort:2,active:true},
+    seedlings:{id:"seedlings",title:"Розсада",emoji:"🌱",sort:3,active:true}
   });
 }
 
@@ -504,9 +469,7 @@ function categoryTitle(id){
 }
 
 function makeId(text){
-  return text
-    .toLowerCase()
-    .trim()
+  return text.toLowerCase().trim()
     .replace(/[^\p{L}\p{N}]+/gu,"_")
     .replace(/^_+|_+$/g,"")+"_"+Date.now();
 }
@@ -525,12 +488,11 @@ function previewImage(){
 
 async function ensureSubcategory(category,title){
   const cleanTitle=title.trim();
-
   if(!cleanTitle)return "";
 
   const existing=Object.values(subcategories).find(sub=>{
     return sub.category===category &&
-           String(sub.title).toLowerCase()===cleanTitle.toLowerCase();
+    String(sub.title).toLowerCase()===cleanTitle.toLowerCase();
   });
 
   if(existing)return existing.id;
@@ -561,7 +523,6 @@ async function uploadImage(productId){
   const ref=storage.ref("gardenProducts/"+productId+"/"+fileName);
 
   await ref.put(file);
-
   return await ref.getDownloadURL();
 }
 
@@ -615,7 +576,7 @@ async function addProduct(){
     alert("Товар збережено");
   }catch(error){
     console.error(error);
-    alert("Помилка збереження. Перевірте Firebase Storage rules.");
+    alert("Не вдалося зберегти товар. Перевірте, чи включений Firebase Storage і чи дозволена загрузка фото.");
   }
 
   saveProductBtn.disabled=false;
@@ -636,12 +597,11 @@ function renderProducts(){
 
       <div>
         <b>${p.title}</b>
-
         <small>
           Категорія: ${categoryTitle(p.category)}<br>
           Ціна: ${p.price||0} грн<br>
           Залишок: ${p.stock||0} шт<br>
-          ${p.active===false ? "Приховано на сайті" : "Показується на сайті"}
+          ${p.active===false ? "Приховано" : "Показується"}
         </small>
 
         <div class="actions">
@@ -659,17 +619,11 @@ function renderProducts(){
 
 async function changeStock(id,delta){
   const current=Number(products[id]?.stock||0);
-  const next=Math.max(0,current+delta);
-
-  await productsRef.child(id).update({
-    stock:next
-  });
+  await productsRef.child(id).update({stock:Math.max(0,current+delta)});
 }
 
 async function toggleProduct(id,isActive){
-  await productsRef.child(id).update({
-    active:!isActive
-  });
+  await productsRef.child(id).update({active:!isActive});
 }
 
 async function deleteProduct(id){
@@ -710,25 +664,11 @@ function renderOrders(){
         <div class="order-products">${productsText}</div>
 
         <div class="actions">
-          <button class="btn" onclick="approvePayment('${order.id}')">
-            Оплату отримано
-          </button>
-
-          <button class="btn" onclick="approveShipping('${order.id}')">
-            Одобрити відправку
-          </button>
-
-          <button class="btn light" onclick="markShipped('${order.id}')">
-            Відправлено
-          </button>
-
-          <button class="btn red" onclick="cancelOrder('${order.id}')">
-            Скасувати
-          </button>
-
-          <button class="btn red" onclick="deleteOrder('${order.id}')">
-            Видалити
-          </button>
+          <button class="btn" onclick="approvePayment('${order.id}')">Оплату отримано</button>
+          <button class="btn" onclick="approveShipping('${order.id}')">Одобрити відправку</button>
+          <button class="btn light" onclick="markShipped('${order.id}')">Відправлено</button>
+          <button class="btn red" onclick="cancelOrder('${order.id}')">Скасувати</button>
+          <button class="btn red" onclick="deleteOrder('${order.id}')">Видалити</button>
         </div>
       </div>
     `;
