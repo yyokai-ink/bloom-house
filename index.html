@@ -2,8 +2,7 @@
 <html lang="uk">
 <head>
 <meta charset="UTF-8">
-<meta name="viewport"
-content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
 <title>Квітковий Дім | Квіти, ягоди та розсада</title>
 
 <script src="https://www.gstatic.com/firebasejs/9.22.1/firebase-app-compat.js"></script>
@@ -46,8 +45,6 @@ a{text-decoration:none;color:inherit}
 button{border:0;cursor:pointer;font-family:inherit}
 
 .app{min-height:100vh}
-
-/* TOPBAR */
 
 .topbar{
   position:sticky;
@@ -150,20 +147,45 @@ button{border:0;cursor:pointer;font-family:inherit}
   overflow:hidden;
   border-radius:52px;
   padding:54px;
-  background:
-    linear-gradient(135deg,rgba(255,255,255,.94),rgba(236,245,231,.82),rgba(255,250,244,.92));
+  background:#1f2b22;
   border:1px solid rgba(255,255,255,.9);
   box-shadow:0 28px 90px rgba(63,95,68,.14);
+  color:#fff;
+}
+
+.hero-video{
+  position:absolute;
+  inset:0;
+  width:100%;
+  height:100%;
+  object-fit:cover;
+  z-index:0;
+}
+
+.hero-main::after{
+  content:"";
+  position:absolute;
+  inset:0;
+  background:
+    linear-gradient(180deg,rgba(0,0,0,.22),rgba(0,0,0,.48)),
+    linear-gradient(90deg,rgba(0,0,0,.32),rgba(0,0,0,.08));
+  z-index:1;
+}
+
+.hero-content{
+  position:relative;
+  z-index:2;
 }
 
 .kicker{
   display:inline-flex;
   padding:11px 16px;
   border-radius:999px;
-  background:rgba(111,143,114,.1);
-  color:var(--sage-dark);
+  background:rgba(255,255,255,.18);
+  color:#fff;
   font-size:13px;
   font-weight:950;
+  backdrop-filter:blur(14px);
 }
 
 .hero h1{
@@ -172,12 +194,13 @@ button{border:0;cursor:pointer;font-family:inherit}
   font-size:clamp(48px,8vw,96px);
   line-height:.88;
   letter-spacing:-.07em;
+  color:#fff;
 }
 
 .hero p{
   margin-top:24px;
   max-width:650px;
-  color:var(--muted);
+  color:rgba(255,255,255,.9);
   font-size:20px;
   line-height:1.65;
 }
@@ -205,12 +228,13 @@ button{border:0;cursor:pointer;font-family:inherit}
 }
 
 .btn-soft{
-  background:#fff;
+  background:rgba(255,255,255,.92);
   color:var(--sage-dark);
-  border:1px solid var(--line);
+  border:1px solid rgba(255,255,255,.55);
 }
 
 .hero-photo{
+  position:relative;
   min-height:690px;
   border-radius:52px;
   overflow:hidden;
@@ -220,14 +244,6 @@ button{border:0;cursor:pointer;font-family:inherit}
     center/cover no-repeat;
   box-shadow:0 28px 90px rgba(63,95,68,.14);
   border:1px solid rgba(255,255,255,.84);
-}
-
-.glass-card{
-  position:absolute;
-}
-
-.hero-photo{
-  position:relative;
 }
 
 .float-card{
@@ -267,29 +283,14 @@ button{border:0;cursor:pointer;font-family:inherit}
   flex-direction:column;
   align-items:center;
   text-align:center;
-
   gap:18px;
-
   margin-bottom:26px;
 }
 
 .section-head h2{
   max-width:700px;
-
   font-size:clamp(42px,8vw,72px);
-
   line-height:.9;
-
-  letter-spacing:-.07em;
-}
-
-.section-head h2{
-  max-width:700px;
-
-  font-size:clamp(42px,8vw,72px);
-
-  line-height:.9;
-
   letter-spacing:-.07em;
 }
 
@@ -445,7 +446,7 @@ button{border:0;cursor:pointer;font-family:inherit}
   display:flex;
   flex-direction:column;
   box-shadow:-20px 0 80px rgba(0,0,0,.16);
-padding-bottom:env(safe-area-inset-bottom);
+  padding-bottom:env(safe-area-inset-bottom);
 }
 
 .cart-drawer.open{
@@ -591,19 +592,16 @@ padding-bottom:env(safe-area-inset-bottom);
 @media(max-width:640px){
   .brand-title span{display:none}
   .nav a{display:none}
-  .hero-main{padding:32px 24px;border-radius:36px}
+  .hero-main{padding:32px 24px;border-radius:36px;min-height:620px}
   .hero-photo{min-height:390px;border-radius:36px}
   .hero-actions{grid-template-columns:1fr}
   .btn{width:100%}
   .hero h1{font-size:52px}
 }
-  button,
-a,
-.qty,
-.drawer-controls{
+
+button,a,.qty,.drawer-controls{
   touch-action:manipulation;
 }
-  
 </style>
 </head>
 
@@ -628,20 +626,27 @@ a,
 <main>
 
 <section class="hero">
+
   <div class="hero-main">
-    <div class="kicker">🌿 Сімейна садиба рослин</div>
+    <video class="hero-video" autoplay muted loop playsinline>
+      <source src="VIDEO_LINK_HERE" type="video/mp4">
+    </video>
 
-    <h1>Квіти, ягоди та розсада для саду з душею</h1>
+    <div class="hero-content">
+      <div class="kicker">🌿 Сімейна садиба рослин</div>
 
-    <p>
-      Ніжна добірка гортензій, хризантем, розсади полуниці,
-      малини та ягідних кущів. Створіть сад, який виглядає дорого,
-      живе довго і радує щодня.
-    </p>
+      <h1>Квіти, ягоди та розсада для саду з душею</h1>
 
-    <div class="hero-actions">
-      <a href="bloom.html" class="btn btn-primary">Переглянути каталог</a>
-      <button onclick="openCart()" class="btn btn-soft">Відкрити кошик</button>
+      <p>
+        Ніжна добірка гортензій, хризантем, розсади полуниці,
+        малини та ягідних кущів. Створіть сад, який виглядає дорого,
+        живе довго і радує щодня.
+      </p>
+
+      <div class="hero-actions">
+        <a href="bloom.html" class="btn btn-primary">Переглянути каталог</a>
+        <button onclick="openCart()" class="btn btn-soft">Відкрити кошик</button>
+      </div>
     </div>
   </div>
 
@@ -651,6 +656,7 @@ a,
       <p>Оберіть квіти чи розсаду онлайн, додайте кількість у кошик та оформіть замовлення за кілька хвилин.</p>
     </div>
   </div>
+
 </section>
 
 <section class="section">
@@ -845,18 +851,18 @@ async function decreaseCartItem(id){
     });
   }
 }
-  let lastTouchEnd = 0;
 
-document.addEventListener("touchend", function(event){
-  const now = Date.now();
+let lastTouchEnd=0;
 
-  if(now - lastTouchEnd <= 300){
+document.addEventListener("touchend",function(event){
+  const now=Date.now();
+
+  if(now-lastTouchEnd<=300){
     event.preventDefault();
   }
 
-  lastTouchEnd = now;
-}, false);
-  
+  lastTouchEnd=now;
+},false);
 </script>
 </body>
 </html>
