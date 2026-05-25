@@ -2,6 +2,7 @@
 <html lang="uk">
 <head>
 <meta charset="UTF-8">
+<meta name="format-detection" content="telephone=no">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Оформлення замовлення | Квітковий Дім</title>
 
@@ -10,329 +11,51 @@
 
 <style>
 *{margin:0;padding:0;box-sizing:border-box;-webkit-tap-highlight-color:transparent}
-
-:root{
-  --milk:#fff4ea;
-  --sage-dark:#314f37;
-  --berry:#8d465a;
-  --text:#2b261f;
-  --muted:#7c7164;
-  --line:rgba(49,79,55,.16);
-}
-
-body{
-  min-height:100vh;
-  font-family:Arial,sans-serif;
-  color:var(--text);
-  background:
-    radial-gradient(circle at 10% -10%,rgba(217,162,173,.18),transparent 30%),
-    radial-gradient(circle at 90% 0%,rgba(111,143,114,.24),transparent 32%),
-    linear-gradient(180deg,#fffdf8 0%,#f8f0e4 45%,#edf2e7 100%);
-}
-
+:root{--milk:#fff4ea;--sage-dark:#314f37;--berry:#8d465a;--text:#2b261f;--muted:#7c7164;--line:rgba(49,79,55,.16)}
+body{min-height:100vh;font-family:Arial,sans-serif;color:var(--text);background:radial-gradient(circle at 10% -10%,rgba(217,162,173,.18),transparent 30%),radial-gradient(circle at 90% 0%,rgba(111,143,114,.24),transparent 32%),linear-gradient(180deg,#fffdf8 0%,#f8f0e4 45%,#edf2e7 100%)}
 a{text-decoration:none;color:inherit}
 button,input,textarea,select{font-family:inherit}
 button{border:0;cursor:pointer}
-
-.page{
-  width:min(1180px,calc(100% - 28px));
-  margin:0 auto;
-  padding:18px 0 60px;
-}
-
-.hero{
-  margin-bottom:20px;
-  padding:34px;
-  border-radius:42px;
-  background:linear-gradient(135deg,rgba(255,255,255,.94),rgba(236,245,231,.86),rgba(255,250,244,.92));
-  border:1px solid rgba(255,255,255,.9);
-  box-shadow:0 28px 90px rgba(63,95,68,.13);
-  text-align:center;
-}
-
-.back{
-  display:inline-flex;
-  justify-content:center;
-  align-items:center;
-  margin:0 auto 22px;
-  padding:12px 18px;
-  border-radius:999px;
-  background:#fff;
-  color:var(--sage-dark);
-  border:1px solid var(--line);
-  font-weight:950;
-}
-
-.hero h1{
-  font-size:clamp(40px,7vw,76px);
-  line-height:.9;
-  letter-spacing:-.08em;
-  color:var(--sage-dark);
-}
-
-.hero p{
-  margin:16px auto 0;
-  max-width:760px;
-  color:var(--muted);
-  font-size:17px;
-  line-height:1.6;
-}
-
-.grid{
-  display:grid;
-  grid-template-columns:1fr 400px;
-  gap:18px;
-  align-items:start;
-}
-
-.card{
-  padding:24px;
-  border-radius:34px;
-  background:rgba(255,255,255,.82);
-  border:1px solid rgba(255,255,255,.95);
-  box-shadow:0 20px 60px rgba(49,79,55,.1);
-  backdrop-filter:blur(18px);
-}
-
-.card h2{
-  margin-bottom:18px;
-  font-size:31px;
-  color:var(--sage-dark);
-  letter-spacing:-.05em;
-}
-
-.form-grid{
-  display:grid;
-  grid-template-columns:1fr 1fr;
-  gap:13px;
-}
-
-.field{
-  display:flex;
-  flex-direction:column;
-  gap:7px;
-}
-
+.page{width:min(1180px,calc(100% - 28px));margin:0 auto;padding:18px 0 60px}
+.hero{margin-bottom:20px;padding:34px;border-radius:42px;background:linear-gradient(135deg,rgba(255,255,255,.94),rgba(236,245,231,.86),rgba(255,250,244,.92));border:1px solid rgba(255,255,255,.9);box-shadow:0 28px 90px rgba(63,95,68,.13);text-align:center}
+.back{display:inline-flex;justify-content:center;align-items:center;margin:0 auto 22px;padding:12px 18px;border-radius:999px;background:#fff;color:var(--sage-dark);border:1px solid var(--line);font-weight:950}
+.hero h1{font-size:clamp(40px,7vw,76px);line-height:.9;letter-spacing:-.08em;color:var(--sage-dark)}
+.hero p{margin:16px auto 0;max-width:760px;color:var(--muted);font-size:17px;line-height:1.6}
+.grid{display:grid;grid-template-columns:1fr 400px;gap:18px;align-items:start}
+.card{padding:24px;border-radius:34px;background:rgba(255,255,255,.82);border:1px solid rgba(255,255,255,.95);box-shadow:0 20px 60px rgba(49,79,55,.1);backdrop-filter:blur(18px)}
+.card h2{margin-bottom:18px;font-size:31px;color:var(--sage-dark);letter-spacing:-.05em}
+.form-grid{display:grid;grid-template-columns:1fr 1fr;gap:13px}
+.field{display:flex;flex-direction:column;gap:7px}
 .field.full{grid-column:1/-1}
-
-label{
-  color:var(--sage-dark);
-  font-size:13px;
-  font-weight:950;
-}
-
-input,textarea,select{
-  width:100%;
-  min-height:56px;
-  border-radius:20px;
-  border:1px solid var(--line);
-  background:#fff;
-  padding:0 16px;
-  outline:none;
-  color:var(--text);
-  font-size:15px;
-}
-
-.phone-wrap{
-  display:grid;
-  grid-template-columns:74px 1fr;
-  gap:8px;
-}
-
-.phone-prefix{
-  min-height:56px;
-  border-radius:20px;
-  border:1px solid var(--line);
-  background:#fff;
-  display:flex;
-  align-items:center;
-  justify-content:center;
-  font-weight:950;
-  color:var(--sage-dark);
-}
-
-textarea{
-  min-height:110px;
-  padding-top:16px;
-  resize:vertical;
-}
-
-.hint{
-  color:var(--muted);
-  font-size:12px;
-  line-height:1.35;
-}
-
-.payments{
-  display:grid;
-  gap:12px;
-  margin-top:4px;
-}
-
-.payment{
-  display:flex;
-  gap:12px;
-  align-items:flex-start;
-  padding:17px;
-  border-radius:24px;
-  background:linear-gradient(135deg,#fff,#fff7ed);
-  border:1px solid var(--line);
-}
-
-.payment input{
-  width:auto;
-  min-height:auto;
-  margin-top:4px;
-  accent-color:var(--sage-dark);
-}
-
-.payment b{
-  color:var(--sage-dark);
-  font-size:16px;
-}
-
-.payment span{
-  display:block;
-  margin-top:5px;
-  color:var(--muted);
-  font-size:13px;
-  line-height:1.4;
-}
-
-.copy-card{
-  margin-top:14px;
-  padding:24px 18px;
-  border-radius:28px;
-  background:linear-gradient(135deg,#314f37,#496d4f);
-  color:#fff;
-  cursor:pointer;
-  transition:.18s;
-  user-select:none;
-  text-align:center;
-}
-
+label{color:var(--sage-dark);font-size:13px;font-weight:950}
+input,textarea,select{width:100%;min-height:56px;border-radius:20px;border:1px solid var(--line);background:#fff;padding:0 16px;outline:none;color:var(--text);font-size:15px}
+textarea{min-height:110px;padding-top:16px;resize:vertical}
+.phone-wrap{display:grid;grid-template-columns:74px 1fr;gap:8px}
+.phone-prefix{min-height:56px;border-radius:20px;border:1px solid var(--line);background:#fff;display:flex;align-items:center;justify-content:center;font-weight:950;color:var(--sage-dark)}
+.hint{color:var(--muted);font-size:12px;line-height:1.35}
+.payments{display:grid;gap:12px;margin-top:4px}
+.payment{display:flex;gap:12px;align-items:flex-start;padding:17px;border-radius:24px;background:linear-gradient(135deg,#fff,#fff7ed);border:1px solid var(--line)}
+.payment input{width:auto;min-height:auto;margin-top:4px;accent-color:var(--sage-dark)}
+.payment b{color:var(--sage-dark);font-size:16px}
+.payment span{display:block;margin-top:5px;color:var(--muted);font-size:13px;line-height:1.4}
+.copy-card{margin-top:14px;padding:24px 18px;border-radius:28px;background:linear-gradient(135deg,#314f37,#496d4f);color:#fff;cursor:pointer;transition:.18s;user-select:none;-webkit-user-select:none;-webkit-touch-callout:none;text-align:center}
 .copy-card:hover{transform:translateY(-2px)}
 .copy-card small{display:block;opacity:.82;text-align:center}
-
-.card-number{
-  margin-top:14px;
-  font-size:28px;
-  font-weight:950;
-  letter-spacing:.08em;
-  text-align:center;
-}
-
-.card-bank{
-  margin-top:12px;
-  font-size:15px;
-  opacity:.92;
-  line-height:1.5;
-  text-align:center;
-}
-
-.warning{
-  margin-top:14px;
-  padding:16px;
-  border-radius:22px;
-  background:rgba(141,70,90,.08);
-  border:1px solid rgba(141,70,90,.18);
-  color:var(--berry);
-  font-size:13px;
-  line-height:1.45;
-  font-weight:800;
-  text-align:center;
-}
-
+.card-number{margin-top:14px;font-size:28px;font-weight:950;letter-spacing:.08em;text-align:center;pointer-events:none;user-select:none;-webkit-user-select:none;-webkit-touch-callout:none}
+.card-bank{margin-top:12px;font-size:15px;opacity:.92;line-height:1.5;text-align:center;pointer-events:none;user-select:none;-webkit-user-select:none}
+.warning{margin-top:14px;padding:16px;border-radius:22px;background:rgba(141,70,90,.08);border:1px solid rgba(141,70,90,.18);color:var(--berry);font-size:13px;line-height:1.45;font-weight:800;text-align:center}
 .order-list{display:grid;gap:10px}
-
-.item{
-  display:grid;
-  grid-template-columns:62px 1fr;
-  gap:11px;
-  padding:10px;
-  border-radius:22px;
-  background:#fff;
-  border:1px solid var(--line);
-}
-
-.item img{
-  width:62px;
-  height:62px;
-  object-fit:cover;
-  border-radius:17px;
-}
-
+.item{display:grid;grid-template-columns:62px 1fr;gap:11px;padding:10px;border-radius:22px;background:#fff;border:1px solid var(--line)}
+.item img{width:62px;height:62px;object-fit:cover;border-radius:17px}
 .item b{display:block;font-size:15px}
-
-.item span{
-  display:block;
-  margin-top:6px;
-  color:var(--muted);
-  font-size:13px;
-}
-
-.total{
-  margin-top:18px;
-  padding-top:18px;
-  border-top:1px solid var(--line);
-  display:flex;
-  justify-content:space-between;
-  align-items:center;
-  font-size:25px;
-  font-weight:950;
-  color:var(--sage-dark);
-}
-
-.submit{
-  margin-top:18px;
-  width:100%;
-  min-height:60px;
-  border-radius:999px;
-  background:linear-gradient(135deg,var(--berry),#a95b6f);
-  color:#fff;
-  font-weight:950;
-  font-size:16px;
-  box-shadow:0 18px 42px rgba(141,70,90,.24);
-  text-align:center;
-}
-
-.submit:disabled{
-  opacity:.55;
-  cursor:not-allowed;
-}
-
-.success{
-  display:none;
-  margin-top:16px;
-  padding:18px;
-  border-radius:24px;
-  background:#eef7ee;
-  color:var(--sage-dark);
-  border:1px solid rgba(49,79,55,.14);
-  text-align:center;
-  line-height:1.5;
-}
-
-.empty{
-  padding:20px;
-  border-radius:22px;
-  background:var(--milk);
-  color:var(--muted);
-  text-align:center;
-  border:1px solid var(--line);
-}
-
-@media(max-width:920px){
-  .grid{grid-template-columns:1fr}
-}
-
-@media(max-width:640px){
-  .hero{padding:26px 22px;border-radius:32px}
-  .hero h1{font-size:42px}
-  .form-grid{grid-template-columns:1fr}
-  .card{padding:18px;border-radius:28px}
-  .card-number{font-size:21px}
-}
+.item span{display:block;margin-top:6px;color:var(--muted);font-size:13px}
+.total{margin-top:18px;padding-top:18px;border-top:1px solid var(--line);display:flex;justify-content:space-between;align-items:center;font-size:25px;font-weight:950;color:var(--sage-dark)}
+.submit{margin-top:18px;width:100%;min-height:60px;border-radius:999px;background:linear-gradient(135deg,var(--berry),#a95b6f);color:#fff;font-weight:950;font-size:16px;box-shadow:0 18px 42px rgba(141,70,90,.24);text-align:center}
+.submit:disabled{opacity:.55;cursor:not-allowed}
+.success{display:none;margin-top:16px;padding:18px;border-radius:24px;background:#eef7ee;color:var(--sage-dark);border:1px solid rgba(49,79,55,.14);text-align:center;line-height:1.5}
+.empty{padding:20px;border-radius:22px;background:var(--milk);color:var(--muted);text-align:center;border:1px solid var(--line)}
+@media(max-width:920px){.grid{grid-template-columns:1fr}}
+@media(max-width:640px){.hero{padding:26px 22px;border-radius:32px}.hero h1{font-size:42px}.form-grid{grid-template-columns:1fr}.card{padding:18px;border-radius:28px}.card-number{font-size:21px}}
 </style>
 </head>
 
@@ -342,10 +65,7 @@ textarea{
 <section class="hero">
   <a href="index.html" class="back">← Назад до каталогу</a>
   <h1>Оформлення замовлення</h1>
-  <p>
-    Оберіть, куди відсилати замовлення Новою Поштою.
-    Після оформлення адміністратор вручну підтвердить замовлення.
-  </p>
+  <p>Оберіть, куди відсилати замовлення Новою Поштою. Після оформлення адміністратор вручну підтвердить замовлення.</p>
 </section>
 
 <div class="grid">
@@ -415,11 +135,11 @@ textarea{
         </label>
       </div>
 
-      <div class="copy-card" id="copyCard" onclick="copyCardNumberOnly()">
+      <button class="copy-card" id="copyCard" type="button" onclick="copyCardNumberOnly()">
         <small>Натисніть, щоб скопіювати номер картки</small>
         <div class="card-number" id="cardNumber">5375 4112 3456 7890</div>
         <div class="card-bank">MONOBANK<br>Іван Петренко</div>
-      </div>
+      </button>
 
       <div class="warning" id="paymentWarning">
         Після оплати на карту замовлення отримає статус:
@@ -428,9 +148,7 @@ textarea{
     </div>
   </div>
 
-  <button class="submit" id="submitBtn" type="submit">
-    Оформити замовлення
-  </button>
+  <button class="submit" id="submitBtn" type="submit">Оформити замовлення</button>
 
   <div class="success" id="successBox">
     Замовлення оформлено 🌿<br><br>
@@ -483,15 +201,14 @@ const citySelect=document.getElementById("citySelect");
 const warehouseSelect=document.getElementById("warehouseSelect");
 const cityHint=document.getElementById("cityHint");
 const phoneLocal=document.getElementById("phoneLocal");
+const copyCard=document.getElementById("copyCard");
 
 function getVisitorId(){
   let id=localStorage.getItem("garden_visitor_id");
-
   if(!id){
     id="visitor_"+Date.now()+"_"+Math.random().toString(16).slice(2);
     localStorage.setItem("garden_visitor_id",id);
   }
-
   return id;
 }
 
@@ -500,7 +217,6 @@ const cartRef=db.ref("gardenCarts/"+visitorId+"/items");
 const ordersRef=db.ref("gardenOrders");
 
 phoneLocal.value=localStorage.getItem("client_phone_local")||"";
-
 phoneLocal.addEventListener("input",()=>{
   phoneLocal.value=phoneLocal.value.replace(/\D/g,"").slice(0,9);
   localStorage.setItem("client_phone_local",phoneLocal.value);
@@ -556,7 +272,6 @@ async function novaRequest(modelName,calledMethod,methodProperties={}){
       methodProperties
     })
   });
-
   return await res.json();
 }
 
@@ -564,7 +279,6 @@ let cityTimer=null;
 
 citySearch.addEventListener("input",()=>{
   clearTimeout(cityTimer);
-
   const value=citySearch.value.trim();
 
   if(value.length<2){
@@ -574,9 +288,7 @@ citySearch.addEventListener("input",()=>{
     return;
   }
 
-  cityTimer=setTimeout(()=>{
-    searchCities(value);
-  },500);
+  cityTimer=setTimeout(()=>searchCities(value),500);
 });
 
 async function searchCities(query){
@@ -608,7 +320,6 @@ async function searchCities(query){
     cityHint.textContent="Оберіть місто зі списку";
   }catch(err){
     cityHint.textContent="Помилка завантаження міст";
-    console.log(err);
   }
 }
 
@@ -618,9 +329,7 @@ citySelect.addEventListener("change",()=>{
   selectedCityRef=citySelect.value;
   selectedCityName=option.dataset.name||option.textContent;
 
-  if(selectedCityRef){
-    loadWarehouses(selectedCityRef);
-  }
+  if(selectedCityRef) loadWarehouses(selectedCityRef);
 });
 
 async function loadWarehouses(cityRef){
@@ -649,7 +358,6 @@ async function loadWarehouses(cityRef){
     });
   }catch(err){
     warehouseSelect.innerHTML=`<option value="">Помилка завантаження</option>`;
-    console.log(err);
   }
 }
 
@@ -666,15 +374,14 @@ function togglePayment(){
 }
 
 function copyCardNumberOnly(){
-  const number=document.getElementById("cardNumber").textContent.trim();
-
-  navigator.clipboard.writeText(number);
+  const pureNumber="5375411234567890";
+  navigator.clipboard.writeText(pureNumber);
 
   const old=copyCard.innerHTML;
 
   copyCard.innerHTML=`
     <small>✓ Номер картки скопійовано</small>
-    <div class="card-number">${number}</div>
+    <div class="card-number">5375 4112 3456 7890</div>
     <div class="card-bank">MONOBANK<br>Іван Петренко</div>
   `;
 
@@ -691,7 +398,7 @@ function getPayment(){
 function buildTelegramMessage(order){
   const productsText=order.items.map(item=>{
     return `• ${item.title} — ${item.qty} x ${item.price} грн`;
-  }).join("\\n");
+  }).join("\n");
 
   return `
 🌿 НОВЕ ЗАМОВЛЕННЯ
@@ -721,10 +428,7 @@ async function sendToTelegram(text){
   await fetch(`https://api.telegram.org/bot${BOT_TOKEN}/sendMessage`,{
     method:"POST",
     headers:{"Content-Type":"application/json"},
-    body:JSON.stringify({
-      chat_id:CHAT_ID,
-      text
-    })
+    body:JSON.stringify({chat_id:CHAT_ID,text})
   });
 }
 
@@ -760,28 +464,22 @@ orderForm.addEventListener("submit",async e=>{
   const order={
     id:orderId,
     visitorId,
-
     firstName:firstName.value.trim(),
     lastName:lastName.value.trim(),
     phone:fullPhone,
     messenger:messenger.value.trim(),
-
     city:selectedCityName,
     cityRef:selectedCityRef,
     novaPost:warehouseSelect.value,
     comment:comment.value.trim(),
-
     payment,
     paymentStatus:payment==="Повна оплата на карту" ? "Очікує перевірки" : "Накладений платіж",
     status:payment==="Повна оплата на карту" ? "Очікує підтвердження оплати" : "Нове замовлення",
-
     total,
     items,
-
     adminConfirmed:false,
     paymentConfirmed:false,
     shipped:false,
-
     createdAt:new Date().toISOString()
   };
 
@@ -801,7 +499,6 @@ orderForm.addEventListener("submit",async e=>{
   selectedCityName="";
 
   togglePayment();
-
   submitBtn.textContent="Замовлення оформлено";
 });
 
