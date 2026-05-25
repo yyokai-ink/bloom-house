@@ -1,0 +1,603 @@
+<!DOCTYPE html>
+<html lang="uk">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Адмінка | Квітковий Дім</title>
+
+<script src="https://www.gstatic.com/firebasejs/9.22.1/firebase-app-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/9.22.1/firebase-database-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/9.22.1/firebase-storage-compat.js"></script>
+
+<style>
+*{margin:0;padding:0;box-sizing:border-box}
+:root{
+  --sage:#314f37;
+  --berry:#8d465a;
+  --muted:#7c7164;
+  --line:rgba(49,79,55,.16);
+  --milk:#fff4ea;
+}
+body{
+  font-family:Arial,sans-serif;
+  background:linear-gradient(180deg,#fffdf8,#edf2e7);
+  color:#2b261f;
+  min-height:100vh;
+}
+button,input,select,textarea{font-family:inherit}
+button{border:0;cursor:pointer}
+.page{width:min(1180px,calc(100% - 24px));margin:0 auto;padding:18px 0 60px}
+.hero{
+  padding:28px;
+  border-radius:34px;
+  background:rgba(255,255,255,.82);
+  border:1px solid #fff;
+  box-shadow:0 20px 60px rgba(49,79,55,.12);
+}
+.hero h1{font-size:44px;color:var(--sage);letter-spacing:-.06em}
+.hero p{margin-top:8px;color:var(--muted)}
+.tabs{display:flex;gap:8px;margin:18px 0;overflow:auto}
+.tab{
+  padding:13px 18px;
+  border-radius:999px;
+  background:#fff;
+  color:var(--sage);
+  font-weight:950;
+  border:1px solid var(--line);
+}
+.tab.active{background:var(--sage);color:#fff}
+.grid{display:grid;grid-template-columns:1fr 1fr;gap:16px}
+.card{
+  padding:20px;
+  border-radius:28px;
+  background:rgba(255,255,255,.86);
+  border:1px solid #fff;
+  box-shadow:0 16px 44px rgba(49,79,55,.08);
+}
+.card h2{font-size:28px;color:var(--sage);margin-bottom:14px;letter-spacing:-.04em}
+.form{display:grid;gap:10px}
+input,select,textarea{
+  width:100%;
+  min-height:48px;
+  border-radius:16px;
+  border:1px solid var(--line);
+  padding:0 14px;
+  outline:none;
+  background:#fff;
+}
+textarea{padding-top:12px;min-height:90px;resize:vertical}
+.btn{
+  min-height:48px;
+  border-radius:999px;
+  padding:0 18px;
+  font-weight:950;
+  background:var(--sage);
+  color:#fff;
+}
+.btn.red{background:var(--berry)}
+.btn.light{background:#fff;color:var(--sage);border:1px solid var(--line)}
+.list{display:grid;gap:10px;margin-top:12px}
+.item{
+  padding:12px;
+  border-radius:18px;
+  background:#fff;
+  border:1px solid var(--line);
+}
+.item-top{
+  display:flex;
+  justify-content:space-between;
+  gap:12px;
+  align-items:flex-start;
+}
+.item b{color:var(--sage)}
+.item small{display:block;color:var(--muted);margin-top:4px;line-height:1.4}
+.actions{display:flex;gap:8px;flex-wrap:wrap;margin-top:10px}
+.product-row{display:grid;grid-template-columns:64px 1fr;gap:10px}
+.product-row img{width:64px;height:64px;border-radius:14px;object-fit:cover;background:var(--milk)}
+.order-products{margin-top:8px;color:var(--muted);font-size:13px;line-height:1.45}
+.hidden{display:none}
+.login{
+  max-width:420px;
+  margin:80px auto;
+}
+.status{
+  display:inline-block;
+  padding:6px 10px;
+  border-radius:999px;
+  background:var(--milk);
+  color:var(--berry);
+  font-size:12px;
+  font-weight:950;
+}
+@media(max-width:900px){.grid{grid-template-columns:1fr}.hero h1{font-size:36px}}
+</style>
+</head>
+
+<body>
+
+<div class="page">
+
+<div class="card login" id="loginBox">
+  <h2>Вхід в адмінку</h2>
+  <div class="form">
+    <input id="adminPass" type="password" placeholder="Пароль">
+    <button class="btn" onclick="login()">Увійти</button>
+  </div>
+</div>
+
+<div id="adminPanel" class="hidden">
+
+<section class="hero">
+  <h1>Адмінка Квітковий Дім</h1>
+  <p>Категорії, підкатегорії, товари, фото, залишки та підтвердження замовлень.</p>
+</section>
+
+<div class="tabs">
+  <button class="tab active" onclick="showTab('products',this)">Товари</button>
+  <button class="tab" onclick="showTab('orders',this)">Замовлення</button>
+</div>
+
+<section id="productsTab">
+
+<div class="grid">
+
+<div class="card">
+  <h2>Категорії</h2>
+
+  <div class="form">
+    <input id="catTitle" placeholder="Назва категорії: Квіти">
+    <input id="catEmoji" placeholder="Emoji: 🌸">
+    <input id="catSort" type="number" placeholder="Порядок: 1">
+    <button class="btn" onclick="addCategory()">Додати категорію</button>
+  </div>
+
+  <div class="list" id="categoriesList"></div>
+</div>
+
+<div class="card">
+  <h2>Підкатегорії</h2>
+
+  <div class="form">
+    <select id="subCategoryParent"></select>
+    <input id="subTitle" placeholder="Назва: Хризантеми / Малина / Овочева розсада">
+    <input id="subSort" type="number" placeholder="Порядок: 1">
+    <button class="btn" onclick="addSubcategory()">Додати підкатегорію</button>
+  </div>
+
+  <div class="list" id="subcategoriesList"></div>
+</div>
+
+</div>
+
+<div class="card" style="margin-top:16px">
+  <h2>Додати товар / сорт</h2>
+
+  <div class="form">
+    <select id="productCategory" onchange="renderProductSubSelect()"></select>
+    <select id="productSubcategory"></select>
+
+    <input id="productTitle" placeholder="Назва / сорт: Попкорн">
+    <input id="productType" placeholder="Тип: Мультифлора / Ремонтантна / Овочева">
+    <input id="productAge" placeholder="Вік: 2-річна / 1-річна / молода">
+    <input id="productPrice" type="number" placeholder="Ціна">
+    <input id="productStock" type="number" placeholder="Кількість в наявності, шт">
+    <input id="productUnit" placeholder="Одиниця: шт" value="шт">
+
+    <textarea id="productDesc" placeholder="Опис товару"></textarea>
+
+    <input id="productImageUrl" placeholder="Фото URL, якщо є">
+    <input id="productImageFile" type="file" accept="image/*">
+
+    <button class="btn" onclick="addProduct()">Зберегти товар</button>
+  </div>
+</div>
+
+<div class="card" style="margin-top:16px">
+  <h2>Список товарів</h2>
+  <div class="list" id="productsList"></div>
+</div>
+
+</section>
+
+<section id="ordersTab" class="hidden">
+  <div class="card">
+    <h2>Замовлення</h2>
+    <div class="list" id="ordersList"></div>
+  </div>
+</section>
+
+</div>
+</div>
+
+<script>
+const ADMIN_PASSWORD="admin123";
+
+const firebaseConfig={
+  apiKey:"AIzaSyALs-ZgFX7auGxRQ2EeQnVngjnejimPLV4",
+  authDomain:"yyokai-tattoo-system.firebaseapp.com",
+  databaseURL:"https://yyokai-tattoo-system-default-rtdb.europe-west1.firebasedatabase.app/",
+  projectId:"yyokai-tattoo-system",
+  storageBucket:"yyokai-tattoo-system.firebasestorage.app",
+  messagingSenderId:"995298614954",
+  appId:"1:995298614954:web:e4039c69fcb0541a95fad3"
+};
+
+firebase.initializeApp(firebaseConfig);
+const db=firebase.database();
+const storage=firebase.storage();
+
+const categoriesRef=db.ref("gardenCategories");
+const subcategoriesRef=db.ref("gardenSubcategories");
+const productsRef=db.ref("gardenProducts");
+const ordersRef=db.ref("gardenOrders");
+
+let categories={};
+let subcategories={};
+let products={};
+let orders={};
+
+function login(){
+  if(adminPass.value===ADMIN_PASSWORD){
+    localStorage.setItem("admin_ok","yes");
+    loginBox.classList.add("hidden");
+    adminPanel.classList.remove("hidden");
+    listenAll();
+  }else{
+    alert("Невірний пароль");
+  }
+}
+
+if(localStorage.getItem("admin_ok")==="yes"){
+  loginBox.classList.add("hidden");
+  adminPanel.classList.remove("hidden");
+  listenAll();
+}
+
+function showTab(id,btn){
+  document.querySelectorAll(".tab").forEach(x=>x.classList.remove("active"));
+  btn.classList.add("active");
+
+  productsTab.classList.add("hidden");
+  ordersTab.classList.add("hidden");
+
+  if(id==="products")productsTab.classList.remove("hidden");
+  if(id==="orders")ordersTab.classList.remove("hidden");
+}
+
+function makeId(text){
+  return text
+    .toLowerCase()
+    .trim()
+    .replace(/[^\p{L}\p{N}]+/gu,"_")
+    .replace(/^_+|_+$/g,"")+"_"+Date.now();
+}
+
+function listenAll(){
+  categoriesRef.on("value",snap=>{
+    categories=snap.val()||{};
+    renderCategories();
+    renderSelects();
+  });
+
+  subcategoriesRef.on("value",snap=>{
+    subcategories=snap.val()||{};
+    renderSubcategories();
+    renderSelects();
+  });
+
+  productsRef.on("value",snap=>{
+    products=snap.val()||{};
+    renderProducts();
+  });
+
+  ordersRef.on("value",snap=>{
+    orders=snap.val()||{};
+    renderOrders();
+  });
+}
+
+async function addCategory(){
+  const title=catTitle.value.trim();
+  if(!title)return alert("Введіть назву категорії");
+
+  const id=makeId(title);
+
+  await categoriesRef.child(id).set({
+    id,
+    title,
+    emoji:catEmoji.value.trim(),
+    sort:Number(catSort.value||99),
+    active:true,
+    createdAt:new Date().toISOString()
+  });
+
+  catTitle.value="";
+  catEmoji.value="";
+  catSort.value="";
+}
+
+async function deleteCategory(id){
+  if(!confirm("Видалити категорію?"))return;
+  await categoriesRef.child(id).remove();
+}
+
+function renderCategories(){
+  const arr=Object.values(categories).sort((a,b)=>(a.sort||0)-(b.sort||0));
+
+  categoriesList.innerHTML=arr.map(cat=>`
+    <div class="item">
+      <div class="item-top">
+        <div>
+          <b>${cat.emoji||""} ${cat.title}</b>
+          <small>ID: ${cat.id}</small>
+        </div>
+        <button class="btn red" onclick="deleteCategory('${cat.id}')">Видалити</button>
+      </div>
+    </div>
+  `).join("");
+}
+
+async function addSubcategory(){
+  const category=subCategoryParent.value;
+  const title=subTitle.value.trim();
+
+  if(!category)return alert("Оберіть категорію");
+  if(!title)return alert("Введіть назву підкатегорії");
+
+  const id=makeId(title);
+
+  await subcategoriesRef.child(id).set({
+    id,
+    category,
+    title,
+    sort:Number(subSort.value||99),
+    active:true,
+    createdAt:new Date().toISOString()
+  });
+
+  subTitle.value="";
+  subSort.value="";
+}
+
+async function deleteSubcategory(id){
+  if(!confirm("Видалити підкатегорію?"))return;
+  await subcategoriesRef.child(id).remove();
+}
+
+function renderSubcategories(){
+  const arr=Object.values(subcategories).sort((a,b)=>(a.sort||0)-(b.sort||0));
+
+  subcategoriesList.innerHTML=arr.map(sub=>{
+    const cat=categories[sub.category];
+    return `
+      <div class="item">
+        <div class="item-top">
+          <div>
+            <b>${sub.title}</b>
+            <small>Категорія: ${cat ? cat.title : sub.category}</small>
+          </div>
+          <button class="btn red" onclick="deleteSubcategory('${sub.id}')">Видалити</button>
+        </div>
+      </div>
+    `;
+  }).join("");
+}
+
+function renderSelects(){
+  const cats=Object.values(categories).sort((a,b)=>(a.sort||0)-(b.sort||0));
+
+  subCategoryParent.innerHTML=`<option value="">Оберіть категорію</option>`;
+  productCategory.innerHTML=`<option value="">Оберіть категорію</option>`;
+
+  cats.forEach(cat=>{
+    subCategoryParent.innerHTML+=`<option value="${cat.id}">${cat.emoji||""} ${cat.title}</option>`;
+    productCategory.innerHTML+=`<option value="${cat.id}">${cat.emoji||""} ${cat.title}</option>`;
+  });
+
+  renderProductSubSelect();
+}
+
+function renderProductSubSelect(){
+  const catId=productCategory.value;
+  const subs=Object.values(subcategories)
+    .filter(s=>s.category===catId)
+    .sort((a,b)=>(a.sort||0)-(b.sort||0));
+
+  productSubcategory.innerHTML=`<option value="">Без підкатегорії</option>`;
+
+  subs.forEach(sub=>{
+    productSubcategory.innerHTML+=`<option value="${sub.id}">${sub.title}</option>`;
+  });
+}
+
+async function uploadProductImage(productId){
+  const file=productImageFile.files[0];
+  if(!file)return productImageUrl.value.trim();
+
+  const path="gardenProducts/"+productId+"/"+Date.now()+"_"+file.name;
+  const ref=storage.ref(path);
+
+  await ref.put(file);
+  return await ref.getDownloadURL();
+}
+
+async function addProduct(){
+  const title=productTitle.value.trim();
+  const category=productCategory.value;
+
+  if(!category)return alert("Оберіть категорію");
+  if(!title)return alert("Введіть назву товару");
+
+  const id=makeId(title);
+  const image=await uploadProductImage(id);
+
+  await productsRef.child(id).set({
+    id,
+    title,
+    category,
+    subcategory:productSubcategory.value,
+    type:productType.value.trim(),
+    age:productAge.value.trim(),
+    price:Number(productPrice.value||0),
+    stock:Number(productStock.value||0),
+    unit:productUnit.value.trim()||"шт",
+    desc:productDesc.value.trim(),
+    image,
+    active:true,
+    sort:Date.now(),
+    createdAt:new Date().toISOString()
+  });
+
+  productTitle.value="";
+  productType.value="";
+  productAge.value="";
+  productPrice.value="";
+  productStock.value="";
+  productUnit.value="шт";
+  productDesc.value="";
+  productImageUrl.value="";
+  productImageFile.value="";
+
+  alert("Товар додано");
+}
+
+async function deleteProduct(id){
+  if(!confirm("Видалити товар?"))return;
+  await productsRef.child(id).remove();
+}
+
+async function toggleProduct(id,active){
+  await productsRef.child(id).update({active:!active});
+}
+
+function renderProducts(){
+  const arr=Object.values(products).sort((a,b)=>(a.sort||0)-(b.sort||0));
+
+  productsList.innerHTML=arr.map(p=>{
+    const cat=categories[p.category];
+    const sub=subcategories[p.subcategory];
+
+    return `
+      <div class="item product-row">
+        <img src="${p.image||""}">
+        <div>
+          <div class="item-top">
+            <div>
+              <b>${p.title}</b>
+              <small>
+                Категорія: ${cat ? cat.title : p.category}<br>
+                Підкатегорія: ${sub ? sub.title : "Без підкатегорії"}<br>
+                Ціна: ${p.price||0} грн • Залишок: ${p.stock||0} ${p.unit||"шт"}<br>
+                ${p.active===false ? "Приховано" : "Показується"}
+              </small>
+            </div>
+          </div>
+
+          <div class="actions">
+            <button class="btn light" onclick="toggleProduct('${p.id}',${p.active!==false})">
+              ${p.active===false ? "Показати" : "Приховати"}
+            </button>
+            <button class="btn red" onclick="deleteProduct('${p.id}')">Видалити</button>
+          </div>
+        </div>
+      </div>
+    `;
+  }).join("");
+}
+
+function renderOrders(){
+  const arr=Object.values(orders).sort((a,b)=>String(b.createdAt).localeCompare(String(a.createdAt)));
+
+  if(!arr.length){
+    ordersList.innerHTML=`<div class="empty">Замовлень поки немає</div>`;
+    return;
+  }
+
+  ordersList.innerHTML=arr.map(order=>{
+    const productsText=(order.items||[]).map(i=>`
+      • ${i.title} — ${i.qty} × ${i.price} грн
+    `).join("<br>");
+
+    return `
+      <div class="item">
+        <div class="item-top">
+          <div>
+            <b>${order.firstName||""} ${order.lastName||""}</b>
+            <small>
+              Телефон: ${order.phone||""}<br>
+              Telegram/Viber: ${order.messenger||"Не вказано"}<br>
+              Місто: ${order.city||""}<br>
+              Нова Пошта: ${order.novaPost||""}<br>
+              Оплата: ${order.payment||""}<br>
+              Сума: ${order.total||0} грн
+            </small>
+          </div>
+          <span class="status">${order.status||"Нове замовлення"}</span>
+        </div>
+
+        <div class="order-products">${productsText}</div>
+
+        <div class="actions">
+          <button class="btn" onclick="approvePayment('${order.id}')">
+            Оплату отримано
+          </button>
+
+          <button class="btn" onclick="approveShipping('${order.id}')">
+            Одобрити відправку
+          </button>
+
+          <button class="btn light" onclick="markShipped('${order.id}')">
+            Відправлено
+          </button>
+
+          <button class="btn red" onclick="cancelOrder('${order.id}')">
+            Скасувати
+          </button>
+        </div>
+      </div>
+    `;
+  }).join("");
+}
+
+async function approvePayment(id){
+  await ordersRef.child(id).update({
+    paymentConfirmed:true,
+    paymentStatus:"Оплату отримано",
+    status:"Оплату отримано. Очікує відправки",
+    customerMessage:"Оплату отримано. Адміністратор скоро одобрить відправку.",
+    updatedAt:new Date().toISOString()
+  });
+}
+
+async function approveShipping(id){
+  await ordersRef.child(id).update({
+    adminConfirmed:true,
+    status:"Адміністратор одобрив відправку",
+    customerMessage:"Адміністратор одобрив відправку. Ваше замовлення готується до відправлення.",
+    updatedAt:new Date().toISOString()
+  });
+}
+
+async function markShipped(id){
+  await ordersRef.child(id).update({
+    shipped:true,
+    status:"Відправлено",
+    customerMessage:"Ваше замовлення відправлено Новою Поштою.",
+    updatedAt:new Date().toISOString()
+  });
+}
+
+async function cancelOrder(id){
+  if(!confirm("Скасувати замовлення?"))return;
+
+  await ordersRef.child(id).update({
+    cancelled:true,
+    status:"Скасовано",
+    customerMessage:"Замовлення скасовано адміністратором.",
+    updatedAt:new Date().toISOString()
+  });
+}
+</script>
+
+</body>
+</html>
