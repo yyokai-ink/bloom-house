@@ -3,172 +3,541 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-<title>Адмінка | Квітковий Дім</title>
+<title>Квітковий Дім | Каталог</title>
 
 <script src="https://www.gstatic.com/firebasejs/9.22.1/firebase-app-compat.js"></script>
 <script src="https://www.gstatic.com/firebasejs/9.22.1/firebase-database-compat.js"></script>
 
 <style>
 *{margin:0;padding:0;box-sizing:border-box;-webkit-tap-highlight-color:transparent}
-:root{--sage:#314f37;--berry:#8d465a;--muted:#7c7164;--line:rgba(49,79,55,.16);--milk:#fff4ea}
-html,body{min-height:100%;font-family:Arial,sans-serif;background:linear-gradient(180deg,#fffdf8,#edf2e7);color:#2b261f;touch-action:manipulation;overflow-x:hidden}
-button,input,select,textarea{font-family:inherit;font-size:16px}
+
+:root{
+  --milk:#fff4ea;
+  --sage-dark:#314f37;
+  --berry:#8d465a;
+  --text:#2b261f;
+  --muted:#7c7164;
+  --line:rgba(49,79,55,.16);
+}
+
+html,body{
+  min-height:100%;
+  font-family:Arial,sans-serif;
+  color:var(--text);
+  background:
+    radial-gradient(circle at 10% -10%,rgba(217,162,173,.18),transparent 30%),
+    radial-gradient(circle at 90% 0%,rgba(111,143,114,.24),transparent 32%),
+    linear-gradient(180deg,#fffdf8 0%,#f8f0e4 45%,#edf2e7 100%);
+  overflow-x:hidden;
+  scroll-behavior:smooth;
+  touch-action:manipulation;
+}
+
+a{text-decoration:none;color:inherit}
+button,input{font-family:inherit}
 button{border:0;cursor:pointer}
-.page{width:min(1120px,calc(100% - 24px));margin:0 auto;padding:16px 0 60px}
-.card{padding:20px;border-radius:28px;background:rgba(255,255,255,.92);border:1px solid #fff;box-shadow:0 16px 44px rgba(49,79,55,.08)}
-.login{max-width:420px;margin:80px auto}
-.hero{padding:28px;border-radius:34px;background:rgba(255,255,255,.84);border:1px solid #fff;box-shadow:0 20px 60px rgba(49,79,55,.12);text-align:center}
-.hero h1{font-size:42px;color:var(--sage);letter-spacing:-.06em}
-.hero p{margin-top:8px;color:var(--muted)}
-h2{font-size:28px;color:var(--sage);margin-bottom:14px;letter-spacing:-.04em}
-.tabs{display:grid;grid-template-columns:1fr 1fr;gap:8px;margin:18px 0}
-.tab{min-height:52px;border-radius:999px;background:#fff;color:var(--sage);font-weight:950;border:1px solid var(--line)}
-.tab.active{background:var(--sage);color:#fff}
-.section{display:none}
-.section.active{display:block}
-.form{display:grid;gap:11px}
-.field{display:grid;gap:6px}
-label{font-size:13px;font-weight:950;color:var(--sage)}
-input,select,textarea{width:100%;min-height:54px;border-radius:18px;border:1px solid var(--line);background:#fff;padding:0 14px;outline:none}
-textarea{min-height:96px;padding-top:14px;resize:vertical}
-.two{display:grid;grid-template-columns:1fr 1fr;gap:11px}
-.btn{min-height:52px;border-radius:999px;padding:0 16px;font-weight:950;background:var(--sage);color:#fff}
-.btn.red{background:var(--berry)}
-.btn.light{background:#fff;color:var(--sage);border:1px solid var(--line)}
-.btn:disabled{opacity:.55;cursor:not-allowed}
-.list{display:grid;gap:10px;margin-top:14px}
-.item{padding:12px;border-radius:20px;background:#fff;border:1px solid var(--line)}
-.product-row{display:grid;grid-template-columns:70px 1fr;gap:12px}
-.product-row img{width:70px;height:70px;border-radius:16px;object-fit:cover;background:var(--milk)}
-.item b{color:var(--sage);font-size:17px}
-.item small{display:block;margin-top:5px;color:var(--muted);line-height:1.45}
-.actions{display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-top:10px}
-.actions .btn{min-height:44px;font-size:14px}
-.status{display:inline-block;margin-top:8px;padding:7px 10px;border-radius:999px;background:var(--milk);color:var(--berry);font-size:12px;font-weight:950}
-.order-products{margin-top:10px;color:var(--muted);font-size:14px;line-height:1.55}
-.preview{display:none;width:100%;max-height:220px;object-fit:cover;border-radius:20px;background:var(--milk);border:1px solid var(--line)}
-.notice{margin-bottom:12px;padding:14px;border-radius:18px;background:var(--milk);color:var(--sage);font-weight:900;line-height:1.45}
-.progress{display:none;margin-top:10px;padding:14px;border-radius:18px;background:#fff;color:var(--sage);border:1px solid var(--line);font-weight:900;text-align:center}
-.hidden{display:none!important}
-@media(max-width:720px){.hero h1{font-size:34px}.two{grid-template-columns:1fr}.product-row{grid-template-columns:64px 1fr}.product-row img{width:64px;height:64px}}
+
+.app{min-height:100vh;padding:16px 0 80px}
+
+.menu-wrap{
+  width:min(1180px,calc(100% - 18px));
+  margin:0 auto 18px;
+  padding:10px;
+  border-radius:999px;
+  background:rgba(255,253,248,.92);
+  border:1px solid rgba(255,255,255,.96);
+  backdrop-filter:blur(22px);
+  box-shadow:0 16px 46px rgba(63,95,68,.12);
+  overflow-x:auto;
+  scrollbar-width:none;
+}
+.menu-wrap::-webkit-scrollbar{display:none}
+.menu-tabs{display:flex;gap:8px;min-width:max-content}
+
+.tab{
+  padding:13px 18px;
+  border-radius:999px;
+  background:#fff;
+  color:var(--sage-dark);
+  font-size:15px;
+  font-weight:950;
+  border:1px solid var(--line);
+  white-space:nowrap;
+}
+.tab.active{background:var(--sage-dark);color:#fff}
+
+.hero{
+  width:min(1180px,calc(100% - 28px));
+  margin:0 auto 26px;
+}
+.hero-card{
+  padding:38px;
+  border-radius:42px;
+  background:linear-gradient(135deg,rgba(255,255,255,.94),rgba(236,245,231,.86),rgba(255,250,244,.92));
+  border:1px solid rgba(255,255,255,.9);
+  box-shadow:0 28px 90px rgba(63,95,68,.13);
+}
+.hero h1{
+  font-size:clamp(42px,7vw,76px);
+  line-height:.9;
+  letter-spacing:-.08em;
+  color:var(--sage-dark);
+}
+.hero p{
+  margin-top:16px;
+  max-width:760px;
+  color:var(--muted);
+  font-size:17px;
+  line-height:1.6;
+}
+
+.layout{
+  width:min(1180px,calc(100% - 28px));
+  margin:0 auto;
+}
+.catalog{display:grid;gap:36px}
+.category-section{scroll-margin-top:24px}
+
+.category-head{
+  display:flex;
+  justify-content:space-between;
+  align-items:end;
+  gap:12px;
+  margin-bottom:16px;
+}
+.category-head h2{
+  font-size:clamp(34px,5vw,56px);
+  letter-spacing:-.06em;
+  color:var(--sage-dark);
+}
+.category-head span{color:var(--muted);font-weight:900}
+
+.subcategory{margin-top:24px}
+.subcategory h3{
+  margin-bottom:12px;
+  font-size:28px;
+  color:var(--berry);
+  letter-spacing:-.04em;
+}
+
+.products{
+  display:grid;
+  grid-template-columns:repeat(2,1fr);
+  gap:14px;
+}
+
+.product{
+  display:grid;
+  grid-template-columns:150px 1fr;
+  gap:14px;
+  padding:12px;
+  border-radius:30px;
+  background:rgba(255,255,255,.80);
+  border:1px solid rgba(255,255,255,.92);
+  box-shadow:0 18px 50px rgba(63,95,68,.09);
+}
+
+.product-img{
+  height:150px;
+  border-radius:24px;
+  background:#eee center/cover no-repeat;
+}
+
+.product h4{
+  font-size:22px;
+  letter-spacing:-.04em;
+}
+
+.meta{
+  margin-top:5px;
+  color:var(--sage-dark);
+  font-size:12px;
+  font-weight:950;
+  line-height:1.4;
+}
+
+.desc{
+  margin-top:7px;
+  color:var(--muted);
+  font-size:14px;
+  line-height:1.45;
+}
+
+.price{
+  margin-top:12px;
+  font-size:25px;
+  font-weight:950;
+  color:var(--berry);
+}
+
+.stock{
+  margin-top:4px;
+  font-size:12px;
+  font-weight:900;
+  color:var(--muted);
+}
+.stock.empty-stock{color:#a33}
+
+.actions{
+  margin-top:12px;
+  display:grid;
+  grid-template-columns:108px 1fr;
+  gap:8px;
+}
+
+.qty{
+  height:44px;
+  border-radius:999px;
+  background:var(--milk);
+  border:1px solid var(--line);
+  display:grid;
+  grid-template-columns:34px 1fr 34px;
+  overflow:hidden;
+}
+
+.qty button{
+  background:transparent;
+  color:var(--sage-dark);
+  font-size:18px;
+  font-weight:950;
+}
+
+.qty input{
+  width:100%;
+  border:0;
+  background:transparent;
+  text-align:center;
+  font-weight:950;
+  outline:none;
+}
+
+.add{
+  height:44px;
+  border-radius:999px;
+  background:var(--sage-dark);
+  color:#fff;
+  font-weight:950;
+}
+.add:disabled{opacity:.45;cursor:not-allowed}
+
+.floating-cart-btn{
+  position:fixed;
+  right:16px;
+  bottom:16px;
+  z-index:1000;
+  height:54px;
+  padding:0 18px;
+  border-radius:999px;
+  background:var(--sage-dark);
+  color:#fff;
+  display:flex;
+  align-items:center;
+  gap:8px;
+  font-weight:950;
+  box-shadow:0 16px 42px rgba(0,0,0,.18);
+}
+.floating-cart-btn span{
+  width:22px;
+  height:22px;
+  border-radius:50%;
+  background:#fff;
+  color:var(--sage-dark);
+  display:grid;
+  place-items:center;
+  font-size:11px;
+}
+
+.cart-drawer{
+  position:fixed;
+  top:10px;
+  right:-390px;
+  width:380px;
+  max-width:calc(100% - 20px);
+  height:calc(100vh - 20px);
+  background:#fffaf4;
+  z-index:1200;
+  transition:.28s;
+  display:flex;
+  flex-direction:column;
+  border-radius:28px 0 0 28px;
+  overflow:hidden;
+  box-shadow:-20px 0 80px rgba(0,0,0,.16);
+}
+.cart-drawer.open{right:0}
+
+.drawer-head{
+  padding:16px;
+  display:flex;
+  justify-content:space-between;
+  align-items:center;
+  border-bottom:1px solid var(--line);
+}
+.drawer-head h3{font-size:24px;color:var(--sage-dark)}
+.drawer-head button{
+  width:38px;
+  height:38px;
+  border-radius:50%;
+  background:#fff;
+  color:var(--sage-dark);
+  font-size:20px;
+}
+
+#drawerItems{
+  flex:1;
+  overflow:auto;
+  padding:12px;
+  display:flex;
+  flex-direction:column;
+  gap:8px;
+}
+
+.drawer-item{
+  display:grid;
+  grid-template-columns:50px 1fr;
+  gap:10px;
+  padding:8px;
+  border-radius:18px;
+  background:#fff;
+  border:1px solid var(--line);
+}
+
+.drawer-item img{
+  width:50px;
+  height:50px;
+  object-fit:cover;
+  border-radius:14px;
+}
+
+.drawer-item b{
+  display:block;
+  font-size:14px;
+  white-space:nowrap;
+  overflow:hidden;
+  text-overflow:ellipsis;
+}
+
+.drawer-item span{
+  display:block;
+  margin-top:4px;
+  color:var(--muted);
+  font-size:12px;
+}
+
+.drawer-controls{
+  margin-top:7px;
+  display:inline-grid;
+  grid-template-columns:28px 32px 28px;
+  height:28px;
+  border-radius:999px;
+  overflow:hidden;
+  border:1px solid var(--line);
+  background:var(--milk);
+}
+
+.drawer-controls button{
+  background:transparent;
+  color:var(--sage-dark);
+  font-weight:950;
+}
+
+.drawer-controls strong{
+  display:grid;
+  place-items:center;
+  font-size:12px;
+}
+
+.drawer-footer{
+  padding:14px;
+  border-top:1px solid var(--line);
+}
+
+.drawer-total{
+  display:flex;
+  justify-content:space-between;
+  font-size:22px;
+  font-weight:950;
+  color:var(--sage-dark);
+}
+
+.drawer-checkout{
+  margin-top:12px;
+  height:50px;
+  border-radius:999px;
+  background:var(--berry);
+  color:#fff;
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  font-weight:950;
+}
+
+.empty{
+  padding:20px;
+  border-radius:22px;
+  text-align:center;
+  color:var(--muted);
+  background:var(--milk);
+  border:1px solid var(--line);
+}
+
+.support-footer{
+  width:min(1180px,calc(100% - 28px));
+  margin:50px auto 20px;
+  padding:34px;
+  border-radius:38px;
+  background:linear-gradient(135deg,rgba(255,255,255,.82),rgba(240,247,236,.74));
+  border:1px solid rgba(255,255,255,.92);
+  backdrop-filter:blur(18px);
+  box-shadow:0 24px 80px rgba(63,95,68,.12);
+}
+
+.support-grid{
+  display:grid;
+  grid-template-columns:1.2fr 1fr 1fr;
+  gap:26px;
+}
+
+.support-brand h2{
+  font-size:42px;
+  line-height:.92;
+  letter-spacing:-.06em;
+  color:var(--sage-dark);
+}
+
+.support-brand p{
+  margin-top:16px;
+  color:var(--muted);
+  line-height:1.7;
+  font-size:15px;
+}
+
+.support-block h3{
+  font-size:20px;
+  color:var(--sage-dark);
+  margin-bottom:14px;
+}
+
+.socials,.contact-list{
+  display:flex;
+  flex-direction:column;
+  gap:10px;
+}
+
+.social-card,.contact-item{
+  min-height:52px;
+  border-radius:20px;
+  background:rgba(255,255,255,.78);
+  border:1px solid rgba(255,255,255,.95);
+  display:flex;
+  align-items:center;
+  padding:0 16px;
+  font-weight:900;
+  color:var(--sage-dark);
+  box-shadow:0 10px 28px rgba(63,95,68,.08);
+}
+
+@media(max-width:980px){
+  .products{grid-template-columns:1fr}
+  .support-grid{grid-template-columns:1fr}
+}
+
+@media(max-width:640px){
+  .hero-card{padding:28px 22px;border-radius:32px}
+  .hero h1{font-size:42px}
+  .product{
+    grid-template-columns:118px 1fr;
+    border-radius:26px;
+  }
+  .product-img{height:128px;border-radius:20px}
+  .actions{grid-template-columns:1fr}
+  .cart-drawer{
+    width:calc(100% - 16px);
+    right:-100%;
+    border-radius:26px;
+  }
+  .cart-drawer.open{right:8px}
+}
 </style>
 </head>
 
 <body>
-<div class="page">
+<div class="app">
 
-<div class="card login" id="loginBox">
-  <h2>Вхід в адмінку</h2>
-  <div class="form">
-    <input id="adminPass" type="password" placeholder="Пароль">
-    <button class="btn" onclick="login()">Увійти</button>
-  </div>
+<div class="menu-wrap">
+  <div class="menu-tabs" id="menuTabs"></div>
 </div>
-
-<div id="adminPanel" class="hidden">
 
 <section class="hero">
-  <h1>Квітковий Дім</h1>
-  <p>Додати товар, змінити залишок, підтвердити замовлення.</p>
+  <div class="hero-card">
+    <h1>Квітковий Дім</h1>
+    <p>
+      Онлайн-магазин квітів, ягід та розсади.
+      Доставка по всій Україні Новою Поштою 🌿
+    </p>
+  </div>
 </section>
 
-<div class="tabs">
-  <button class="tab active" onclick="showTab('products',this)">Товари</button>
-  <button class="tab" onclick="showTab('orders',this)">Замовлення</button>
+<section class="layout">
+  <main class="catalog" id="catalog"></main>
+</section>
+
+<div class="floating-cart-btn" onclick="toggleCart()">
+  🛒 <span id="floatingCount">0</span>
 </div>
 
-<section id="productsTab" class="section active">
-  <div class="card">
-    <h2>Додати товар</h2>
+<div class="cart-drawer" id="cartDrawer">
+  <div class="drawer-head">
+    <h3>Ваш кошик</h3>
+    <button onclick="toggleCart()">×</button>
+  </div>
 
-    <div class="notice">
-      Фото завантажується в Cloudinary, товар зберігається у Firebase і автоматично зʼявляється на сайті.
+  <div id="drawerItems"></div>
+
+  <div class="drawer-footer">
+    <div class="drawer-total">
+      <span>Разом:</span>
+      <strong id="drawerTotal">0 грн</strong>
     </div>
 
-    <div class="form">
-      <div class="field">
-        <label>Фото товару</label>
-        <input id="productImageFile" type="file" accept="image/jpeg,image/png,image/jpg" onchange="previewImage()">
-        <img id="imagePreview" class="preview">
-      </div>
-
-      <div class="two">
-        <div class="field">
-          <label>Категорія</label>
-          <select id="productCategory">
-            <option value="flowers">Квіти</option>
-            <option value="berries">Ягоди</option>
-            <option value="seedlings">Розсада</option>
-          </select>
-        </div>
-
-        <div class="field">
-          <label>Підкатегорія</label>
-          <input id="productSubcategoryText" placeholder="Хризантеми / Малина / Овочева">
-        </div>
-      </div>
-
-      <div class="field">
-        <label>Назва / сорт</label>
-        <input id="productTitle" placeholder="Наприклад: Попкорн">
-      </div>
-
-      <div class="two">
-        <div class="field">
-          <label>Ціна, грн</label>
-          <input id="productPrice" type="number" placeholder="120">
-        </div>
-
-        <div class="field">
-          <label>Кількість, шт</label>
-          <input id="productStock" type="number" placeholder="25">
-        </div>
-      </div>
-
-      <div class="two">
-        <div class="field">
-          <label>Тип</label>
-          <input id="productType" placeholder="Мультифлора / Ремонтантна">
-        </div>
-
-        <div class="field">
-          <label>Вік</label>
-          <input id="productAge" placeholder="2-річна / 1-річна">
-        </div>
-      </div>
-
-      <div class="field">
-        <label>Опис</label>
-        <textarea id="productDesc" placeholder="Короткий опис товару"></textarea>
-      </div>
-
-      <button class="btn" id="saveProductBtn" onclick="addProduct()">Зберегти товар</button>
-      <div class="progress" id="progressBox">Готуємо...</div>
-    </div>
+    <a href="cart.html" class="drawer-checkout">
+      Оформити замовлення
+    </a>
   </div>
-
-  <div class="card" style="margin-top:16px">
-    <h2>Список товарів</h2>
-    <div class="list" id="productsList"></div>
-  </div>
-</section>
-
-<section id="ordersTab" class="section">
-  <div class="card">
-    <h2>Замовлення</h2>
-    <div class="list" id="ordersList"></div>
-  </div>
-</section>
-
 </div>
+
+<section class="support-footer">
+  <div class="support-grid">
+    <div class="support-brand">
+      <h2>Квітковий Дім</h2>
+      <p>
+        Онлайн-магазин рослин, квітів та саджанців.
+        Відправка по всій Україні Новою Поштою.
+      </p>
+    </div>
+
+    <div class="support-block">
+      <h3>Соцмережі</h3>
+      <div class="socials">
+        <a href="#" class="social-card">📸 Instagram</a>
+        <a href="#" class="social-card">✈ Telegram</a>
+        <a href="#" class="social-card">🎵 TikTok</a>
+      </div>
+    </div>
+
+    <div class="support-block">
+      <h3>Контакти</h3>
+      <div class="contact-list">
+        <div class="contact-item">📞 +380 XX XXX XX XX</div>
+        <div class="contact-item">📦 Нова Пошта по Україні</div>
+        <div class="contact-item">🕘 Підтримка 09:00–20:00</div>
+      </div>
+    </div>
+  </div>
+</section>
+
 </div>
 
 <script>
-const ADMIN_PASSWORD="admin123";
-
-const CLOUD_NAME="doz2sacki";
-const UPLOAD_PRESET="tsyvs3pz";
-
 const firebaseConfig={
   apiKey:"AIzaSyALs-ZgFX7auGxRQ2EeQnVngjnejimPLV4",
   authDomain:"yyokai-tattoo-system.firebaseapp.com",
@@ -182,372 +551,406 @@ const firebaseConfig={
 firebase.initializeApp(firebaseConfig);
 const db=firebase.database();
 
+const menuTabs=document.getElementById("menuTabs");
+const catalog=document.getElementById("catalog");
+const cartDrawer=document.getElementById("cartDrawer");
+const floatingCount=document.getElementById("floatingCount");
+const drawerItems=document.getElementById("drawerItems");
+const drawerTotal=document.getElementById("drawerTotal");
+
+let categories=[];
+let subcategories=[];
+let products=[];
+let cart={};
+
+function getVisitorId(){
+  let id=localStorage.getItem("garden_visitor_id");
+
+  if(!id){
+    id="visitor_"+Date.now()+"_"+Math.random().toString(16).slice(2);
+    localStorage.setItem("garden_visitor_id",id);
+  }
+
+  return id;
+}
+
+const visitorId=getVisitorId();
+
 const categoriesRef=db.ref("gardenCategories");
 const subcategoriesRef=db.ref("gardenSubcategories");
 const productsRef=db.ref("gardenProducts");
-const ordersRef=db.ref("gardenOrders");
-
-let products={};
-let orders={};
-let subcategories={};
-
-function login(){
-  if(adminPass.value===ADMIN_PASSWORD){
-    localStorage.setItem("admin_ok","yes");
-    loginBox.classList.add("hidden");
-    adminPanel.classList.remove("hidden");
-    initAdmin();
-  }else{
-    alert("Невірний пароль");
-  }
-}
-
-if(localStorage.getItem("admin_ok")==="yes"){
-  loginBox.classList.add("hidden");
-  adminPanel.classList.remove("hidden");
-  initAdmin();
-}
-
-function showTab(id,btn){
-  document.querySelectorAll(".tab").forEach(tab=>tab.classList.remove("active"));
-  btn.classList.add("active");
-
-  productsTab.classList.remove("active");
-  ordersTab.classList.remove("active");
-
-  if(id==="products")productsTab.classList.add("active");
-  if(id==="orders")ordersTab.classList.add("active");
-}
-
-async function initAdmin(){
-  await ensureBaseCategories();
-
-  productsRef.on("value",snap=>{
-    products=snap.val()||{};
-    renderProducts();
-  });
-
-  ordersRef.on("value",snap=>{
-    orders=snap.val()||{};
-    renderOrders();
-  });
-
-  subcategoriesRef.on("value",snap=>{
-    subcategories=snap.val()||{};
-  });
-}
+const cartRef=db.ref("gardenCarts/"+visitorId+"/items");
 
 async function ensureBaseCategories(){
   const snap=await categoriesRef.once("value");
+
   if(snap.exists())return;
 
   await categoriesRef.set({
-    flowers:{id:"flowers",title:"Квіти",emoji:"🌸",sort:1,active:true},
-    berries:{id:"berries",title:"Ягоди",emoji:"🍓",sort:2,active:true},
-    seedlings:{id:"seedlings",title:"Розсада",emoji:"🌱",sort:3,active:true}
+    flowers:{
+      id:"flowers",
+      title:"Квіти",
+      emoji:"🌸",
+      sort:1,
+      active:true
+    },
+    berries:{
+      id:"berries",
+      title:"Ягоди",
+      emoji:"🍓",
+      sort:2,
+      active:true
+    },
+    seedlings:{
+      id:"seedlings",
+      title:"Розсада",
+      emoji:"🌱",
+      sort:3,
+      active:true
+    }
   });
 }
 
-function categoryTitle(id){
-  if(id==="flowers")return "Квіти";
-  if(id==="berries")return "Ягоди";
-  if(id==="seedlings")return "Розсада";
-  return id;
-}
+function listenData(){
+  categoriesRef.on("value",snap=>{
+    categories=Object.values(snap.val()||{})
+      .filter(item=>item.active!==false)
+      .sort((a,b)=>(a.sort||0)-(b.sort||0));
 
-function makeId(text){
-  return text.toLowerCase().trim()
-    .replace(/[^\p{L}\p{N}]+/gu,"_")
-    .replace(/^_+|_+$/g,"")+"_"+Date.now();
-}
+    renderAll();
+  });
 
-function previewImage(){
-  const file=productImageFile.files[0];
+  subcategoriesRef.on("value",snap=>{
+    subcategories=Object.values(snap.val()||{})
+      .filter(item=>item.active!==false)
+      .sort((a,b)=>(a.sort||0)-(b.sort||0));
 
-  if(!file){
-    imagePreview.style.display="none";
-    return;
-  }
+    renderAll();
+  });
 
-  imagePreview.src=URL.createObjectURL(file);
-  imagePreview.style.display="block";
-}
+  productsRef.on("value",snap=>{
+    products=Object.values(snap.val()||{})
+      .filter(item=>item.active!==false)
+      .sort((a,b)=>(b.sort||0)-(a.sort||0));
 
-function uploadImageToCloudinary(file){
-  return new Promise((resolve,reject)=>{
-    const formData=new FormData();
-    formData.append("file",file);
-    formData.append("upload_preset",UPLOAD_PRESET);
+    renderAll();
+  });
 
-    const xhr=new XMLHttpRequest();
-
-    xhr.open("POST",`https://api.cloudinary.com/v1_1/${CLOUD_NAME}/image/upload`);
-
-    const timeout=setTimeout(()=>{
-      xhr.abort();
-      reject(new Error("Фото довго завантажується. Спробуйте менше фото або Wi-Fi."));
-    },30000);
-
-    xhr.upload.onprogress=function(e){
-      if(e.lengthComputable){
-        const percent=Math.round((e.loaded/e.total)*100);
-        progressBox.textContent="Завантажуємо фото: "+percent+"%";
-      }
-    };
-
-    xhr.onload=function(){
-      clearTimeout(timeout);
-
-      try{
-        const data=JSON.parse(xhr.responseText);
-
-        if(xhr.status>=200 && xhr.status<300 && data.secure_url){
-          resolve(data.secure_url);
-        }else{
-          reject(new Error(data.error?.message || "Cloudinary не прийняв фото"));
-        }
-      }catch(e){
-        reject(new Error("Не вдалося прочитати відповідь Cloudinary"));
-      }
-    };
-
-    xhr.onerror=function(){
-      clearTimeout(timeout);
-      reject(new Error("Помилка інтернету при завантаженні фото"));
-    };
-
-    xhr.send(formData);
+  cartRef.on("value",snap=>{
+    cart=snap.val()||{};
+    renderCart();
   });
 }
 
-async function ensureSubcategory(category,title){
-  const cleanTitle=title.trim();
-
-  const existing=Object.values(subcategories).find(sub=>{
-    return sub.category===category &&
-    String(sub.title).toLowerCase()===cleanTitle.toLowerCase();
-  });
-
-  if(existing)return existing.id;
-
-  const id=makeId(cleanTitle);
-
-  await subcategoriesRef.child(id).set({
-    id,
-    category,
-    title:cleanTitle,
-    sort:Date.now(),
-    active:true,
-    createdAt:new Date().toISOString()
-  });
-
-  return id;
+function renderAll(){
+  renderTabs();
+  renderCatalog();
 }
 
-async function addProduct(){
-  const category=productCategory.value;
-  const subTitle=productSubcategoryText.value.trim();
-  const title=productTitle.value.trim();
-  const file=productImageFile.files[0];
+function renderTabs(){
+  menuTabs.innerHTML=`
+    <button class="tab active" onclick="scrollToTopBlock(this)">
+      Усе
+    </button>
+  `;
 
-  if(!file)return alert("Оберіть фото товару");
-  if(!title)return alert("Введіть назву товару");
-  if(!subTitle)return alert("Введіть підкатегорію");
-  if(!productPrice.value)return alert("Введіть ціну");
-  if(!productStock.value)return alert("Введіть кількість");
+  categories.forEach(cat=>{
+    const hasProducts=products.some(product=>product.category===cat.id);
 
-  saveProductBtn.disabled=true;
-  saveProductBtn.textContent="Зберігаємо...";
-  progressBox.style.display="block";
-  progressBox.textContent="Починаємо завантаження...";
+    if(!hasProducts)return;
 
-  try{
-    const id=makeId(title);
+    menuTabs.innerHTML+=`
+      <button class="tab" onclick="scrollToCategory('${cat.id}',this)">
+        ${cat.emoji||""} ${cat.title}
+      </button>
+    `;
+  });
+}
 
-    const imageUrl=await uploadImageToCloudinary(file);
+function renderCatalog(){
+  catalog.innerHTML="";
 
-    progressBox.textContent="Зберігаємо товар у Firebase...";
+  categories.forEach(cat=>{
+    const catProducts=products.filter(product=>product.category===cat.id);
 
-    const subcategoryId=await ensureSubcategory(category,subTitle);
+    if(!catProducts.length)return;
 
-    await productsRef.child(id).set({
-      id,
-      title,
-      category,
-      subcategory:subcategoryId,
-      type:productType.value.trim(),
-      age:productAge.value.trim(),
-      price:Number(productPrice.value||0),
-      stock:Number(productStock.value||0),
-      unit:"шт",
-      desc:productDesc.value.trim(),
-      image:imageUrl,
-      active:true,
-      sort:Date.now(),
-      createdAt:new Date().toISOString()
+    const section=document.createElement("section");
+    section.className="category-section";
+    section.id="cat_"+cat.id;
+
+    section.innerHTML=`
+      <div class="category-head">
+        <h2>${cat.emoji||""} ${cat.title}</h2>
+        <span>${catProducts.length} позицій</span>
+      </div>
+    `;
+
+    const catSubs=subcategories.filter(sub=>sub.category===cat.id);
+
+    catSubs.forEach(sub=>{
+      const list=catProducts.filter(product=>product.subcategory===sub.id);
+
+      if(!list.length)return;
+
+      const block=document.createElement("div");
+      block.className="subcategory";
+
+      block.innerHTML=`
+        <h3>${sub.title}</h3>
+        <div class="products"></div>
+      `;
+
+      const grid=block.querySelector(".products");
+
+      list.forEach(product=>{
+        grid.appendChild(createProductCard(product));
+      });
+
+      section.appendChild(block);
     });
 
-    productTitle.value="";
-    productSubcategoryText.value="";
-    productPrice.value="";
-    productStock.value="";
-    productType.value="";
-    productAge.value="";
-    productDesc.value="";
-    productImageFile.value="";
-    imagePreview.src="";
-    imagePreview.style.display="none";
+    const withoutSub=catProducts.filter(product=>!product.subcategory);
 
-    progressBox.textContent="Товар збережено ✅";
-    alert("Товар збережено");
-  }catch(error){
-    console.error(error);
-    alert("Помилка: "+error.message);
-    progressBox.textContent="Помилка: "+error.message;
-  }
+    if(withoutSub.length){
+      const block=document.createElement("div");
+      block.className="subcategory";
 
-  saveProductBtn.disabled=false;
-  saveProductBtn.textContent="Зберегти товар";
+      block.innerHTML=`
+        <h3>Інше</h3>
+        <div class="products"></div>
+      `;
 
-  setTimeout(()=>{
-    progressBox.style.display="none";
-  },3000);
-}
+      const grid=block.querySelector(".products");
 
-function renderProducts(){
-  const arr=Object.values(products).sort((a,b)=>(b.sort||0)-(a.sort||0));
+      withoutSub.forEach(product=>{
+        grid.appendChild(createProductCard(product));
+      });
 
-  if(!arr.length){
-    productsList.innerHTML=`<div class="item">Поки що товарів немає</div>`;
-    return;
-  }
+      section.appendChild(block);
+    }
 
-  productsList.innerHTML=arr.map(p=>`
-    <div class="item product-row">
-      <img src="${p.image||""}">
-      <div>
-        <b>${p.title}</b>
-        <small>
-          Категорія: ${categoryTitle(p.category)}<br>
-          Ціна: ${p.price||0} грн<br>
-          Залишок: ${p.stock||0} шт<br>
-          ${p.active===false ? "Приховано" : "Показується"}
-        </small>
-
-        <div class="actions">
-          <button class="btn light" onclick="changeStock('${p.id}',1)">+1 шт</button>
-          <button class="btn light" onclick="changeStock('${p.id}',-1)">-1 шт</button>
-          <button class="btn light" onclick="toggleProduct('${p.id}',${p.active!==false})">
-            ${p.active===false ? "Показати" : "Приховати"}
-          </button>
-          <button class="btn red" onclick="deleteProduct('${p.id}')">Видалити</button>
-        </div>
-      </div>
-    </div>
-  `).join("");
-}
-
-async function changeStock(id,delta){
-  const current=Number(products[id]?.stock||0);
-  await productsRef.child(id).update({stock:Math.max(0,current+delta)});
-}
-
-async function toggleProduct(id,isActive){
-  await productsRef.child(id).update({active:!isActive});
-}
-
-async function deleteProduct(id){
-  if(!confirm("Видалити товар?"))return;
-  await productsRef.child(id).remove();
-}
-
-function renderOrders(){
-  const arr=Object.values(orders).sort((a,b)=>{
-    return String(b.createdAt||"").localeCompare(String(a.createdAt||""));
+    catalog.appendChild(section);
   });
 
-  if(!arr.length){
-    ordersList.innerHTML=`<div class="item">Замовлень поки немає</div>`;
+  if(!catalog.innerHTML.trim()){
+    catalog.innerHTML=`
+      <div class="empty">
+        Поки що немає товарів
+      </div>
+    `;
+  }
+}
+
+function createProductCard(product){
+  const card=document.createElement("article");
+  card.className="product";
+
+  const stock=Number(product.stock||0);
+  const disabled=stock<=0;
+
+  card.innerHTML=`
+    <div class="product-img" style="background-image:url('${product.image||""}')"></div>
+
+    <div class="product-body">
+      <h4>${product.title||"Без назви"}</h4>
+
+      <div class="meta">
+        ${product.type ? `Тип: ${product.type}<br>` : ""}
+        ${product.age ? `Вік: ${product.age}` : ""}
+      </div>
+
+      <div class="desc">
+        ${product.desc||""}
+      </div>
+
+      <div class="price">
+        ${product.price||0} грн
+      </div>
+
+      <div class="stock ${disabled ? "empty-stock" : ""}">
+        ${disabled ? "Немає в наявності" : "В наявності: "+stock+" "+(product.unit||"шт")}
+      </div>
+
+      <div class="actions">
+        <div class="qty">
+          <button onclick="changeQty('${product.id}',-1,${stock})">−</button>
+          <input id="qty_${product.id}" value="1" inputmode="numeric">
+          <button onclick="changeQty('${product.id}',1,${stock})">+</button>
+        </div>
+
+        <button class="add" ${disabled ? "disabled" : ""} onclick="addToCart('${product.id}')">
+          Додати
+        </button>
+      </div>
+    </div>
+  `;
+
+  return card;
+}
+
+function changeQty(id,delta,max){
+  const input=document.getElementById("qty_"+id);
+
+  if(!input)return;
+
+  let value=Number(input.value||1)+delta;
+
+  if(value<1)value=1;
+  if(max && value>max)value=max;
+
+  input.value=value;
+}
+
+async function addToCart(id){
+  const product=products.find(item=>item.id===id);
+
+  if(!product)return;
+
+  const stock=Number(product.stock||0);
+
+  if(stock<=0){
+    alert("Товару немає в наявності");
     return;
   }
 
-  ordersList.innerHTML=arr.map(order=>{
-    const productsText=(order.items||[]).map(item=>{
-      return `• ${item.title} — ${item.qty} × ${item.price} грн`;
-    }).join("<br>");
+  const qtyInput=document.getElementById("qty_"+id);
+  const qty=Number(qtyInput.value||1);
+  const existing=cart[id]||{};
+  const existingQty=Number(existing.qty||0);
 
-    return `
-      <div class="item">
-        <b>${order.firstName||""} ${order.lastName||""}</b>
+  if(existingQty+qty>stock){
+    alert("Не можна додати більше, ніж є в наявності");
+    return;
+  }
 
-        <small>
-          Телефон: ${order.phone||""}<br>
-          Telegram/Viber: ${order.messenger||"Не вказано"}<br>
-          Куди: ${order.city||""}<br>
-          Нова Пошта: ${order.novaPost||""}<br>
-          Оплата: ${order.payment||""}<br>
-          Сума: ${order.total||0} грн
-        </small>
+  await cartRef.child(id).set({
+    id:product.id,
+    title:product.title,
+    price:Number(product.price||0),
+    unit:product.unit||"шт",
+    image:product.image||"",
+    qty:existingQty+qty,
+    stock:stock,
+    category:product.category||"",
+    subcategory:product.subcategory||"",
+    type:product.type||"",
+    age:product.age||""
+  });
 
-        <span class="status">${order.status||"Нове замовлення"}</span>
+  cartDrawer.classList.add("open");
+}
 
-        <div class="order-products">${productsText}</div>
+function renderCart(){
+  const items=Object.values(cart);
 
-        <div class="actions">
-          <button class="btn" onclick="approvePayment('${order.id}')">Оплату отримано</button>
-          <button class="btn" onclick="approveShipping('${order.id}')">Одобрити відправку</button>
-          <button class="btn light" onclick="markShipped('${order.id}')">Відправлено</button>
-          <button class="btn red" onclick="cancelOrder('${order.id}')">Скасувати</button>
-          <button class="btn red" onclick="deleteOrder('${order.id}')">Видалити</button>
+  let total=0;
+  let count=0;
+
+  items.forEach(item=>{
+    total+=Number(item.qty||0)*Number(item.price||0);
+    count+=Number(item.qty||0);
+  });
+
+  floatingCount.textContent=count;
+  drawerTotal.textContent=total+" грн";
+
+  if(!items.length){
+    drawerItems.innerHTML=`
+      <div class="empty">
+        Кошик порожній
+      </div>
+    `;
+    return;
+  }
+
+  drawerItems.innerHTML="";
+
+  items.forEach(item=>{
+    const card=document.createElement("div");
+    card.className="drawer-item";
+
+    card.innerHTML=`
+      <img src="${item.image||""}">
+
+      <div>
+        <b>${item.title||"Товар"}</b>
+        <span>${item.price||0} грн / ${item.unit||"шт"}</span>
+
+        <div class="drawer-controls">
+          <button onclick="decreaseCartItem('${item.id}')">−</button>
+          <strong>${item.qty}</strong>
+          <button onclick="increaseCartItem('${item.id}')">+</button>
         </div>
       </div>
     `;
-  }).join("");
-}
 
-async function approvePayment(id){
-  await ordersRef.child(id).update({
-    paymentConfirmed:true,
-    paymentStatus:"Оплату отримано",
-    status:"Оплату отримано",
-    customerMessage:"Оплату отримано. Замовлення очікує одобрення відправки.",
-    updatedAt:new Date().toISOString()
+    drawerItems.appendChild(card);
   });
 }
 
-async function approveShipping(id){
-  await ordersRef.child(id).update({
-    adminConfirmed:true,
-    status:"Адміністратор одобрив відправку",
-    customerMessage:"Адміністратор одобрив відправку. Ваше замовлення готується до відправлення.",
-    updatedAt:new Date().toISOString()
+async function increaseCartItem(id){
+  const item=cart[id];
+
+  if(!item)return;
+
+  if(Number(item.qty)>=Number(item.stock)){
+    alert("Більше немає в наявності");
+    return;
+  }
+
+  await cartRef.child(id).update({
+    qty:Number(item.qty)+1
   });
 }
 
-async function markShipped(id){
-  await ordersRef.child(id).update({
-    shipped:true,
-    status:"Відправлено",
-    customerMessage:"Ваше замовлення відправлено Новою Поштою.",
-    updatedAt:new Date().toISOString()
+async function decreaseCartItem(id){
+  const item=cart[id];
+
+  if(!item)return;
+
+  const newQty=Number(item.qty)-1;
+
+  if(newQty<=0){
+    await cartRef.child(id).remove();
+  }else{
+    await cartRef.child(id).update({
+      qty:newQty
+    });
+  }
+}
+
+function toggleCart(){
+  cartDrawer.classList.toggle("open");
+}
+
+function setActiveTab(button){
+  document.querySelectorAll(".tab").forEach(tab=>{
+    tab.classList.remove("active");
+  });
+
+  button.classList.add("active");
+}
+
+function scrollToTopBlock(button){
+  setActiveTab(button);
+
+  window.scrollTo({
+    top:0,
+    behavior:"smooth"
   });
 }
 
-async function cancelOrder(id){
-  if(!confirm("Скасувати замовлення?"))return;
+function scrollToCategory(id,button){
+  setActiveTab(button);
 
-  await ordersRef.child(id).update({
-    cancelled:true,
-    status:"Скасовано",
-    customerMessage:"Замовлення скасовано адміністратором.",
-    updatedAt:new Date().toISOString()
+  document.getElementById("cat_"+id)?.scrollIntoView({
+    behavior:"smooth"
   });
 }
 
-async function deleteOrder(id){
-  if(!confirm("Повністю видалити замовлення?"))return;
-  await ordersRef.child(id).remove();
-}
+ensureBaseCategories().then(listenData);
 </script>
+
 </body>
 </html>
