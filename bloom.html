@@ -30,11 +30,13 @@ html,body{
     linear-gradient(180deg,#fffdf8 0%,#f8f0e4 45%,#edf2e7 100%);
   overflow-x:hidden;
   scroll-behavior:smooth;
+  touch-action:manipulation;
 }
 
 a{text-decoration:none;color:inherit}
 button,input{font-family:inherit}
 button{border:0;cursor:pointer}
+
 .app{min-height:100vh;padding:16px 0 80px}
 
 .menu-wrap{
@@ -552,7 +554,7 @@ const subcategoriesRef=db.ref("gardenSubcategories");
 const productsRef=db.ref("gardenProducts");
 const cartRef=db.ref("gardenCarts/"+visitorId+"/items");
 
-async function seedIfEmpty(){
+async function ensureBaseCategories(){
   const snap=await categoriesRef.once("value");
 
   if(snap.exists())return;
@@ -580,89 +582,6 @@ async function seedIfEmpty(){
       active:true
     }
   });
-
-  await subcategoriesRef.set({
-    chrysanthemums:{
-      id:"chrysanthemums",
-      category:"flowers",
-      title:"Хризантеми",
-      emoji:"🌼",
-      sort:1,
-      active:true
-    },
-    hydrangeas:{
-      id:"hydrangeas",
-      category:"flowers",
-      title:"Гортензії",
-      emoji:"💠",
-      sort:2,
-      active:true
-    },
-    raspberries:{
-      id:"raspberries",
-      category:"berries",
-      title:"Малина",
-      emoji:"❤️",
-      sort:1,
-      active:true
-    },
-    strawberries:{
-      id:"strawberries",
-      category:"berries",
-      title:"Полуниця",
-      emoji:"🍓",
-      sort:2,
-      active:true
-    }
-  });
-
-  await productsRef.set({
-    popcorn:{
-      id:"popcorn",
-      title:"Попкорн",
-      category:"flowers",
-      subcategory:"chrysanthemums",
-      type:"Мультифлора",
-      age:"2-річна",
-      price:120,
-      stock:25,
-      unit:"шт",
-      desc:"Відводи хризантеми мультифлори.",
-      image:"https://images.unsplash.com/photo-1606041008023-472dfb5e530f?auto=format&fit=crop&w=900&q=90",
-      active:true,
-      sort:1
-    },
-    hydrangea_blue:{
-      id:"hydrangea_blue",
-      title:"Блакитна гортензія",
-      category:"flowers",
-      subcategory:"hydrangeas",
-      type:"Крупнолиста",
-      age:"2-річна",
-      price:280,
-      stock:12,
-      unit:"шт",
-      desc:"Декоративна садова гортензія.",
-      image:"https://images.unsplash.com/photo-1622396481322-6a2b82de51fc?auto=format&fit=crop&w=900&q=90",
-      active:true,
-      sort:2
-    },
-    raspberry_polana:{
-      id:"raspberry_polana",
-      title:"Полана",
-      category:"berries",
-      subcategory:"raspberries",
-      type:"Ремонтантна малина",
-      age:"1-річна",
-      price:80,
-      stock:30,
-      unit:"шт",
-      desc:"Саджанці малини для домашнього врожаю.",
-      image:"https://images.unsplash.com/photo-1577003833619-76bbd7f82948?auto=format&fit=crop&w=900&q=90",
-      active:true,
-      sort:3
-    }
-  });
 }
 
 function listenData(){
@@ -685,7 +604,7 @@ function listenData(){
   productsRef.on("value",snap=>{
     products=Object.values(snap.val()||{})
       .filter(item=>item.active!==false)
-      .sort((a,b)=>(a.sort||0)-(b.sort||0));
+      .sort((a,b)=>(b.sort||0)-(a.sort||0));
 
     renderAll();
   });
@@ -709,6 +628,10 @@ function renderTabs(){
   `;
 
   categories.forEach(cat=>{
+    const hasProducts=products.some(product=>product.category===cat.id);
+
+    if(!hasProducts)return;
+
     menuTabs.innerHTML+=`
       <button class="tab" onclick="scrollToCategory('${cat.id}',this)">
         ${cat.emoji||""} ${cat.title}
@@ -999,7 +922,7 @@ function scrollToCategory(id,button){
   });
 }
 
-seedIfEmpty().then(listenData);
+ensureBaseCategories().then(listenData);
 </script>
 
 </body>
