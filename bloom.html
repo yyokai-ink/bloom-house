@@ -368,10 +368,14 @@ async function addProduct(){
     imagePreview.style.display="none";
 
     alert("Товар збережено");
-  }catch(error){
-    console.error(error);
-    alert("Не вдалося зберегти товар. Перевір Cloudinary Upload Preset: має бути Unsigned.");
-  }
+}catch(error){
+  console.error(error);
+
+  alert(
+    "Помилка:\n" +
+    (error.message || JSON.stringify(error))
+  );
+}
 
   saveProductBtn.disabled=false;
   saveProductBtn.textContent="Зберегти товар";
