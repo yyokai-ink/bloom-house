@@ -133,6 +133,24 @@ input,textarea,select{
   font-size:15px;
 }
 
+.phone-wrap{
+  display:grid;
+  grid-template-columns:74px 1fr;
+  gap:8px;
+}
+
+.phone-prefix{
+  min-height:56px;
+  border-radius:20px;
+  border:1px solid var(--line);
+  background:#fff;
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  font-weight:950;
+  color:var(--sage-dark);
+}
+
 textarea{
   min-height:110px;
   padding-top:16px;
@@ -183,7 +201,7 @@ textarea{
 
 .copy-card{
   margin-top:14px;
-  padding:22px;
+  padding:24px 18px;
   border-radius:28px;
   background:linear-gradient(135deg,#314f37,#496d4f);
   color:#fff;
@@ -194,13 +212,14 @@ textarea{
 }
 
 .copy-card:hover{transform:translateY(-2px)}
-.copy-card small{opacity:.78}
+.copy-card small{display:block;opacity:.82;text-align:center}
 
 .card-number{
   margin-top:14px;
   font-size:28px;
   font-weight:950;
   letter-spacing:.08em;
+  text-align:center;
 }
 
 .card-bank{
@@ -208,6 +227,7 @@ textarea{
   font-size:15px;
   opacity:.92;
   line-height:1.5;
+  text-align:center;
 }
 
 .warning{
@@ -220,6 +240,7 @@ textarea{
   font-size:13px;
   line-height:1.45;
   font-weight:800;
+  text-align:center;
 }
 
 .order-list{display:grid;gap:10px}
@@ -272,6 +293,7 @@ textarea{
   font-weight:950;
   font-size:16px;
   box-shadow:0 18px 42px rgba(141,70,90,.24);
+  text-align:center;
 }
 
 .submit:disabled{
@@ -287,6 +309,8 @@ textarea{
   background:#eef7ee;
   color:var(--sage-dark);
   border:1px solid rgba(49,79,55,.14);
+  text-align:center;
+  line-height:1.5;
 }
 
 .empty{
@@ -319,7 +343,8 @@ textarea{
   <a href="index.html" class="back">← Назад до каталогу</a>
   <h1>Оформлення замовлення</h1>
   <p>
-    Оберіть місто та відділення Нової Пошти. Після оформлення адміністратор вручну підтвердить замовлення.
+    Оберіть, куди відсилати замовлення Новою Поштою.
+    Після оформлення адміністратор вручну підтвердить замовлення.
   </p>
 </section>
 
@@ -341,7 +366,10 @@ textarea{
 
     <div class="field">
       <label>Телефон</label>
-      <input id="phone" required placeholder="+380...">
+      <div class="phone-wrap">
+        <div class="phone-prefix">+380</div>
+        <input id="phoneLocal" required inputmode="numeric" maxlength="9" placeholder="50 123 45 67">
+      </div>
     </div>
 
     <div class="field">
@@ -350,7 +378,7 @@ textarea{
     </div>
 
     <div class="field full">
-      <label>Місто Нової Пошти</label>
+      <label>Куди відсилати?</label>
       <input id="citySearch" required placeholder="Почніть вводити місто...">
       <div class="hint" id="cityHint">Наприклад: Київ, Львів, Ужгород</div>
       <select id="citySelect" required></select>
@@ -387,14 +415,15 @@ textarea{
         </label>
       </div>
 
-      <div class="copy-card" id="copyCard" onclick="copyCard()">
-        <small>Натисніть щоб скопіювати реквізити</small>
-        <div class="card-number">5375 4112 3456 7890</div>
+      <div class="copy-card" id="copyCard" onclick="copyCardNumberOnly()">
+        <small>Натисніть, щоб скопіювати номер картки</small>
+        <div class="card-number" id="cardNumber">5375 4112 3456 7890</div>
         <div class="card-bank">MONOBANK<br>Іван Петренко</div>
       </div>
 
       <div class="warning" id="paymentWarning">
-        Після оплати на карту замовлення отримає статус: «Очікує підтвердження адміністратором».
+        Після оплати на карту замовлення отримає статус:
+        «Очікує підтвердження адміністратором».
       </div>
     </div>
   </div>
@@ -453,6 +482,7 @@ const citySearch=document.getElementById("citySearch");
 const citySelect=document.getElementById("citySelect");
 const warehouseSelect=document.getElementById("warehouseSelect");
 const cityHint=document.getElementById("cityHint");
+const phoneLocal=document.getElementById("phoneLocal");
 
 function getVisitorId(){
   let id=localStorage.getItem("garden_visitor_id");
@@ -469,9 +499,11 @@ const visitorId=getVisitorId();
 const cartRef=db.ref("gardenCarts/"+visitorId+"/items");
 const ordersRef=db.ref("gardenOrders");
 
-phone.value=localStorage.getItem("client_phone")||"";
-phone.addEventListener("input",()=>{
-  localStorage.setItem("client_phone",phone.value);
+phoneLocal.value=localStorage.getItem("client_phone_local")||"";
+
+phoneLocal.addEventListener("input",()=>{
+  phoneLocal.value=phoneLocal.value.replace(/\D/g,"").slice(0,9);
+  localStorage.setItem("client_phone_local",phoneLocal.value);
 });
 
 cartRef.on("value",snapshot=>{
@@ -549,7 +581,6 @@ citySearch.addEventListener("input",()=>{
 
 async function searchCities(query){
   cityHint.textContent="Шукаємо місто...";
-
   citySelect.innerHTML="";
   warehouseSelect.innerHTML="";
 
@@ -634,20 +665,22 @@ function togglePayment(){
   }
 }
 
-function copyCard(){
-  const text=`
-5375 4112 3456 7890
-MONOBANK
-Іван Петренко
-  `.trim();
+function copyCardNumberOnly(){
+  const number=document.getElementById("cardNumber").textContent.trim();
 
-  navigator.clipboard.writeText(text);
+  navigator.clipboard.writeText(number);
+
+  const old=copyCard.innerHTML;
 
   copyCard.innerHTML=`
-    <small>✓ Реквізити скопійовано</small>
-    <div class="card-number">5375 4112 3456 7890</div>
+    <small>✓ Номер картки скопійовано</small>
+    <div class="card-number">${number}</div>
     <div class="card-bank">MONOBANK<br>Іван Петренко</div>
   `;
+
+  setTimeout(()=>{
+    copyCard.innerHTML=old;
+  },1600);
 }
 
 function getPayment(){
@@ -667,7 +700,7 @@ function buildTelegramMessage(order){
 📞 ${order.phone}
 💬 ${order.messenger || "Не вказано"}
 
-🏙 Місто: ${order.city}
+🏙 Куди відсилати: ${order.city}
 📦 Нова Пошта: ${order.novaPost}
 
 💳 ${order.payment}
@@ -705,8 +738,13 @@ orderForm.addEventListener("submit",async e=>{
     return;
   }
 
+  if(phoneLocal.value.length!==9){
+    alert("Введіть номер телефону після +380. Має бути 9 цифр.");
+    return;
+  }
+
   if(!selectedCityRef){
-    alert("Оберіть місто Нової Пошти");
+    alert("Оберіть місто");
     return;
   }
 
@@ -715,6 +753,7 @@ orderForm.addEventListener("submit",async e=>{
     return;
   }
 
+  const fullPhone="+380"+phoneLocal.value;
   const payment=getPayment();
   const orderId="order_"+Date.now();
 
@@ -724,7 +763,7 @@ orderForm.addEventListener("submit",async e=>{
 
     firstName:firstName.value.trim(),
     lastName:lastName.value.trim(),
-    phone:phone.value.trim(),
+    phone:fullPhone,
     messenger:messenger.value.trim(),
 
     city:selectedCityName,
