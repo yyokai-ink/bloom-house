@@ -7,271 +7,58 @@
 
 <script src="https://www.gstatic.com/firebasejs/9.22.1/firebase-app-compat.js"></script>
 <script src="https://www.gstatic.com/firebasejs/9.22.1/firebase-database-compat.js"></script>
-<script src="https://www.gstatic.com/firebasejs/9.22.1/firebase-storage-compat.js"></script>
 
 <style>
 *{margin:0;padding:0;box-sizing:border-box;-webkit-tap-highlight-color:transparent}
-
-:root{
-  --sage:#314f37;
-  --berry:#8d465a;
-  --muted:#7c7164;
-  --line:rgba(49,79,55,.16);
-  --milk:#fff4ea;
-}
-
-html,body{
-  min-height:100%;
-  font-family:Arial,sans-serif;
-  background:linear-gradient(180deg,#fffdf8,#edf2e7);
-  color:#2b261f;
-  touch-action:manipulation;
-  overflow-x:hidden;
-}
-
-button,input,select,textarea{
-  font-family:inherit;
-  font-size:16px;
-}
-
+:root{--sage:#314f37;--berry:#8d465a;--muted:#7c7164;--line:rgba(49,79,55,.16);--milk:#fff4ea}
+html,body{min-height:100%;font-family:Arial,sans-serif;background:linear-gradient(180deg,#fffdf8,#edf2e7);color:#2b261f;touch-action:manipulation;overflow-x:hidden}
+button,input,select,textarea{font-family:inherit;font-size:16px}
 button{border:0;cursor:pointer}
-
-.page{
-  width:min(1120px,calc(100% - 24px));
-  margin:0 auto;
-  padding:16px 0 60px;
-}
-
-.card{
-  padding:20px;
-  border-radius:28px;
-  background:rgba(255,255,255,.92);
-  border:1px solid #fff;
-  box-shadow:0 16px 44px rgba(49,79,55,.08);
-}
-
-.login{
-  max-width:420px;
-  margin:80px auto;
-}
-
-.hero{
-  padding:28px;
-  border-radius:34px;
-  background:rgba(255,255,255,.84);
-  border:1px solid #fff;
-  box-shadow:0 20px 60px rgba(49,79,55,.12);
-  text-align:center;
-}
-
-.hero h1{
-  font-size:42px;
-  color:var(--sage);
-  letter-spacing:-.06em;
-}
-
-.hero p{
-  margin-top:8px;
-  color:var(--muted);
-}
-
-h2{
-  font-size:28px;
-  color:var(--sage);
-  margin-bottom:14px;
-  letter-spacing:-.04em;
-}
-
-.tabs{
-  display:grid;
-  grid-template-columns:1fr 1fr;
-  gap:8px;
-  margin:18px 0;
-}
-
-.tab{
-  min-height:52px;
-  border-radius:999px;
-  background:#fff;
-  color:var(--sage);
-  font-weight:950;
-  border:1px solid var(--line);
-}
-
-.tab.active{
-  background:var(--sage);
-  color:#fff;
-}
-
+.page{width:min(1120px,calc(100% - 24px));margin:0 auto;padding:16px 0 60px}
+.card{padding:20px;border-radius:28px;background:rgba(255,255,255,.92);border:1px solid #fff;box-shadow:0 16px 44px rgba(49,79,55,.08)}
+.login{max-width:420px;margin:80px auto}
+.hero{padding:28px;border-radius:34px;background:rgba(255,255,255,.84);border:1px solid #fff;box-shadow:0 20px 60px rgba(49,79,55,.12);text-align:center}
+.hero h1{font-size:42px;color:var(--sage);letter-spacing:-.06em}
+.hero p{margin-top:8px;color:var(--muted)}
+h2{font-size:28px;color:var(--sage);margin-bottom:14px;letter-spacing:-.04em}
+.tabs{display:grid;grid-template-columns:1fr 1fr;gap:8px;margin:18px 0}
+.tab{min-height:52px;border-radius:999px;background:#fff;color:var(--sage);font-weight:950;border:1px solid var(--line)}
+.tab.active{background:var(--sage);color:#fff}
 .section{display:none}
 .section.active{display:block}
-
-.form{
-  display:grid;
-  gap:11px;
-}
-
-.field{
-  display:grid;
-  gap:6px;
-}
-
-label{
-  font-size:13px;
-  font-weight:950;
-  color:var(--sage);
-}
-
-input,select,textarea{
-  width:100%;
-  min-height:54px;
-  border-radius:18px;
-  border:1px solid var(--line);
-  background:#fff;
-  padding:0 14px;
-  outline:none;
-}
-
-textarea{
-  min-height:96px;
-  padding-top:14px;
-  resize:vertical;
-}
-
-.two{
-  display:grid;
-  grid-template-columns:1fr 1fr;
-  gap:11px;
-}
-
-.btn{
-  min-height:52px;
-  border-radius:999px;
-  padding:0 16px;
-  font-weight:950;
-  background:var(--sage);
-  color:#fff;
-}
-
+.form{display:grid;gap:11px}
+.field{display:grid;gap:6px}
+label{font-size:13px;font-weight:950;color:var(--sage)}
+input,select,textarea{width:100%;min-height:54px;border-radius:18px;border:1px solid var(--line);background:#fff;padding:0 14px;outline:none}
+textarea{min-height:96px;padding-top:14px;resize:vertical}
+.two{display:grid;grid-template-columns:1fr 1fr;gap:11px}
+.btn{min-height:52px;border-radius:999px;padding:0 16px;font-weight:950;background:var(--sage);color:#fff}
 .btn.red{background:var(--berry)}
-.btn.light{
-  background:#fff;
-  color:var(--sage);
-  border:1px solid var(--line);
-}
-
-.btn:disabled{
-  opacity:.55;
-  cursor:not-allowed;
-}
-
-.list{
-  display:grid;
-  gap:10px;
-  margin-top:14px;
-}
-
-.item{
-  padding:12px;
-  border-radius:20px;
-  background:#fff;
-  border:1px solid var(--line);
-}
-
-.product-row{
-  display:grid;
-  grid-template-columns:70px 1fr;
-  gap:12px;
-}
-
-.product-row img{
-  width:70px;
-  height:70px;
-  border-radius:16px;
-  object-fit:cover;
-  background:var(--milk);
-}
-
-.item b{
-  color:var(--sage);
-  font-size:17px;
-}
-
-.item small{
-  display:block;
-  margin-top:5px;
-  color:var(--muted);
-  line-height:1.45;
-}
-
-.actions{
-  display:grid;
-  grid-template-columns:1fr 1fr;
-  gap:8px;
-  margin-top:10px;
-}
-
-.actions .btn{
-  min-height:44px;
-  font-size:14px;
-}
-
-.status{
-  display:inline-block;
-  margin-top:8px;
-  padding:7px 10px;
-  border-radius:999px;
-  background:var(--milk);
-  color:var(--berry);
-  font-size:12px;
-  font-weight:950;
-}
-
-.order-products{
-  margin-top:10px;
-  color:var(--muted);
-  font-size:14px;
-  line-height:1.55;
-}
-
-.preview{
-  display:none;
-  width:100%;
-  max-height:220px;
-  object-fit:cover;
-  border-radius:20px;
-  background:var(--milk);
-  border:1px solid var(--line);
-}
-
-.notice{
-  margin-bottom:12px;
-  padding:14px;
-  border-radius:18px;
-  background:var(--milk);
-  color:var(--sage);
-  font-weight:900;
-  line-height:1.45;
-}
-
+.btn.light{background:#fff;color:var(--sage);border:1px solid var(--line)}
+.btn:disabled{opacity:.55;cursor:not-allowed}
+.list{display:grid;gap:10px;margin-top:14px}
+.item{padding:12px;border-radius:20px;background:#fff;border:1px solid var(--line)}
+.product-row{display:grid;grid-template-columns:70px 1fr;gap:12px}
+.product-row img{width:70px;height:70px;border-radius:16px;object-fit:cover;background:var(--milk)}
+.item b{color:var(--sage);font-size:17px}
+.item small{display:block;margin-top:5px;color:var(--muted);line-height:1.45}
+.actions{display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-top:10px}
+.actions .btn{min-height:44px;font-size:14px}
+.status{display:inline-block;margin-top:8px;padding:7px 10px;border-radius:999px;background:var(--milk);color:var(--berry);font-size:12px;font-weight:950}
+.order-products{margin-top:10px;color:var(--muted);font-size:14px;line-height:1.55}
+.preview{display:none;width:100%;max-height:220px;object-fit:cover;border-radius:20px;background:var(--milk);border:1px solid var(--line)}
+.notice{margin-bottom:12px;padding:14px;border-radius:18px;background:var(--milk);color:var(--sage);font-weight:900;line-height:1.45}
+.progress{display:none;margin-top:10px;padding:14px;border-radius:18px;background:#fff;color:var(--sage);border:1px solid var(--line);font-weight:900;text-align:center}
 .hidden{display:none!important}
-
-@media(max-width:720px){
-  .hero h1{font-size:34px}
-  .two{grid-template-columns:1fr}
-  .product-row{grid-template-columns:64px 1fr}
-  .product-row img{width:64px;height:64px}
-}
+@media(max-width:720px){.hero h1{font-size:34px}.two{grid-template-columns:1fr}.product-row{grid-template-columns:64px 1fr}.product-row img{width:64px;height:64px}}
 </style>
 </head>
 
 <body>
-
 <div class="page">
 
 <div class="card login" id="loginBox">
   <h2>Вхід в адмінку</h2>
-
   <div class="form">
     <input id="adminPass" type="password" placeholder="Пароль">
     <button class="btn" onclick="login()">Увійти</button>
@@ -291,19 +78,17 @@ textarea{
 </div>
 
 <section id="productsTab" class="section active">
-
   <div class="card">
     <h2>Додати товар</h2>
 
     <div class="notice">
-      Заповніть товар. Підкатегорія створиться автоматично.
+      Фото завантажується в Cloudinary, товар зберігається у Firebase і автоматично зʼявляється на сайті.
     </div>
 
     <div class="form">
-
       <div class="field">
         <label>Фото товару</label>
-        <input id="productImageFile" type="file" accept="image/*" onchange="previewImage()">
+        <input id="productImageFile" type="file" accept="image/jpeg,image/png,image/jpg" onchange="previewImage()">
         <img id="imagePreview" class="preview">
       </div>
 
@@ -358,6 +143,7 @@ textarea{
       </div>
 
       <button class="btn" id="saveProductBtn" onclick="addProduct()">Зберегти товар</button>
+      <div class="progress" id="progressBox">Готуємо...</div>
     </div>
   </div>
 
@@ -365,7 +151,6 @@ textarea{
     <h2>Список товарів</h2>
     <div class="list" id="productsList"></div>
   </div>
-
 </section>
 
 <section id="ordersTab" class="section">
@@ -381,6 +166,9 @@ textarea{
 <script>
 const ADMIN_PASSWORD="admin123";
 
+const CLOUD_NAME="doz2sacki";
+const UPLOAD_PRESET="tsyvs3pz";
+
 const firebaseConfig={
   apiKey:"AIzaSyALs-ZgFX7auGxRQ2EeQnVngjnejimPLV4",
   authDomain:"yyokai-tattoo-system.firebaseapp.com",
@@ -393,7 +181,6 @@ const firebaseConfig={
 
 firebase.initializeApp(firebaseConfig);
 const db=firebase.database();
-const storage=firebase.storage();
 
 const categoriesRef=db.ref("gardenCategories");
 const subcategoriesRef=db.ref("gardenSubcategories");
@@ -486,9 +273,55 @@ function previewImage(){
   imagePreview.style.display="block";
 }
 
+function uploadImageToCloudinary(file){
+  return new Promise((resolve,reject)=>{
+    const formData=new FormData();
+    formData.append("file",file);
+    formData.append("upload_preset",UPLOAD_PRESET);
+
+    const xhr=new XMLHttpRequest();
+
+    xhr.open("POST",`https://api.cloudinary.com/v1_1/${CLOUD_NAME}/image/upload`);
+
+    const timeout=setTimeout(()=>{
+      xhr.abort();
+      reject(new Error("Фото довго завантажується. Спробуйте менше фото або Wi-Fi."));
+    },30000);
+
+    xhr.upload.onprogress=function(e){
+      if(e.lengthComputable){
+        const percent=Math.round((e.loaded/e.total)*100);
+        progressBox.textContent="Завантажуємо фото: "+percent+"%";
+      }
+    };
+
+    xhr.onload=function(){
+      clearTimeout(timeout);
+
+      try{
+        const data=JSON.parse(xhr.responseText);
+
+        if(xhr.status>=200 && xhr.status<300 && data.secure_url){
+          resolve(data.secure_url);
+        }else{
+          reject(new Error(data.error?.message || "Cloudinary не прийняв фото"));
+        }
+      }catch(e){
+        reject(new Error("Не вдалося прочитати відповідь Cloudinary"));
+      }
+    };
+
+    xhr.onerror=function(){
+      clearTimeout(timeout);
+      reject(new Error("Помилка інтернету при завантаженні фото"));
+    };
+
+    xhr.send(formData);
+  });
+}
+
 async function ensureSubcategory(category,title){
   const cleanTitle=title.trim();
-  if(!cleanTitle)return "";
 
   const existing=Object.values(subcategories).find(sub=>{
     return sub.category===category &&
@@ -511,39 +344,31 @@ async function ensureSubcategory(category,title){
   return id;
 }
 
-async function uploadImage(productId){
-  const file=productImageFile.files[0];
-
-  if(!file){
-    alert("Оберіть фото товару");
-    return "";
-  }
-
-  const fileName=Date.now()+"_"+file.name.replace(/\s+/g,"_");
-  const ref=storage.ref("gardenProducts/"+productId+"/"+fileName);
-
-  await ref.put(file);
-  return await ref.getDownloadURL();
-}
-
 async function addProduct(){
   const category=productCategory.value;
   const subTitle=productSubcategoryText.value.trim();
   const title=productTitle.value.trim();
+  const file=productImageFile.files[0];
 
+  if(!file)return alert("Оберіть фото товару");
   if(!title)return alert("Введіть назву товару");
   if(!subTitle)return alert("Введіть підкатегорію");
   if(!productPrice.value)return alert("Введіть ціну");
   if(!productStock.value)return alert("Введіть кількість");
-  if(!productImageFile.files[0])return alert("Оберіть фото товару");
 
   saveProductBtn.disabled=true;
   saveProductBtn.textContent="Зберігаємо...";
+  progressBox.style.display="block";
+  progressBox.textContent="Починаємо завантаження...";
 
   try{
     const id=makeId(title);
+
+    const imageUrl=await uploadImageToCloudinary(file);
+
+    progressBox.textContent="Зберігаємо товар у Firebase...";
+
     const subcategoryId=await ensureSubcategory(category,subTitle);
-    const imageUrl=await uploadImage(id);
 
     await productsRef.child(id).set({
       id,
@@ -573,14 +398,20 @@ async function addProduct(){
     imagePreview.src="";
     imagePreview.style.display="none";
 
+    progressBox.textContent="Товар збережено ✅";
     alert("Товар збережено");
   }catch(error){
     console.error(error);
-    alert("Не вдалося зберегти товар. Перевірте, чи включений Firebase Storage і чи дозволена загрузка фото.");
+    alert("Помилка: "+error.message);
+    progressBox.textContent="Помилка: "+error.message;
   }
 
   saveProductBtn.disabled=false;
   saveProductBtn.textContent="Зберегти товар";
+
+  setTimeout(()=>{
+    progressBox.style.display="none";
+  },3000);
 }
 
 function renderProducts(){
@@ -594,7 +425,6 @@ function renderProducts(){
   productsList.innerHTML=arr.map(p=>`
     <div class="item product-row">
       <img src="${p.image||""}">
-
       <div>
         <b>${p.title}</b>
         <small>
@@ -719,6 +549,5 @@ async function deleteOrder(id){
   await ordersRef.child(id).remove();
 }
 </script>
-
 </body>
 </html>
