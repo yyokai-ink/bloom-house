@@ -915,41 +915,41 @@ function createProductCard(product){
   const disabled=stock<=0;
 
   card.innerHTML=`
-    <div class="product-img" style="background-image:url('${product.image||""}')"></div>
+  <div class="product-img" style="background-image:url('${product.image||""}')"></div>
 
-    <div class="product-body">
-      <h4>${product.title||"Без назви"}</h4>
+  <div class="product-body">
+    <h4>${product.title||"Без назви"}</h4>
 
-      <div class="meta">
-        ${product.type ? `Тип: ${product.type}<br>` : ""}
-        ${product.age ? `Вік: ${product.age}` : ""}
-      </div>
-
-      <div class="desc">
-        ${product.desc||""}
-      </div>
-
-      <div class="price">
-        ${product.price||0} грн
-      </div>
-
-      <div class="stock ${disabled ? "empty-stock" : ""}">
-        ${disabled ? "Немає в наявності" : "В наявності: "+stock+" "+(product.unit||"шт")}
-      </div>
-
-      <div class="actions">
-        <div class="qty">
-          <button onclick="changeQty('${product.id}',-1,${stock})">−</button>
-          <input id="qty_${product.id}" value="1 шт" inputmode="numeric">
-          <button onclick="changeQty('${product.id}',1,${stock})">+</button>
-        </div>
-
-        <button class="add" ${disabled ? "disabled" : ""} onclick="addToCart('${product.id}')">
-          Додати
-        </button>
-      </div>
+    <div class="meta">
+      ${product.type ? `Тип: ${product.type}<br>` : ""}
+      ${product.age ? `Вік: ${product.age}` : ""}
     </div>
-  `;
+
+    <div class="desc">
+      ${product.desc||""}
+    </div>
+
+    <div class="price">
+      ${product.price||0} грн
+    </div>
+
+    <div class="stock ${disabled ? "empty-stock" : ""}">
+      ${disabled ? "Немає в наявності" : "В наявності: "+stock+" "+(product.unit||"шт")}
+    </div>
+  </div>
+
+  <div class="actions">
+    <div class="qty">
+      <button onclick="changeQty('${product.id}',-1,${stock})">−</button>
+      <input id="qty_${product.id}" value="1 шт" inputmode="numeric">
+      <button onclick="changeQty('${product.id}',1,${stock})">+</button>
+    </div>
+
+    <button class="add" ${disabled ? "disabled" : ""} onclick="addToCart('${product.id}')">
+      Додати
+    </button>
+  </div>
+`;
 
   return card;
 }
