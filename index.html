@@ -595,13 +595,43 @@ backdrop-filter:blur(2px);
 }
 
 @media(max-width:640px){
-  .brand-title span{display:none}
-  .nav a{display:none}
-  .hero-main{padding:32px 24px;border-radius:36px;min-height:620px}
-  .hero-photo{min-height:390px;border-radius:36px}
-  .hero-actions{grid-template-columns:1fr}
-  .btn{width:100%}
-  .hero h1{font-size:52px}
+
+  .brand-title span{
+    display:none;
+  }
+
+  .nav a{
+    display:none;
+  }
+
+  .hero{
+    min-height:auto;
+  }
+
+  .hero-main{
+    padding:32px 24px 26px;
+    border-radius:36px;
+    min-height:auto;
+  }
+
+  .hero-photo{
+    min-height:320px;
+    border-radius:36px;
+  }
+
+  .hero-actions{
+    grid-template-columns:1fr;
+    margin-top:16px;
+  }
+
+  .btn{
+    width:100%;
+  }
+
+  .hero h1{
+    font-size:52px;
+  }
+
 }
 
 button,a,.qty,.drawer-controls{
