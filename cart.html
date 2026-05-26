@@ -366,22 +366,27 @@ textarea{
       <input id="messenger" placeholder="@username або Viber">
     </div>
 
-   <div class="field full">
-  <label>Область</label>
-  <select id="areaSelect" required>
-    <option value="">Оберіть область</option>
-  </select>
-</div>
+ <div class="field full">
+  <label>Місто доставки</label>
 
-<div class="field full">
-  <label>Місто</label>
+  <input
+    id="citySearch"
+    required
+    placeholder="Введіть назву міста"
+  >
+
+  <div class="hint" id="cityHint">
+    Наприклад: Львів, Самбір, Старий Самбір
+  </div>
+
   <select id="citySelect" required>
-    <option value="">Спочатку оберіть область</option>
+    <option value="">Спочатку введіть місто</option>
   </select>
 </div>
 
 <div class="field full">
   <label>Відділення / поштомат Нової Пошти</label>
+
   <select id="warehouseSelect" required>
     <option value="">Спочатку оберіть місто</option>
   </select>
@@ -597,44 +602,47 @@ async function novaRequest(modelName,calledMethod,methodProperties={}){
   return await res.json();
 }
 
-const areaSelect=document.getElementById("areaSelect");
+const citySearch=document.getElementById("citySearch");
+const cityHint=document.getElementById("cityHint");
 
-loadAreas();
+let cityTimer=null;
 
-async function loadAreas(){
-  try{
-    const data=await novaRequest("Address","getAreas",{});
+citySearch.addEventListener("input",()=>{
+  clearTimeout(cityTimer);
 
-    areaSelect.innerHTML=`<option value="">Оберіть область</option>`;
+  const value=citySearch.value.trim();
 
-    data.data.forEach(area=>{
-      areaSelect.innerHTML+=`
-        <option value="${area.Ref}">
-          ${area.Description}
-        </option>
-      `;
-    });
-  }catch(err){
-    areaSelect.innerHTML=`<option value="">Помилка завантаження областей</option>`;
-  }
-}
-
-areaSelect.addEventListener("change",async()=>{
-  selectedCityRef="";
-  selectedCityName="";
-
-  citySelect.innerHTML=`<option value="">Завантаження міст...</option>`;
-  warehouseSelect.innerHTML=`<option value="">Спочатку оберіть місто</option>`;
-
-  if(!areaSelect.value){
-    citySelect.innerHTML=`<option value="">Спочатку оберіть область</option>`;
+  if(value.length<2){
+    citySelect.innerHTML="";
+    warehouseSelect.innerHTML="";
+    selectedCityRef="";
+    selectedCityName="";
+    cityHint.textContent="Введіть мінімум 2 літери";
     return;
   }
 
+  cityTimer=setTimeout(()=>{
+    searchCities(value);
+  },500);
+});
+
+async function searchCities(query){
+  cityHint.textContent="Шукаємо місто...";
+  citySelect.innerHTML="";
+  warehouseSelect.innerHTML="";
+  selectedCityRef="";
+  selectedCityName="";
+
   try{
     const data=await novaRequest("Address","getCities",{
-      AreaRef:areaSelect.value
+      FindByString:query,
+      Limit:"20"
     });
+
+    if(!data.success || !data.data.length){
+      cityHint.textContent="Місто не знайдено";
+      return;
+    }
 
     citySelect.innerHTML=`<option value="">Оберіть місто</option>`;
 
@@ -642,13 +650,17 @@ areaSelect.addEventListener("change",async()=>{
       citySelect.innerHTML+=`
         <option value="${city.Ref}" data-name="${city.Description}">
           ${city.Description}
+          ${city.AreaDescription ? "— "+city.AreaDescription : ""}
         </option>
       `;
     });
+
+    cityHint.textContent="Оберіть місто зі списку";
+
   }catch(err){
-    citySelect.innerHTML=`<option value="">Помилка завантаження міст</option>`;
+    cityHint.textContent="Помилка завантаження міст";
   }
-});
+}
 
 citySelect.addEventListener("change",()=>{
   const option=citySelect.options[citySelect.selectedIndex];
@@ -659,11 +671,11 @@ citySelect.addEventListener("change",()=>{
   if(selectedCityRef){
     loadWarehouses(selectedCityRef);
   }else{
-    warehouseSelect.innerHTML=`<option value="">Спочатку оберіть місто</option>`;
+    warehouseSelect.innerHTML="";
   }
 });
 
-async function loadWarehouses(cityRef){
+  async function loadWarehouses(cityRef){
   warehouseSelect.innerHTML=`<option value="">Завантаження...</option>`;
 
   try{
