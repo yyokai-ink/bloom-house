@@ -12,318 +12,51 @@
 <style>
 *{margin:0;padding:0;box-sizing:border-box;-webkit-tap-highlight-color:transparent}
 :root{--milk:#fff4ea;--sage-dark:#314f37;--berry:#8d465a;--text:#2b261f;--muted:#7c7164;--line:rgba(49,79,55,.16)}
-
-html,body{
-  min-height:100%;
-  font-family:Arial,sans-serif;
-  color:var(--text);
-  background:
-    radial-gradient(circle at 10% -10%,rgba(217,162,173,.18),transparent 30%),
-    radial-gradient(circle at 90% 0%,rgba(111,143,114,.24),transparent 32%),
-    linear-gradient(180deg,#fffdf8 0%,#f8f0e4 45%,#edf2e7 100%);
-  overflow-x:hidden;
-  touch-action:manipulation;
-}
-
+html,body{min-height:100%;font-family:Arial,sans-serif;color:var(--text);background:radial-gradient(circle at 10% -10%,rgba(217,162,173,.18),transparent 30%),radial-gradient(circle at 90% 0%,rgba(111,143,114,.24),transparent 32%),linear-gradient(180deg,#fffdf8 0%,#f8f0e4 45%,#edf2e7 100%);overflow-x:hidden;touch-action:manipulation}
 a{text-decoration:none;color:inherit}
 button,input,textarea,select{font-family:inherit}
 button{border:0;cursor:pointer}
-
 .page{width:min(1180px,calc(100% - 28px));margin:0 auto;padding:18px 0 60px}
-
-.hero{
-  margin-bottom:20px;
-  padding:34px;
-  border-radius:42px;
-  background:linear-gradient(135deg,rgba(255,255,255,.94),rgba(236,245,231,.86),rgba(255,250,244,.92));
-  border:1px solid rgba(255,255,255,.9);
-  box-shadow:0 28px 90px rgba(63,95,68,.13);
-  text-align:center;
-}
-
-.back{
-  display:inline-flex;
-  justify-content:center;
-  align-items:center;
-  margin:0 auto 22px;
-  padding:12px 18px;
-  border-radius:999px;
-  background:#fff;
-  color:var(--sage-dark);
-  border:1px solid var(--line);
-  font-weight:950;
-}
-
-.hero h1{
-  font-size:clamp(40px,7vw,76px);
-  line-height:.9;
-  letter-spacing:-.08em;
-  color:var(--sage-dark);
-}
-
-.hero p{
-  margin:16px auto 0;
-  max-width:760px;
-  color:var(--muted);
-  font-size:17px;
-  line-height:1.6;
-}
-
-.grid{
-  display:grid;
-  grid-template-columns:1fr 400px;
-  gap:18px;
-  align-items:start;
-}
-
-.card{
-  padding:24px;
-  border-radius:34px;
-  background:rgba(255,255,255,.82);
-  border:1px solid rgba(255,255,255,.95);
-  box-shadow:0 20px 60px rgba(49,79,55,.1);
-  backdrop-filter:blur(18px);
-}
-
-.card h2{
-  margin-bottom:18px;
-  font-size:31px;
-  color:var(--sage-dark);
-  letter-spacing:-.05em;
-}
-
-.form-grid{
-  display:grid;
-  grid-template-columns:1fr 1fr;
-  gap:13px;
-}
-
+.hero{margin-bottom:20px;padding:34px;border-radius:42px;background:linear-gradient(135deg,rgba(255,255,255,.94),rgba(236,245,231,.86),rgba(255,250,244,.92));border:1px solid rgba(255,255,255,.9);box-shadow:0 28px 90px rgba(63,95,68,.13);text-align:center}
+.back{display:inline-flex;justify-content:center;align-items:center;margin:0 auto 22px;padding:12px 18px;border-radius:999px;background:#fff;color:var(--sage-dark);border:1px solid var(--line);font-weight:950}
+.hero h1{font-size:clamp(40px,7vw,76px);line-height:.9;letter-spacing:-.08em;color:var(--sage-dark)}
+.hero p{margin:16px auto 0;max-width:760px;color:var(--muted);font-size:17px;line-height:1.6}
+.grid{display:grid;grid-template-columns:1fr 400px;gap:18px;align-items:start}
+.card{padding:24px;border-radius:34px;background:rgba(255,255,255,.82);border:1px solid rgba(255,255,255,.95);box-shadow:0 20px 60px rgba(49,79,55,.1);backdrop-filter:blur(18px)}
+.card h2{margin-bottom:18px;font-size:31px;color:var(--sage-dark);letter-spacing:-.05em}
+.form-grid{display:grid;grid-template-columns:1fr 1fr;gap:13px}
 .field{display:flex;flex-direction:column;gap:7px}
 .field.full{grid-column:1/-1}
-
-label{
-  color:var(--sage-dark);
-  font-size:13px;
-  font-weight:950;
-}
-
-input,textarea,select{
-  width:100%;
-  min-height:56px;
-  border-radius:20px;
-  border:1px solid var(--line);
-  background:#fff;
-  padding:0 16px;
-  outline:none;
-  color:var(--text);
-  font-size:15px;
-}
-
-textarea{
-  min-height:110px;
-  padding-top:16px;
-  resize:vertical;
-}
-
-.phone-wrap{
-  display:grid;
-  grid-template-columns:74px 1fr;
-  gap:8px;
-}
-
-.phone-prefix{
-  min-height:56px;
-  border-radius:20px;
-  border:1px solid var(--line);
-  background:#fff;
-  display:flex;
-  align-items:center;
-  justify-content:center;
-  font-weight:950;
-  color:var(--sage-dark);
-}
-
-.hint{
-  color:var(--muted);
-  font-size:12px;
-  line-height:1.35;
-}
-
-.payments{
-  display:grid;
-  gap:12px;
-  margin-top:4px;
-}
-
-.payment{
-  display:flex;
-  gap:12px;
-  align-items:flex-start;
-  padding:17px;
-  border-radius:24px;
-  background:linear-gradient(135deg,#fff,#fff7ed);
-  border:1px solid var(--line);
-}
-
-.payment input{
-  width:auto;
-  min-height:auto;
-  margin-top:4px;
-  accent-color:var(--sage-dark);
-}
-
+label{color:var(--sage-dark);font-size:13px;font-weight:950}
+input,textarea,select{width:100%;min-height:56px;border-radius:20px;border:1px solid var(--line);background:#fff;padding:0 16px;outline:none;color:var(--text);font-size:15px}
+textarea{min-height:110px;padding-top:16px;resize:vertical}
+.phone-wrap{display:grid;grid-template-columns:74px 1fr;gap:8px}
+.phone-prefix{min-height:56px;border-radius:20px;border:1px solid var(--line);background:#fff;display:flex;align-items:center;justify-content:center;font-weight:950;color:var(--sage-dark)}
+.hint{color:var(--muted);font-size:12px;line-height:1.35}
+.payments{display:grid;gap:12px;margin-top:4px}
+.payment{display:flex;gap:12px;align-items:flex-start;padding:17px;border-radius:24px;background:linear-gradient(135deg,#fff,#fff7ed);border:1px solid var(--line)}
+.payment input{width:auto;min-height:auto;margin-top:4px;accent-color:var(--sage-dark)}
 .payment b{color:var(--sage-dark);font-size:16px}
-
-.payment span{
-  display:block;
-  margin-top:5px;
-  color:var(--muted);
-  font-size:13px;
-  line-height:1.4;
-}
-
-.warning{
-  margin-top:14px;
-  padding:16px;
-  border-radius:22px;
-  background:rgba(141,70,90,.08);
-  border:1px solid rgba(141,70,90,.18);
-  color:var(--berry);
-  font-size:13px;
-  line-height:1.45;
-  font-weight:800;
-  text-align:center;
-}
-
+.payment span{display:block;margin-top:5px;color:var(--muted);font-size:13px;line-height:1.4}
+.warning{margin-top:14px;padding:16px;border-radius:22px;background:rgba(141,70,90,.08);border:1px solid rgba(141,70,90,.18);color:var(--berry);font-size:13px;line-height:1.45;font-weight:800;text-align:center}
 .order-list{display:grid;gap:10px}
-
-.item{
-  display:grid;
-  grid-template-columns:62px 1fr;
-  gap:11px;
-  padding:10px;
-  border-radius:22px;
-  background:#fff;
-  border:1px solid var(--line);
-}
-
-.item img{
-  width:62px;
-  height:62px;
-  object-fit:cover;
-  border-radius:17px;
-}
-
+.item{display:grid;grid-template-columns:62px 1fr;gap:11px;padding:10px;border-radius:22px;background:#fff;border:1px solid var(--line)}
+.item img{width:62px;height:62px;object-fit:cover;border-radius:17px}
 .item b{display:block;font-size:15px}
-
-.item span{
-  display:block;
-  margin-top:6px;
-  color:var(--muted);
-  font-size:13px;
-}
-
-.total{
-  margin-top:18px;
-  padding-top:18px;
-  border-top:1px solid var(--line);
-  display:flex;
-  justify-content:space-between;
-  align-items:center;
-  font-size:25px;
-  font-weight:950;
-  color:var(--sage-dark);
-}
-
-.submit{
-  margin-top:18px;
-  width:100%;
-  min-height:60px;
-  border-radius:999px;
-  background:linear-gradient(135deg,var(--berry),#a95b6f);
-  color:#fff;
-  font-weight:950;
-  font-size:16px;
-  box-shadow:0 18px 42px rgba(141,70,90,.24);
-  text-align:center;
-}
-
+.item span{display:block;margin-top:6px;color:var(--muted);font-size:13px}
+.total{margin-top:18px;padding-top:18px;border-top:1px solid var(--line);display:flex;justify-content:space-between;align-items:center;font-size:25px;font-weight:950;color:var(--sage-dark)}
+.submit{margin-top:18px;width:100%;min-height:60px;border-radius:999px;background:linear-gradient(135deg,var(--berry),#a95b6f);color:#fff;font-weight:950;font-size:16px;box-shadow:0 18px 42px rgba(141,70,90,.24);text-align:center}
 .submit:disabled{opacity:.55;cursor:not-allowed}
-
-.success{
-  display:none;
-  margin-top:16px;
-  padding:18px;
-  border-radius:24px;
-  background:#eef7ee;
-  color:var(--sage-dark);
-  border:1px solid rgba(49,79,55,.14);
-  text-align:center;
-  line-height:1.5;
-}
-
-.empty{
-  padding:20px;
-  border-radius:22px;
-  background:var(--milk);
-  color:var(--muted);
-  text-align:center;
-  border:1px solid var(--line);
-}
-
+.success{display:none;margin-top:16px;padding:18px;border-radius:24px;background:#eef7ee;color:var(--sage-dark);border:1px solid rgba(49,79,55,.14);text-align:center;line-height:1.5}
+.empty{padding:20px;border-radius:22px;background:var(--milk);color:var(--muted);text-align:center;border:1px solid var(--line)}
 .my-orders{display:grid;gap:10px}
-
-.my-order{
-  padding:14px;
-  border-radius:22px;
-  background:#fff;
-  border:1px solid var(--line);
-}
-
-.my-order-top{
-  display:flex;
-  justify-content:space-between;
-  align-items:center;
-  gap:10px;
-}
-
-.my-order-status{
-  padding:7px 10px;
-  border-radius:999px;
-  background:var(--milk);
-  color:var(--berry);
-  font-size:12px;
-  font-weight:950;
-  text-align:center;
-}
-
-.my-order-products{
-  margin-top:10px;
-  color:var(--muted);
-  font-size:13px;
-  line-height:1.5;
-}
-
-.my-order-message{
-  margin-top:10px;
-  padding:12px;
-  border-radius:18px;
-  background:#eef7ee;
-  color:var(--sage-dark);
-  font-size:13px;
-  font-weight:900;
-}
-
-@media(max-width:920px){
-  .grid{grid-template-columns:1fr}
-}
-
-@media(max-width:640px){
-  .hero{padding:26px 22px;border-radius:32px}
-  .hero h1{font-size:42px}
-  .form-grid{grid-template-columns:1fr}
-  .card{padding:18px;border-radius:28px}
-}
+.my-order{padding:14px;border-radius:22px;background:#fff;border:1px solid var(--line)}
+.my-order-top{display:flex;justify-content:space-between;align-items:center;gap:10px}
+.my-order-status{padding:7px 10px;border-radius:999px;background:var(--milk);color:var(--berry);font-size:12px;font-weight:950;text-align:center}
+.my-order-products{margin-top:10px;color:var(--muted);font-size:13px;line-height:1.5}
+.my-order-message{margin-top:10px;padding:12px;border-radius:18px;background:#eef7ee;color:var(--sage-dark);font-size:13px;font-weight:900}
+@media(max-width:920px){.grid{grid-template-columns:1fr}}
+@media(max-width:640px){.hero{padding:26px 22px;border-radius:32px}.hero h1{font-size:42px}.form-grid{grid-template-columns:1fr}.card{padding:18px;border-radius:28px}}
 </style>
 </head>
 
@@ -333,7 +66,7 @@ textarea{
 <section class="hero">
   <a href="index.html" class="back">Назад на головну</a>
   <h1>Оформлення замовлення</h1>
-  <p>Після оформлення оператор звʼяжеться з вами для уточнення деталей.</p>
+  <p>Після оформлення ми звʼяжемось з вами для підтвердження замовлення.</p>
 </section>
 
 <div class="grid">
@@ -354,7 +87,7 @@ textarea{
     </div>
 
     <div class="field">
-      <label>Телефон</label>
+      <label>Номер телефону</label>
       <div class="phone-wrap">
         <div class="phone-prefix">+380</div>
         <input id="phoneLocal" required inputmode="numeric" maxlength="9" placeholder="50 123 45 67">
@@ -366,36 +99,26 @@ textarea{
       <input id="messenger" placeholder="@username або Viber">
     </div>
 
- <div class="field full">
-  <label>Місто доставки</label>
+    <div class="field full">
+      <label>Місто доставки</label>
+      <input id="citySearch" required placeholder="Введіть назву міста">
+      <div class="hint" id="cityHint">Наприклад: Львів, Самбір, Старий Самбір</div>
+      <select id="citySelect" required>
+        <option value="">Спочатку введіть місто</option>
+      </select>
+    </div>
 
-  <input
-    id="citySearch"
-    required
-    placeholder="Введіть назву міста"
-  >
+    <div class="field full">
+      <label>Відділення / поштомат Нової Пошти</label>
+      <select id="warehouseSelect" required>
+        <option value="">Спочатку оберіть місто</option>
+      </select>
+    </div>
 
-  <div class="hint" id="cityHint">
-    Наприклад: Львів, Самбір, Старий Самбір
-  </div>
-
-  <select id="citySelect" required>
-    <option value="">Спочатку введіть місто</option>
-  </select>
-</div>
-
-<div class="field full">
-  <label>Відділення / поштомат Нової Пошти</label>
-
-  <select id="warehouseSelect" required>
-    <option value="">Спочатку оберіть місто</option>
-  </select>
-</div>
-
-<div class="field full">
-  <label>Коментар</label>
-  <textarea id="comment" placeholder="Побажання до замовлення..."></textarea>
-</div>
+    <div class="field full">
+      <label>Коментар</label>
+      <textarea id="comment" placeholder="Побажання до замовлення..."></textarea>
+    </div>
 
     <div class="field full">
       <label>Спосіб оплати</label>
@@ -404,8 +127,8 @@ textarea{
         <label class="payment">
           <input type="radio" name="payment" value="prepay" checked>
           <div>
-            <b>Передоплата</b>
-            <span>Оператор звʼяжеться з вами та надасть реквізити для оплати.</span>
+            <b>Передоплата / повна оплата</b>
+            <span>Ми звʼяжемось з вами після оформлення замовлення.</span>
           </div>
         </label>
 
@@ -418,9 +141,9 @@ textarea{
         </label>
       </div>
 
-<div class="warning" id="paymentWarning">
-  Ми звʼяжемось з вами для підтвердження замовлення 🌿
-</div>
+      <div class="warning" id="paymentWarning">
+        Ми звʼяжемось з вами для підтвердження замовлення 🌿
+      </div>
     </div>
 
   </div>
@@ -429,7 +152,7 @@ textarea{
 
   <div class="success" id="successBox">
     Замовлення оформлено 🌿<br><br>
-    Оператор звʼяжеться з вами найближчим часом.
+    Ми звʼяжемось з вами найближчим часом.
   </div>
 </form>
 
@@ -467,7 +190,7 @@ const firebaseConfig={
 firebase.initializeApp(firebaseConfig);
 const db=firebase.database();
 
-/* TELEGRAM — ВСТАВЬ СВОИ */
+/* TELEGRAM */
 const BOT_TOKEN="8957828898:AAHihpRvJ7YWIeD0gistQcRE5t4GOqUn2pM";
 const CHAT_ID="1634779056";
 
@@ -483,9 +206,9 @@ let selectedCityName="";
 const orderItems=document.getElementById("orderItems");
 const orderTotal=document.getElementById("orderTotal");
 const citySearch=document.getElementById("citySearch");
+const cityHint=document.getElementById("cityHint");
 const citySelect=document.getElementById("citySelect");
 const warehouseSelect=document.getElementById("warehouseSelect");
-const cityHint=document.getElementById("cityHint");
 const phoneLocal=document.getElementById("phoneLocal");
 const myOrders=document.getElementById("myOrders");
 
@@ -602,9 +325,6 @@ async function novaRequest(modelName,calledMethod,methodProperties={}){
   return await res.json();
 }
 
-const citySearch=document.getElementById("citySearch");
-const cityHint=document.getElementById("cityHint");
-
 let cityTimer=null;
 
 citySearch.addEventListener("input",()=>{
@@ -613,8 +333,8 @@ citySearch.addEventListener("input",()=>{
   const value=citySearch.value.trim();
 
   if(value.length<2){
-    citySelect.innerHTML="";
-    warehouseSelect.innerHTML="";
+    citySelect.innerHTML=`<option value="">Спочатку введіть місто</option>`;
+    warehouseSelect.innerHTML=`<option value="">Спочатку оберіть місто</option>`;
     selectedCityRef="";
     selectedCityName="";
     cityHint.textContent="Введіть мінімум 2 літери";
@@ -628,8 +348,8 @@ citySearch.addEventListener("input",()=>{
 
 async function searchCities(query){
   cityHint.textContent="Шукаємо місто...";
-  citySelect.innerHTML="";
-  warehouseSelect.innerHTML="";
+  citySelect.innerHTML=`<option value="">Завантаження...</option>`;
+  warehouseSelect.innerHTML=`<option value="">Спочатку оберіть місто</option>`;
   selectedCityRef="";
   selectedCityName="";
 
@@ -640,24 +360,25 @@ async function searchCities(query){
     });
 
     if(!data.success || !data.data.length){
+      citySelect.innerHTML=`<option value="">Місто не знайдено</option>`;
       cityHint.textContent="Місто не знайдено";
       return;
     }
 
-    citySelect.innerHTML=`<option value="">Оберіть місто</option>`;
+    citySelect.innerHTML=`<option value="">Оберіть місто зі списку</option>`;
 
     data.data.forEach(city=>{
       citySelect.innerHTML+=`
         <option value="${city.Ref}" data-name="${city.Description}">
-          ${city.Description}
-          ${city.AreaDescription ? "— "+city.AreaDescription : ""}
+          ${city.Description}${city.AreaDescription ? " — "+city.AreaDescription : ""}
         </option>
       `;
     });
 
-    cityHint.textContent="Оберіть місто зі списку";
+    cityHint.textContent="Оберіть потрібне місто зі списку";
 
   }catch(err){
+    citySelect.innerHTML=`<option value="">Помилка завантаження</option>`;
     cityHint.textContent="Помилка завантаження міст";
   }
 }
@@ -671,11 +392,11 @@ citySelect.addEventListener("change",()=>{
   if(selectedCityRef){
     loadWarehouses(selectedCityRef);
   }else{
-    warehouseSelect.innerHTML="";
+    warehouseSelect.innerHTML=`<option value="">Спочатку оберіть місто</option>`;
   }
 });
 
-  async function loadWarehouses(cityRef){
+async function loadWarehouses(cityRef){
   warehouseSelect.innerHTML=`<option value="">Завантаження...</option>`;
 
   try{
@@ -684,8 +405,6 @@ citySelect.addEventListener("change",()=>{
       Page:"1",
       Limit:"500"
     });
-
-    warehouseSelect.innerHTML="";
 
     if(!data.success || !data.data.length){
       warehouseSelect.innerHTML=`<option value="">Відділення не знайдено</option>`;
@@ -701,6 +420,7 @@ citySelect.addEventListener("change",()=>{
         </option>
       `;
     });
+
   }catch(err){
     warehouseSelect.innerHTML=`<option value="">Помилка завантаження</option>`;
   }
@@ -728,7 +448,7 @@ function buildTelegramMessage(order){
 📞 ${order.phone}
 💬 ${order.messenger || "Не вказано"}
 
-🏙 Куди відсилати: ${order.city}
+🏙 Місто: ${order.city}
 📦 Нова Пошта: ${order.novaPost}
 
 💳 ${order.payment}
@@ -783,7 +503,7 @@ orderForm.addEventListener("submit",async e=>{
   }
 
   if(!selectedCityRef){
-    alert("Оберіть місто");
+    alert("Оберіть місто зі списку");
     return;
   }
 
@@ -810,9 +530,9 @@ orderForm.addEventListener("submit",async e=>{
     comment:comment.value.trim(),
 
     payment,
-    paymentStatus:"Очікує уточнення оператором",
-    status:"Очікує дзвінка оператора",
-    customerMessage:"Оператор звʼяжеться з вами найближчим часом. Очікуйте дзвінок або повідомлення у Telegram / Viber.",
+    paymentStatus:"Очікує уточнення",
+    status:"Нове замовлення",
+    customerMessage:"Ми звʼяжемось з вами для підтвердження замовлення.",
 
     total,
     items,
@@ -837,8 +557,10 @@ orderForm.addEventListener("submit",async e=>{
     successBox.style.display="block";
     orderForm.reset();
 
-    citySelect.innerHTML="";
-    warehouseSelect.innerHTML="";
+    citySelect.innerHTML=`<option value="">Спочатку введіть місто</option>`;
+    warehouseSelect.innerHTML=`<option value="">Спочатку оберіть місто</option>`;
+    cityHint.textContent="Наприклад: Львів, Самбір, Старий Самбір";
+
     selectedCityRef="";
     selectedCityName="";
 
