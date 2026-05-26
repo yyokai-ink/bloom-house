@@ -38,10 +38,7 @@ textarea{min-height:110px;padding-top:16px;resize:vertical}
 .payment input{width:auto;min-height:auto;margin-top:4px;accent-color:var(--sage-dark)}
 .payment b{color:var(--sage-dark);font-size:16px}
 .payment span{display:block;margin-top:5px;color:var(--muted);font-size:13px;line-height:1.4}
-.copy-card{margin-top:14px;padding:24px 18px;border-radius:28px;background:linear-gradient(135deg,#314f37,#496d4f);color:#fff;cursor:pointer;user-select:none;-webkit-user-select:none;-webkit-touch-callout:none;text-align:center}
-.copy-card small{display:block;opacity:.82;text-align:center}
-.card-number{margin-top:14px;font-size:28px;font-weight:950;letter-spacing:.08em;text-align:center;pointer-events:none;user-select:none;-webkit-user-select:none;-webkit-touch-callout:none}
-.card-bank{margin-top:12px;font-size:15px;opacity:.92;line-height:1.5;text-align:center;pointer-events:none;user-select:none;-webkit-user-select:none}
+
 .warning{margin-top:14px;padding:16px;border-radius:22px;background:rgba(141,70,90,.08);border:1px solid rgba(141,70,90,.18);color:var(--berry);font-size:13px;line-height:1.45;font-weight:800;text-align:center}
 .order-list{display:grid;gap:10px}
 .item{display:grid;grid-template-columns:62px 1fr;gap:11px;padding:10px;border-radius:22px;background:#fff;border:1px solid var(--line)}
@@ -140,15 +137,10 @@ textarea{min-height:110px;padding-top:16px;resize:vertical}
         </label>
       </div>
 
-      <button class="copy-card" id="copyCard" type="button" onclick="copyCardNumberOnly()">
-        <small>Натисніть, щоб скопіювати номер картки</small>
-        <div class="card-number">5375 4112 3456 7890</div>
-        <div class="card-bank">MONOBANK<br>Іван Петренко</div>
-      </button>
-
-      <div class="warning" id="paymentWarning">
-        Після оплати замовлення очікує підтвердження адміністратором.
-      </div>
+     <div class="warning" id="paymentWarning">
+  Оператор звʼяжеться з вами найближчим часом для уточнення деталей замовлення.
+  Очікуйте дзвінок або повідомлення у Telegram / Viber.
+</div>
     </div>
   </div>
 
@@ -416,15 +408,8 @@ async function loadWarehouses(cityRef){
 }
 
 function togglePayment(){
-  const type=document.querySelector('input[name="payment"]:checked').value;
-
-  if(type==="nova"){
-    copyCard.style.display="none";
-    paymentWarning.textContent="Ви обрали накладений платіж. Адміністратор підтвердить замовлення вручну.";
-  }else{
-    copyCard.style.display="block";
-    paymentWarning.textContent="Після оплати адміністратор підтвердить замовлення.";
-  }
+  paymentWarning.textContent =
+    "Оператор звʼяжеться з вами найближчим часом для уточнення деталей замовлення. Очікуйте дзвінок або повідомлення у Telegram / Viber.";
 }
 
 function copyCardNumberOnly(){
@@ -534,7 +519,10 @@ orderForm.addEventListener("submit",async e=>{
 
     paymentStatus:payment==="Повна оплата на карту" ? "Очікує перевірки" : "Накладений платіж",
     status:payment==="Повна оплата на карту" ? "Очікує підтвердження оплати" : "Нове замовлення",
-    customerMessage:"Після перевірки адміністратор підтвердить відправку.",
+    function togglePayment(){
+  paymentWarning.textContent =
+    "Оператор звʼяжеться з вами найближчим часом для уточнення деталей замовлення. Очікуйте дзвінок або повідомлення у Telegram / Viber.";
+}
 
     total,
     items,
